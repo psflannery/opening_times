@@ -1,0 +1,24 @@
+/*
+ * Site Name: Opening Times
+ * Author: Paul Flannery
+ * Author URI: http://paulflannery.co.uk
+ *
+ * Stylesheet: Login Stylesheet
+ *
+ * This stylesheet is loaded (if admin.php is setup in your
+ * functions file) on the login page. This way you can style
+ * the login page. It won't affect any other page, admin or front-end.
+ *
+ * For more info, check out the codex:
+ * http://codex.wordpress.org/Creating_Admin_Themes
+ */
+
+/* Logo */
+.login h1 a {
+	background-image: url(../img/ot-logo-black-animated.svg);
+	background-repeat: no-repeat;
+	background-size: 80px;
+	display: block; 
+	overflow: hidden;
+	text-indent: -9999px;
+}

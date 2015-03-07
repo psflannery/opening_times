@@ -1,0 +1,23 @@
+// Header
+// --------------------------------------------------
+
+.site-header {
+	background: @body-bg;
+	.clearfix();
+	border-bottom: 1px solid @border-color;
+	min-height: @header-height;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: @zindex-header;
+}
+.social-menu {
+	@media (min-width: @screen-sm-min) {
+		float: right;
+		margin-right: @grid-gutter-width*3.25; //65px;
+	}
+}
+// Remove the margins of the site-title to prevent any unexpected weirdness
+.site-title {
+	margin: 0;
+}

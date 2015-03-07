@@ -1,0 +1,12 @@
+// Lazy load
+// --------------------------------------------------
+
+.fluid-width-video-wrapper {
+    &:before {
+       content: 'loading...';
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       .translate(-50%; -50%);
+    }
+}

@@ -1,0 +1,41 @@
+// Acordion
+// --------------------------------------------------
+
+// Use Modernizr to deal with the Flash of Unstyled Content on Accordion pages
+.js .accordion,
+.js .accordion-issue {
+	display: none;
+}
+// Header
+.ui-accordion-header {
+	.clearfix();
+	cursor: pointer;
+	display: block;
+	min-height: 0;
+	position: relative;
+	.transition(background-color 0.5s ease-in);
+}
+
+// Content
+.ui-accordion-content {
+	overflow: auto;
+}
+.accordion-content {
+	padding: @grid-gutter-width 0 @grid-gutter-width*2;
+}
+.veiled > .ui-accordion-content-active {
+	background-color: @overlay;
+}
+
+// Interaction states
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	outline: none;
+}
+.ui-state-hover {
+	background-color: @white-hover;		
+}
+.ui-accordion-header-active {
+	background-color: @overlay;	
+}

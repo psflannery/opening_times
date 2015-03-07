@@ -1,0 +1,30 @@
+// Expanding search box
+// --------------------------------------------------
+
+.menu-search {
+	.search-form {
+		padding: @menu-padding @grid-gutter-width / 2;
+		@media (max-width: @screen-xs-max) {
+			font-size: @font-size-mid;
+			padding: 0;
+		}
+	}
+	input[type="search"] {
+		border: none;
+		border-width: 0;
+		font-size: @font-size-mid;
+		line-height: @line-height-base;
+		@media (max-width: @screen-xs-max) {
+			margin: 0;
+			padding: 11px 0;
+			text-align: center;
+			width: 100%;
+		}
+		@media (min-width: @screen-sm-min) {
+			width: (@grid-gutter-width*3) - (@grid-gutter-width/2); //50px;
+			&:focus {
+				width: 100%;
+			}
+		}
+	}
+}

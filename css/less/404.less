@@ -1,0 +1,41 @@
+// 404
+// --------------------------------------------------
+
+.not-found {
+	text-align: center;
+	h1 {
+		//font-size: @font-size-large;
+	}
+}
+.search-field {
+	width: 200px;
+	@media (min-width: @screen-sm-min) {
+		width: 350px;
+	}
+}
+.message404 {
+	.size(250px; 150px);
+    .translate(-50%; -50%);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+	@media (min-width: @screen-sm-min) {
+		.size(650px; 250px);
+	}
+}
+.message404:before, .message404:after {
+    content:'4';
+    font-size: 50px;
+    height: inherit;
+	line-height: 150px;
+	@media (min-width: @screen-sm-min) {
+		font-size: 150px;
+		line-height: 250px;
+	}
+}
+.message404:before {
+    float: left;
+}
+.message404:after {
+    float: right;
+}
