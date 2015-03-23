@@ -38,7 +38,7 @@
 				<?php $slug = home_url('take-overs/#'. opening_times_the_slug($echo=false)); ?>
 
 				<ul class="ot-social-links ot-meta">
-					<li><a href="<?php echo $slug ?>" rel="bookmark" class="ot-permalink"><?php _e( 'Share Link', 'opening_times' ); ?></a></li>
+					<li><a href="<?php echo esc_url( $slug ); ?>" rel="bookmark" class="ot-permalink"><?php _e( 'Share Link', 'opening_times' ); ?></a></li>
 					<li class="popout-link"><a href="http://www.facebook.com/sharer.php?u=<?php echo urlencode( $slug ); ?>&t=<?php echo urlencode( the_title() ); ?>" title="Share on Facebook" rel="nofollow" target="_blank" >Share on Facebook</a></li>
 					<li class="popout-link"><a href="http://twitter.com/share?text=<?php echo urlencode( the_title() ); ?>&url=<?php echo urlencode( $slug ); ?>&via=otdac&related=<?php echo urlencode("Opening Times: digital art commissions"); ?>" title="Share on Twitter" rel="nofollow" target="_blank">Share on Twitter</a></li>
 				</ul>
