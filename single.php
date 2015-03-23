@@ -7,33 +7,32 @@
 
 get_header(); ?>
 
-	<main id="main" class="site-main gradienter container-fluid" role="main">
+    <main id="main" class="site-main gradienter container-fluid" role="main">
 
-	<?php while ( have_posts() ) : the_post(); ?>
-		
-		<?php $post_type = get_post_type();
+        <?php while ( have_posts() ) : the_post(); ?>
 
-            switch( $post_type ) {
-                case 'post':
-                    get_template_part( 'template-parts/content', get_post_format() );
-                break;
+            <?php $post_type = get_post_type();
+                switch( $post_type ) {
+                    case 'post':
+                        get_template_part( 'template-parts/content', get_post_format() );
+                    break;
 
-                case 'reading':
-                    get_template_part( 'template-parts/single', 'issue' );
-                break;
-                
-                case 'article':
-                    get_template_part( 'template-parts/single', 'reading-article' );
-                break;
-                
-                case 'take-overs':
-                    get_template_part( 'template-parts/content', 'take-over' );
-                break;
-            }
-        ?>
+                    case 'reading':
+                        get_template_part( 'template-parts/single', 'issue' );
+                    break;
 
-	<?php endwhile; ?>
+                    case 'article':
+                        get_template_part( 'template-parts/single', 'reading-article' );
+                    break;
 
-	</main>
+                    case 'take-overs':
+                        get_template_part( 'template-parts/content', 'take-over' );
+                    break;
+                }
+            ?>
+
+        <?php endwhile; ?>
+
+    </main>
 
 <?php get_footer(); ?>
