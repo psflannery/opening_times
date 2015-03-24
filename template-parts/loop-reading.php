@@ -11,24 +11,24 @@
 
 <?php
 $args = array(
-	'post_parent' => $post->ID,
-	'post_type' => 'article',
-	'order' => 'DESC', 
-	'numberposts' => -1,
+    'post_parent' => $post->ID,
+    'post_type' => 'article',
+    'order' => 'DESC', 
+    'numberposts' => -1,
 );
 $articles = new WP_query($args); ?>
 
 <?php if ($articles->have_posts()) : ?>
 
-	<?php while ($articles->have_posts()) : $articles->the_post(); ?>
+    <?php while ($articles->have_posts()) : $articles->the_post(); ?>
 
-		<?php get_template_part( 'template-parts/content', 'reading' ); ?>
+        <?php get_template_part( 'template-parts/content', 'reading' ); ?>
 
-   <?php endwhile; ?>
+    <?php endwhile; ?>
    
 <?php else : ?>
 
-	<?php get_template_part( 'template-parts/content', 'none' ); ?>
+    <?php get_template_part( 'template-parts/content', 'none' ); ?>
 	
 <?php endif; ?>
  

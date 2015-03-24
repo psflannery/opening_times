@@ -9,24 +9,24 @@
 
 get_header(); ?>
 	
-	<main id="main" class="site-main accordion-issue container-fluid" role="main">
-	
-		<?php if ( have_posts() ) : ?>
-		
-			<?php while ( have_posts() ) : the_post(); ?>
-			
-				<?php get_template_part( 'template-parts/single', 'issue' ); ?>
-					
-			<?php endwhile; ?>
+    <main id="main" class="site-main accordion-issue container-fluid" role="main">
 
-			<?php the_posts_navigation(); ?>
+        <?php if ( have_posts() ) : ?>
 
-		<?php else : ?>
+            <?php while ( have_posts() ) : the_post(); ?>
 
-			<?php get_template_part( 'template-parts/content', 'none' ); ?>
+                <?php get_template_part( 'template-parts/single', 'issue' ); ?>
 
-		<?php endif; ?>
-	
-	</main>
+            <?php endwhile; ?>
+
+            <?php the_posts_navigation(); ?>
+
+        <?php else : ?>
+
+            <?php get_template_part( 'template-parts/content', 'none' ); ?>
+
+        <?php endif; ?>
+
+    </main>
 
 <?php get_footer(); ?>
