@@ -87,7 +87,7 @@ add_filter( 'nav_menu_link_attributes', 'opening_times_menu_atts', 10, 3 );
  * Show all the posts in the Loop
  */
 function opening_times_all_the_posts($query) {
-    if($query->is_main_query() && !is_admin()) {
+    if( $query->is_main_query() && !is_admin() ) {
 		$query->set('posts_per_page', '-1');
     }
 }
@@ -112,8 +112,8 @@ add_filter( 'pre_get_posts', 'opening_times_add_custom_types_to_tax' );
  * Show Authors used in Custom Post Types in the author archive.
  */
 function opening_times_author_archive($query) {
-    if ($query->is_author)
-        $query->set( 'post_type', array('post', 'article') );
+    if ( $query->is_author )
+         $query->set( 'post_type', array('post', 'article') );
     remove_action( 'pre_get_posts', 'opening_times_author_archive' );
 }
 add_action('pre_get_posts', 'opening_times_author_archive');
@@ -123,12 +123,12 @@ add_action('pre_get_posts', 'opening_times_author_archive');
  *
  * @link: http://www.tcbarrett.com/2011/09/wordpress-the_slug-get-post-slug-function/#.U0GiBfldWSo
  */
-function opening_times_the_slug($echo=true){
-	$slug = basename(get_permalink());
-	do_action('before_slug', $slug);
-	$slug = apply_filters('slug_filter', $slug);
+function opening_times_the_slug( $echo=true ){
+	$slug = basename( get_permalink() );
+	do_action( 'before_slug', $slug );
+	$slug = apply_filters( 'slug_filter', $slug );
 	if( $echo ) echo $slug;
-	do_action('after_slug', $slug);
+	do_action( 'after_slug', $slug );
 	return $slug;
 }
 
@@ -141,7 +141,7 @@ function opening_times_the_slug($echo=true){
 function opening_times_imagelink_setup() {
 	$image_set = get_option( 'image_default_link_type' );
 	
-	if ($image_set !== 'none') {
+	if ( $image_set !== 'none' ) {
 		update_option('image_default_link_type', 'none');
 	}
 }

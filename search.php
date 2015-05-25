@@ -13,7 +13,7 @@ get_header(); ?>
 
             <header class="page-header">
                 <h1 class="page-title"><?php printf( __( 'Search Results for: %s', 'opening_times' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
-            </header><!-- .page-header -->
+            </header>
 
             <?php while ( have_posts() ) : the_post(); ?>
 
@@ -29,6 +29,6 @@ get_header(); ?>
 
         <?php endif; ?>
 
-    </main><!-- #main -->
+    </main>
 
 <?php get_footer(); ?>

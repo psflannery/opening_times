@@ -164,7 +164,7 @@ function opening_times_event_dates() {
 		$takeoverdate = '';
 		$takeoverdate .= '' . $clean_takeover_sd;
 		$takeoverdate .= ' - ' . $clean_takeover_ed;
-		echo $takeoverdate;
+		return $takeoverdate;
 	endif;
 }
 
@@ -181,37 +181,38 @@ function opening_times_collection_meta() {
 	$postyear = get_the_time('Y', $post->ID);
 	$user_description = get_the_author_meta('description');
     $residency_start_date = get_post_meta( $post->ID, '_ot_residency_start_date', true );
-	?>
 	
-	<dl class="ot-collection-meta ot-meta dl-inline">
-		<?php if ( get_the_terms( $post->ID, 'artists') ): ?>
-			<dt><?php _e( 'Artist', 'opening_times' ); ?></dt>
-			<dd><?php echo get_the_term_list( $post->ID, 'artists', '', ', ', '' ); ?></dd>
-		<?php endif; ?>
-		<?php if ( in_category( 'editorial-introduction' ) ): ?>
-			<dt><?php _e( 'Author', 'opening_times' ); ?></dt>
-			<dd><?php the_author_posts_link(); ?></dd>
-		<?php endif; ?>
-		<?php if( get_the_category_list() ) : ?>
-			<dt><?php _e( 'Category', 'opening_times' ); ?></dt>
-			<dd><?php echo get_the_category_list( ', ' ); ?></dd>
-		<?php endif; ?>
-		<?php if( get_the_tag_list() ) : ?>
-			<dt><?php _e( 'Tags', 'opening_times' ); ?></dt>
-			<dd><?php echo get_the_tag_list( '', ', ', '' ); ?></dd>
-		<?php endif; ?>			
-		<?php if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) ) : ?>
-			<dt><?php _e( 'Year', 'opening_times' ); ?></dt>
-			<dd><a rel="ajax" href="<?php echo get_year_link( $postyear ); ?>"><?php echo $postyear; ?></a></dd>
-		<?php endif; ?>
-	</dl>
+	$meta = '<dl class="ot-collection-meta ot-meta dl-inline">';
+	if ( get_the_terms( $post->ID, 'artists') ):
+        $meta .= '<dt>' . esc_html( 'Artist', 'opening_times' ) . '</dt>';
+		$meta .= '<dd>' . get_the_term_list( $post->ID, 'artists', ' ', ', ', '' ) . '</dd>';
+	endif;
+	if ( in_category( 'editorial-introduction' ) ):
+		$meta .= '<dt>' . esc_html( 'Author', 'opening_times' ) . '</dt>';
+		$meta .= '<dd>' . the_author_posts_link() . '</dd>';
+	endif;
+	if( get_the_category_list() ) :
+		$meta .= '<dt>' . esc_html( 'Category', 'opening_times' ) . '</dt>';
+		$meta .= '<dd>' . ' ' . get_the_category_list( ', ' ) . '</dd>';
+	endif;
+	if( get_the_tag_list() ) :
+		$meta .= '<dt>' . esc_html( 'Tags', 'opening_times' ) . '</dt>';
+		$meta .= '<dd>' . get_the_tag_list( ' ', ', ', '' ) . '</dd>';
+	endif;		
+	if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) ) :
+		$meta .= '<dt>' . esc_html( 'Year', 'opening_times' ) . '</dt>';
+		$meta .= '<dd> <a rel="ajax" href="' . get_year_link( $postyear ) . '">' . $postyear . '</a></dd>';
+	endif;
+	$meta .= '</dl>';
     
-    <?php if ( in_category( 'residency' ) && '' != $residency_start_date ): ?>
-        <dl class="ot-collection-meta ot-meta dl-inline">
-            <dt><?php _e( 'Dates', 'opening_times' ); ?></dt>
-            <dd><?php opening_times_event_dates(); ?></dd>
-        </dl>
-	<?php endif;
+    if ( in_category( 'residency' ) && '' != $residency_start_date ):
+        $meta .= '<dl class="ot-collection-meta ot-meta dl-inline">';
+        $meta .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
+        $meta .= '<dd>' . opening_times_event_dates() . '</dd>';
+        $meta .= '</dl>';
+	endif;
+    
+    return $meta;
 }
 
 
@@ -219,13 +220,135 @@ function opening_times_collection_meta() {
  * Prints HTML with meta information for the Take-overs.
  */
 function opening_times_takeover_meta() {
-    if ( 'take-overs' == get_post_type() ) : ?>
-    
-        <dl class="ot-event-meta ot-meta dl-inline">
-            <dt><?php _e( 'Website', 'opening_times' ); ?></dt>
-            <dd><?php get_template_part('template-parts/loop', 'collection_links'); ?></dd>
-            <dt><?php _e( 'Dates', 'opening_times' ); ?></dt>
-            <dd><?php opening_times_event_dates(); ?></dd>
-        </dl>   
-    <?php endif;
+    if ( 'take-overs' == get_post_type() ) : 
+        $takeover = '<dl class="ot-event-meta ot-meta dl-inline">';
+        $takeover .= '<dt>' . esc_html( 'Website', 'opening_times' ) . '</dt>';
+        $takeover .= '<dd>' . opening_times_collection_links() . '</dd>';
+        $takeover .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
+        $takeover .= '<dd>' . ' ' . opening_times_event_dates() . '</dd>';
+        $takeover .= '</dl>'; 
+		
+		return $takeover;
+    endif;
+}
+
+/**
+ * The template tag for the the Artist bio.
+ */
+function opening_times_artist_bio() {
+    global $post;
+    $artist_description = get_the_terms( $post->ID, 'artists');
+    if ( !is_post_type_archive( 'reading' ) && !is_singular( 'reading' ) ) : // display the artist bio if it exists, and don't display them on the reading pages.
+
+        if ( '' != $artist_description ) :
+            foreach ( $artist_description as $artist ) {
+                if (  $artist->description ) {
+                    echo '<aside class="artist-bio ot-meta ot-bio" role="complementary">' . wpautop( wptexturize( $artist->description ) ) . '</aside>';
+                }
+            };
+        endif;
+            
+    endif;
+}
+
+/**
+ * The template used for the User Description AKA the Editor Bio
+ */
+function opening_times_editor_bio() {
+    global $post;
+    $user_description = get_the_author_meta('description');
+    $user_url = get_the_author_meta('user_url');
+
+    if ( '' != $user_description ) :
+        $editor = '<aside class="editor-bio">';
+        if ( 'article' == get_post_type() ) :
+            $editor .= '<p>' . esc_html( 'Selected by: ', 'opening_times' ) . '<span>' . the_author_posts_link() . '</span></p>';
+        endif;
+
+        $editor .= wpautop( wptexturize( $user_description ) );
+        if ( '' != $user_url ) :
+            $editor .= '<p><a href="' . esc_url( $user_url ) . '" target="_blank">' . esc_html( $user_url ) . '</a></p>';
+        endif;
+
+        $editor .= '</aside>';
+		
+		return $editor;
+    endif;
+}
+
+/**
+ * Output the featured content
+ *
+ * Get the fist value from the link array
+ * @link: http://stackoverflow.com/questions/1921421/get-the-first-element-of-an-array
+ */
+function opening_times_featured_content() {
+	global $post;
+    $oembed = get_post_meta( $post->ID, '_ot_embed_url', true );
+    $link_url = get_post_meta( $post->ID, '_ot_link_url', true );
+    $file_url = get_post_meta( $post->ID, '_ot_file', true );
+
+    if ( '' != get_the_post_thumbnail() ) :
+        if ( '' != $link_url  ) :
+            $featured = '<figure class="featured-image col-sm-3"><a href="' . reset($link_url) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</a></figure>';
+
+        elseif ( is_post_type_archive( 'reading' ) || (is_singular( 'reading' ) || is_singular( 'article' )) ) :
+            $featured = '<figure class="featured-image">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</figure>';
+
+        else :
+            $featured = '<figure class="featured-image col-sm-3">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') .'</figure>';
+
+        endif;
+		
+		return $featured;
+
+    elseif ( '' != $oembed ) :
+        // If there is no thumbnail, but there is an embed, and we're not in the reading section or take-overs section. This will format the posts the appear in the archives.
+        if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) && !is_singular( array ( 'reading', 'take-overs', 'article' ) ) ) :
+            $featured = '<figure class="col-sm-3">' . apply_filters( 'the_content', $oembed ) . '</figure>';
+
+        // If there is no thumbnail, but there is an embed, and we ARE in the TAKE-OVERS section
+        elseif ( '' != $oembed && ( is_post_type_archive( 'take-overs' ) || is_singular( 'take-overs' ) ) ) :
+            $featured = '<figure class="col-sm-5 fitvids">' . apply_filters( 'the_content', $oembed ) . '</figure>';
+
+        // If there is no thumbnail, but there is an embed, and we ARE in the READING section
+        elseif ( '' != $oembed ) :
+            $featured = '<figure>' . apply_filters( 'the_content', $oembed ) . '</figure>';
+
+        endif;
+		
+		return $featured;
+
+    elseif ( !is_post_type_archive( 'reading' ) && !is_singular( array ( 'reading', 'article' ) ) ) :
+        // None of the above, everything is empty
+        $featured = '<figure class="featured-image col-sm-3">' . file_get_contents( get_template_directory_uri() . '/img/future-content-thumbnail.svg' ) . '</figure>';
+
+		return $featured;
+		
+    endif;
+}
+
+/**
+ * Output the Collection Links
+ */
+function opening_times_collection_links() {
+	global $post;
+    $file_url = get_post_meta( $post->ID, '_ot_file', true );
+    $link_url = get_post_meta( $post->ID, "_ot_link_url", true );
+
+    if ( '' != $link_url ) :
+        foreach ( $link_url as $link ) :
+            if ( 'take-overs' != get_post_type() ) :
+                $links = '<a href="' . esc_url( $link ) . '" target="_blank" class="featured-link">' .  esc_html( $link ) . '</a>';
+            else :
+                $links = '<a href="' . esc_url( $link ) . '" target="_blank">' .  esc_html( $link ) . '</a>';
+            endif;
+        endforeach;
+		return $links;
+    endif;
+
+    if ( '' != $file_url ) :
+        $file = '<a href="' . esc_url( $file_url ) . '" target="_blank" class="featured-link">' .  esc_html( $file_url ) . '</a>';
+		return $file;
+    endif;
 }

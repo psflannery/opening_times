@@ -7,6 +7,7 @@
 ?>
 
 <section id="about" class="info-panel info-columns" aria-hidden="true" role="complementary">
+
     <?php $about_page = get_theme_mod( 'ot_about-menu' ); ?>
     <?php if ( '' != $about_page ) : ?>
         <?php global $post; ?>
@@ -22,4 +23,5 @@
         <?php wp_reset_postdata( $post ); ?>
 
     <?php endif; ?>
+    
 </section>

@@ -11,10 +11,10 @@ get_header(); ?>
 
         <section class="error-404 not-found">
             <header class="page-header">
-                <h1 class="page-title"><?php _e( 'Not Found', 'opening_times' ); ?></h1>
-            </header><!-- .page-header -->
-        </section><!-- .error-404 -->
+                <h1 class="page-title"><?php esc_html_e( 'Not Found', 'opening_times' ); ?></h1>
+            </header>
+        </section>
 
-    </main><!-- #main -->
+    </main>
 
 <?php get_footer(); ?>

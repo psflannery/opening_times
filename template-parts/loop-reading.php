@@ -10,13 +10,14 @@
 ?>
 
 <?php
-$args = array(
-    'post_parent' => $post->ID,
-    'post_type' => 'article',
-    'order' => 'DESC', 
-    'numberposts' => -1,
-);
-$articles = new WP_query($args); ?>
+    $args = array(
+        'post_parent' => $post->ID,
+        'post_type' => 'article',
+        'order' => 'DESC', 
+        'numberposts' => -1,
+    );
+    $articles = new WP_query($args); 
+?>
 
 <?php if ($articles->have_posts()) : ?>
 

@@ -17,7 +17,6 @@ get_header(); ?>
 
         <?php if ( have_posts() ) : ?>
 
-            <?php /* Start the Loop */ ?>
             <?php while ( have_posts() ) : the_post(); ?>
 
                 <?php
@@ -38,6 +37,6 @@ get_header(); ?>
 
         <?php endif; ?>
 
-    </main><!-- #main -->
+    </main>
 
 <?php get_footer(); ?>

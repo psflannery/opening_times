@@ -13,6 +13,7 @@
 
         <?php $editor_title = get_post_meta( $post->ID, '_ot_editor_title', true ); ?>
         <?php if ( '' != $editor_title ) : ?>
+        
             <h2 class="header-details gradientee col-sm-3"><?php echo $editor_title ?></h2>
 
         <?php endif; ?>
@@ -24,15 +25,21 @@
         <div class="editor-wrap col-sm-4">
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <div class="entry-content">
-                    <?php the_content(); ?>			
+                
+                    <?php the_content(); ?>		
+                    
                 </div>
             </article>
             <div class="content-divider">
-                <?php get_template_part( 'template-parts/bio', 'editor' ); ?>
+            
+                <?php echo opening_times_editor_bio(); ?>
+                
             </div>
         </div>
         <div class="editor-selection accordion col-sm-6">
-            <?php get_template_part( 'template-parts/loop', 'reading' ); ?>		
+        
+            <?php get_template_part( 'template-parts/loop', 'reading' ); ?>	
+            
         </div>
     </div>
 </section>
