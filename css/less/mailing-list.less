@@ -41,37 +41,36 @@
 			width: 57.5%;
 		}
 	}
+	//Forms
+	form > div {
+		clear: both;
+		overflow: hidden;
+		margin: 0 0 @grid-gutter-width 0;
+	}
+	form > div > label {
+		line-height: @line-height-base*1.5;
+		padding-right: @grid-gutter-width;
+		width: 100%;
+		@media (min-width: @screen-sm-min) {
+			float: left;
+			text-align: right;
+			//width: 25%;
+			width: 30%;
+		}
+	}
+	form > div > div {
+		float: none;
+		@media (min-width: @screen-sm-min) {
+			float: right;
+			//width: 75%;
+			width: 70%
+		}
+	}
 }
 .ot-mail-unsubscribe {
 	display: inline-block;
 	@media (min-width: @screen-sm-min) {
 		//margin-left: 25%;
 		margin-left: 30%;
-	}
-}
-
-//Forms
-form > div {
-	clear: both;
-	overflow: hidden;
-	margin: 0 0 @grid-gutter-width 0;
-}
-form > div > label {
-	line-height: @line-height-base*1.5;
-	padding-right: @grid-gutter-width;
-	width: 100%;
-	@media (min-width: @screen-sm-min) {
-		float: left;
-		text-align: right;
-		//width: 25%;
-		width: 30%;
-	}
-}
-form > div > div {
-	float: none;
-	@media (min-width: @screen-sm-min) {
-		float: right;
-		//width: 75%;
-		width: 70%
 	}
 }

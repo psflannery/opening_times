@@ -1328,19 +1328,105 @@ table th[class*="col-"] {
     border-bottom: 0;
   }
 }
-input[type="submit"].ot-button {
-  margin: 20px 0;
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  min-width: 0;
 }
-input[type=text],
-input[type=email],
-input[type=url],
-input[type=password],
-input[type=search],
-textarea {
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 18px;
+  font-size: 19.5px;
+  line-height: inherit;
+  color: #333333;
+  border: 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+label {
+  display: inline-block;
+  max-width: 100%;
+}
+input[type="search"] {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+input[type="radio"],
+input[type="checkbox"] {
+  margin: 4px 0 0;
+  margin-top: 1px \9;
+  line-height: normal;
+}
+input[type="file"] {
+  display: block;
+}
+input[type="range"] {
+  display: block;
+  width: 100%;
+}
+select[multiple],
+select[size] {
+  height: auto;
+}
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+output {
+  display: block;
+  padding-top: 7px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #555555;
+}
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #555555;
+  background-color: #ffffff;
+  background-image: none;
   border: 1px solid #000000;
-  border-radius: 0;
-  color: #000000;
-  line-height: 1.78571429;
+  border-radius: none;
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.form-control:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.form-control::-moz-placeholder {
+  color: #999999;
+  opacity: 1;
+}
+.form-control:-ms-input-placeholder {
+  color: #999999;
+}
+.form-control::-webkit-input-placeholder {
+  color: #999999;
+}
+.form-control::-ms-expand {
+  border: 0;
+  background-color: transparent;
+}
+@media (min-width: 768px) {
+  .form-control-small {
+    width: 50%;
+  }
+}
+.form-group {
+  margin-bottom: 15px;
 }
 input[type="button"]:focus,
 input[type="reset"]:focus,
@@ -1369,11 +1455,14 @@ input[type=search] {
   border: 1px dotted #000000;
   display: block;
   float: left;
-  margin: 1em 1em 80px 20px;
+  margin: 7.5px 7.5px 30px 0;
   padding: .5em;
 }
 .ot-button:hover {
   border: 1px solid #000000;
+}
+.ot-button-no-float {
+  float: none;
 }
 .site-header {
   background: #ffffff;
@@ -2485,38 +2574,38 @@ object {
     width: 57.5%;
   }
 }
+.mailing-list-inner form > div {
+  clear: both;
+  overflow: hidden;
+  margin: 0 0 20px 0;
+}
+.mailing-list-inner form > div > label {
+  line-height: 2.14285714;
+  padding-right: 20px;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .mailing-list-inner form > div > label {
+    float: left;
+    text-align: right;
+    width: 30%;
+  }
+}
+.mailing-list-inner form > div > div {
+  float: none;
+}
+@media (min-width: 768px) {
+  .mailing-list-inner form > div > div {
+    float: right;
+    width: 70%;
+  }
+}
 .ot-mail-unsubscribe {
   display: inline-block;
 }
 @media (min-width: 768px) {
   .ot-mail-unsubscribe {
     margin-left: 30%;
-  }
-}
-form > div {
-  clear: both;
-  overflow: hidden;
-  margin: 0 0 20px 0;
-}
-form > div > label {
-  line-height: 2.14285714;
-  padding-right: 20px;
-  width: 100%;
-}
-@media (min-width: 768px) {
-  form > div > label {
-    float: left;
-    text-align: right;
-    width: 30%;
-  }
-}
-form > div > div {
-  float: none;
-}
-@media (min-width: 768px) {
-  form > div > div {
-    float: right;
-    width: 70%;
   }
 }
 .about-drop-down ul {
