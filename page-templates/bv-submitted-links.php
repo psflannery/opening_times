@@ -8,13 +8,25 @@
  
 get_header(); ?>
 
-    <main id="main" class="site-main accordion-issue container-fluid" role="main">
+    <main id="main" class="site-main accordion gradienter container-fluid" role="main">
+	
+		<?php
+			$args = array(
+				'author_name' => 'anonymous',
+				'post_type' => array( 'article' ),
+				'posts_per_page' => -1,
+				'order' => 'DESC',
+				'orderby' => 'date',
+			);
 
-        <?php if ( have_posts() ) : ?>
+			$user_submit = new WP_Query( $args );
+		?>
 
-            <?php while ( have_posts() ) : the_post(); ?>
+        <?php if (  $user_submit->have_posts() ) : ?>
 
-                <?php get_template_part( 'template-parts/single', 'issue' ); ?>
+            <?php while ( $user_submit->have_posts() ) : $user_submit->the_post(); ?>
+
+				<?php get_template_part( 'template-parts/content', get_post_format() ); ?>
 
             <?php endwhile; ?>
 
@@ -25,6 +37,8 @@ get_header(); ?>
             <?php get_template_part( 'template-parts/content', 'none' ); ?>
 
         <?php endif; ?>
+		
+		<?php wp_reset_postdata(); ?>
 
     </main>
 
