@@ -6,7 +6,7 @@
  */
 ?>
 
-<section id="mailing-list" class="info-panel" aria-hidden="true" role="complementary">
+<section id="mailing-list" class="info-panel pseudo-content-divider-top" aria-hidden="true" role="complementary">
 
     <?php $email = get_theme_mod( 'ot_email_address' ); ?>
     <?php if ( '' != $email ) : ?>
@@ -22,7 +22,7 @@
         <?php $post = get_post( $page_id ); ?>
         <?php setup_postdata( $post ); ?>
 
-        <div id="ot-mailing-list" class="mailing-list">
+        <div id="ot-mailing-list" class="mailing-list row">
             <?php the_content(); ?>
             <?php edit_post_link( __( 'Edit', 'opening_times' ), '<footer class="entry-meta"><span class="edit-link">', '</span></footer>' ); ?>
         </div>

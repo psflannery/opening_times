@@ -546,10 +546,10 @@ dd {
   margin: 0;
 }
 .dl-inline dd + dd:before {
-  content: ', ';
+  content: '\002C \0020';
 }
 .dl-inline dt:after {
-  content: ':';
+  content: '\003A \0020';
 }
 .dl-inline dt:before {
   content: "\A";
@@ -1339,11 +1339,7 @@ legend {
   width: 100%;
   padding: 0;
   margin-bottom: 18px;
-  font-size: 19.5px;
   line-height: inherit;
-  color: #333333;
-  border: 0;
-  border-bottom: 1px solid #e5e5e5;
 }
 label {
   display: inline-block;
@@ -1447,8 +1443,84 @@ input[type=search] {
   -webkit-appearance: textfield;
   -webkit-box-sizing: content-box;
 }
-.search-form {
-  padding: 0;
+.form-horizontal .radio,
+.form-horizontal .checkbox,
+.form-horizontal .radio-inline,
+.form-horizontal .checkbox-inline {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 7px;
+}
+.form-horizontal .radio,
+.form-horizontal .checkbox {
+  min-height: 25px;
+}
+.form-horizontal .form-group {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+@media (min-width: 768px) {
+  .form-horizontal .control-label {
+    text-align: right;
+    margin-bottom: 0;
+    padding-top: 7px;
+  }
+}
+.form-horizontal .has-feedback .form-control-feedback {
+  right: 10px;
+}
+@media (min-width: 768px) {
+  .form-horizontal .form-group-lg .control-label {
+    padding-top: 14.3px;
+    font-size: 17px;
+  }
+}
+@media (min-width: 768px) {
+  .form-horizontal .form-group-sm .control-label {
+    padding-top: 6px;
+    font-size: 12px;
+  }
+}
+.expanding-search .search-form {
+  padding: 7px 0;
+}
+@media (max-width: 767px) {
+  .expanding-search .search-form {
+    font-size: 15px;
+    padding: 0;
+  }
+}
+.expanding-search .form-control {
+  border: none;
+  border-width: 0;
+  font-size: 15px;
+  line-height: 1.42857143;
+}
+.expanding-search .form-control::-moz-placeholder {
+  color: #000000;
+  opacity: 1;
+}
+.expanding-search .form-control:-ms-input-placeholder {
+  color: #000000;
+}
+.expanding-search .form-control::-webkit-input-placeholder {
+  color: #000000;
+}
+@media (max-width: 767px) {
+  .expanding-search .form-control {
+    margin: 0;
+    padding: 11px 0;
+    text-align: center;
+    width: 100%;
+  }
+}
+@media (min-width: 768px) {
+  .expanding-search .form-control {
+    width: 50px;
+  }
+  .expanding-search .form-control:focus {
+    width: 200px;
+  }
 }
 .ot-button {
   background: #ffffff;
@@ -1747,47 +1819,6 @@ body {
   padding-left: 0;
   padding-right: 0;
 }
-.menu-search .search-form {
-  padding: 7px 0;
-}
-@media (max-width: 767px) {
-  .menu-search .search-form {
-    font-size: 15px;
-    padding: 0;
-  }
-}
-.menu-search input[type="search"] {
-  border: none;
-  border-width: 0;
-  font-size: 15px;
-  line-height: 1.42857143;
-}
-@media (max-width: 767px) {
-  .menu-search input[type="search"] {
-    margin: 0;
-    padding: 11px 0;
-    text-align: center;
-    width: 100%;
-  }
-}
-@media (min-width: 768px) {
-  .menu-search input[type="search"] {
-    width: 50px;
-  }
-  .menu-search input[type="search"]:focus {
-    width: 150px;
-  }
-}
-.menu-search input[type="search"]::-moz-placeholder {
-  color: #000000;
-  opacity: 1;
-}
-.menu-search input[type="search"]:-ms-input-placeholder {
-  color: #000000;
-}
-.menu-search input[type="search"]::-webkit-input-placeholder {
-  color: #000000;
-}
 .strap-container {
   border-bottom: 1px solid #000000;
 }
@@ -1881,13 +1912,10 @@ body {
   }
 }
 .pseudo-content-divider:before {
-  content: '';
-  border-top: 1px solid #000000;
-  display: block;
   margin-top: 40px;
-  padding-bottom: 20px;
 }
-.pseudo-content-divider-top:before {
+.pseudo-content-divider-top:before,
+.pseudo-content-divider:before {
   content: '';
   border-top: 1px solid #000000;
   display: block;
@@ -2257,7 +2285,9 @@ object {
 .container-fluid:before,
 .container-fluid:after,
 .row:before,
-.row:after {
+.row:after,
+.form-horizontal .form-group:before,
+.form-horizontal .form-group:after {
   content: " ";
   display: table;
 }
@@ -2265,7 +2295,8 @@ object {
 .dl-horizontal dd:after,
 .container:after,
 .container-fluid:after,
-.row:after {
+.row:after,
+.form-horizontal .form-group:after {
   clear: both;
 }
 .center-block {
@@ -2523,103 +2554,6 @@ object {
 @media print {
   .hidden-print {
     display: none !important;
-  }
-}
-.mailing-list:before,
-.mailing-list:after {
-  content: " ";
-  display: table;
-}
-.mailing-list:after {
-  clear: both;
-}
-.mailing-list:before,
-.mailing-list:after {
-  content: " ";
-  display: table;
-}
-.mailing-list:after {
-  clear: both;
-}
-@media (max-width: 767px) {
-  .mailing-list {
-    margin-left: -20px;
-    margin-right: -20px;
-  }
-}
-@media (min-width: 768px) {
-  .mailing-list {
-    border-top: 1px solid #000000;
-  }
-}
-.mailing-list-inner h2 {
-  font-weight: normal;
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-@media (max-width: 767px) {
-  .mailing-list-inner h2 {
-    border-bottom: 1px solid #000000;
-    line-height: 27px;
-  }
-}
-@media (min-width: 768px) {
-  .mailing-list-inner h2 {
-    margin-top: 29px;
-    margin-left: -20px;
-    text-align: right;
-    white-space: pre;
-    width: 30%;
-  }
-}
-.mailing-list-inner input[type=text],
-.mailing-list-inner input[type=email],
-.mailing-list-inner input[type=url],
-.mailing-list-inner input[type=password],
-.mailing-list-inner textarea {
-  width: 100%;
-}
-@media (min-width: 768px) {
-  .mailing-list-inner input[type=text],
-  .mailing-list-inner input[type=email],
-  .mailing-list-inner input[type=url],
-  .mailing-list-inner input[type=password],
-  .mailing-list-inner textarea {
-    width: 57.5%;
-  }
-}
-.mailing-list-inner form > div {
-  clear: both;
-  overflow: hidden;
-  margin: 0 0 20px 0;
-}
-.mailing-list-inner form > div > label {
-  line-height: 2.14285714;
-  padding-right: 20px;
-  width: 100%;
-}
-@media (min-width: 768px) {
-  .mailing-list-inner form > div > label {
-    float: left;
-    text-align: right;
-    width: 30%;
-  }
-}
-.mailing-list-inner form > div > div {
-  float: none;
-}
-@media (min-width: 768px) {
-  .mailing-list-inner form > div > div {
-    float: right;
-    width: 70%;
-  }
-}
-.ot-mail-unsubscribe {
-  display: inline-block;
-}
-@media (min-width: 768px) {
-  .ot-mail-unsubscribe {
-    margin-left: 30%;
   }
 }
 .about-drop-down ul {

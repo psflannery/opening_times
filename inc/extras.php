@@ -58,7 +58,7 @@ add_filter( 'post_class', 'opening_times_post_classes', 10, 3 );
  */
 function opening_times_nav_search_form($items, $args) {
 	if( $args->theme_location == 'social' )
-		$items .= '<li class="menu-item menu-search">' . get_search_form( false ) . '</li>';
+		$items .= '<li class="menu-item expanding-search">' . get_search_form( false ) . '</li>';
 	return $items;
 }
 add_filter('wp_nav_menu_items', 'opening_times_nav_search_form', 10, 2);

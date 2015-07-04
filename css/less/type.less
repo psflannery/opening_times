@@ -208,11 +208,11 @@ dd {
         margin: 0;
     }
     dd + dd:before {
-        content:', '; // add comma between definitions
+        content:'\002C \0020'; // add comma between definitions
     }
     dt {
         &:after {
-            content: ':';
+            content: '\003A \0020';
         }
         &:before { // insert line break before <dt>
             content:"\A";

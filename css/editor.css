@@ -453,10 +453,10 @@ dd {
   margin: 0;
 }
 .dl-inline dd + dd:before {
-  content: ', ';
+  content: '\002C \0020';
 }
 .dl-inline dt:after {
-  content: ':';
+  content: '\003A \0020';
 }
 .dl-inline dt:before {
   content: "\A";

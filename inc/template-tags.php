@@ -289,9 +289,6 @@ function ot_return_future_content_thumbnail() {
 
 /**
  * Output the featured content
- *
- * Get the fist value from the link array
- * @link: http://stackoverflow.com/questions/1921421/get-the-first-element-of-an-array
  */
 function opening_times_featured_content() {
 	global $post;
@@ -301,7 +298,7 @@ function opening_times_featured_content() {
 
     if ( '' != get_the_post_thumbnail() ) :
         if ( '' != $link_url  ) :
-            $featured = '<figure class="featured-image col-sm-3"><a href="' . reset($link_url) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</a></figure>';
+            $featured = '<figure class="featured-image col-sm-3"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</a></figure>';
 
         elseif ( is_post_type_archive( 'reading' ) || (is_singular( 'reading' ) || is_singular( 'article' )) ) :
             $featured = '<figure class="featured-image">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</figure>';
@@ -346,13 +343,14 @@ function opening_times_collection_links() {
 	global $post;
     $file_url = get_post_meta( $post->ID, '_ot_file', true );
     $link_url = get_post_meta( $post->ID, "_ot_link_url", true );
+	$links = '';
 
     if ( '' != $link_url ) :
         foreach ( $link_url as $link ) :
             if ( 'take-overs' != get_post_type() ) :
-                $links = '<a href="' . esc_url( $link ) . '" target="_blank" class="featured-link">' .  esc_html( $link ) . '</a>';
+                $links .= '<a href="' . esc_url( $link ) . '" target="_blank" class="featured-link">' .  esc_html( $link ) . '</a>';
             else :
-                $links = '<a href="' . esc_url( $link ) . '" target="_blank">' .  esc_html( $link ) . '</a>';
+                $links = '<a href="' . esc_url( $link ) . '" target="_blank">' . esc_html( $link ) . '</a>';
             endif;
         endforeach;
 		return $links;
