@@ -1748,7 +1748,7 @@ body {
   padding-right: 0;
 }
 .menu-search .search-form {
-  padding: 13px 10px;
+  padding: 7px 0;
 }
 @media (max-width: 767px) {
   .menu-search .search-form {
@@ -1775,8 +1775,18 @@ body {
     width: 50px;
   }
   .menu-search input[type="search"]:focus {
-    width: 100%;
+    width: 150px;
   }
+}
+.menu-search input[type="search"]::-moz-placeholder {
+  color: #000000;
+  opacity: 1;
+}
+.menu-search input[type="search"]:-ms-input-placeholder {
+  color: #000000;
+}
+.menu-search input[type="search"]::-webkit-input-placeholder {
+  color: #000000;
 }
 .strap-container {
   border-bottom: 1px solid #000000;
@@ -2156,6 +2166,10 @@ object {
 .edit-link {
   display: block;
   clear: both;
+}
+.label {
+  font-style: normal;
+  font-weight: bold;
 }
 .js .accordion,
 .js .accordion-issue {

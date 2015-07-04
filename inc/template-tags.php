@@ -277,6 +277,17 @@ function opening_times_editor_bio() {
 }
 
 /**
+ * Return, not echo, the future content thumbnail `get_template_part`
+ *
+ * @link https://kovshenin.com/2013/get_template_part-within-shortcodes/
+ */
+function ot_return_future_content_thumbnail() {
+    ob_start();
+    get_template_part( 'img/inline', 'future-content-thumbnail.svg' );
+    return ob_get_clean();
+}
+
+/**
  * Output the featured content
  *
  * Get the fist value from the link array
@@ -321,7 +332,7 @@ function opening_times_featured_content() {
 
     elseif ( !is_post_type_archive( 'reading' ) && !is_singular( array ( 'reading', 'article' ) ) ) :
         // None of the above, everything is empty
-        $featured = '<figure class="featured-image col-sm-3">' . file_get_contents( get_template_directory_uri() . '/img/future-content-thumbnail.svg' ) . '</figure>';
+        $featured = '<figure class="featured-image col-sm-3">' . ot_return_future_content_thumbnail() . '</figure>';
 
 		return $featured;
 		

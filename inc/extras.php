@@ -149,6 +149,7 @@ add_action('admin_init', 'opening_times_imagelink_setup', 10);
 
 /**
  * Add a `screen-reader-text` class to the search form's submit button.
+ * Add a `form-control` class to the search form.
  *
  * @since Opening Times 1.3.0
  *
@@ -157,6 +158,7 @@ add_action('admin_init', 'opening_times_imagelink_setup', 10);
  */
 function opening_times_search_form_modify( $html ) {	
 	$html = str_replace( 'class="search-submit"', 'class="search-submit screen-reader-text"', $html );
+	$html = str_replace( 'class="search-field"', 'class="search-field form-control"', $html );
 	return $html;
 }
 add_filter( 'get_search_form', 'opening_times_search_form_modify' );

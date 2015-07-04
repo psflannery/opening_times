@@ -36,7 +36,7 @@
             <div id="info" class="dropdown site-info"></div>
         </header>
 
-        <?php echo file_get_contents( get_template_directory_uri() . "/img/ot-logo-black-animated.svg" ); ?>
+		<?php get_template_part('img/inline', 'ot-logo-black-animated.svg'); ?>
 
         <div id="content" class="site-content">
             <h1 class="menu-toggle"><span class="screen-reader-text"><?php esc_html_e( 'Menu', 'opening_times' ); ?></span></h1>
