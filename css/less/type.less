@@ -208,18 +208,18 @@ dd {
         margin: 0;
     }
     dd + dd:before {
-        content:'\002C \0020'; // add comma between definitions
+        content:'\002C \0020'; // comma, space
     }
     dt {
         &:after {
-            content: '\003A \0020';
+            content: '\003A \0020'; // colon, space
         }
-        &:before { // insert line break before <dt>
-            content:"\A";
+        &:before {
+            content:"\A"; // line break
             white-space:pre;
         }
-        &:first-child:before { // disable line break before the first <dt>
-            content: none;
+        &:first-child:before {
+            content: none; // disable line break before the first <dt>
         }
     }
 }
