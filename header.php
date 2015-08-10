@@ -29,8 +29,22 @@
             <nav id="site-navigation" class="main-navigation" role="navigation">
                 <a class="skip-link screen-reader-text screen-reader-text-focusable" href="#content"><?php esc_html_e( 'Skip to content', 'opening_times' ); ?></a>
 
-                <?php wp_nav_menu( array( 'theme_location' => 'primary' ) ); ?>
-                <?php wp_nav_menu( array( 'theme_location' => 'social', 'depth' => '1', 'menu_class' => 'social-menu menu' ) ); ?>
+                <?php 
+                    wp_nav_menu( array( 
+                        'theme_location' => 'primary',
+                        'container' => false,
+                        'depth' => '1',
+                        'menu_class' => 'navigation-menu menu'
+                    ) ); 
+                ?>
+                <?php 
+                    wp_nav_menu( array( 
+                        'theme_location' => 'social',
+                        'container' => false,
+                        'depth' => '1',
+                        'menu_class' => 'social-menu menu'
+                    ) );
+                ?>
 
             </nav>
             <div id="info" class="dropdown site-info"></div>

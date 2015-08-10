@@ -53,6 +53,7 @@ function opening_times_setup() {
 	// Enable support for Post Formats.
 	add_theme_support( 'post-formats', array( 
 		'chat',
+		'link',
 	) );
 	
 	// Enable support for HTML5 markup.

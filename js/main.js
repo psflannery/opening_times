@@ -5,7 +5,7 @@
  */
 function updateViewportDimensions() {
     var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
-    return { width:x,height:y }
+    return { width:x,height:y };
 }
 // setting the viewport width
 var viewport = updateViewportDimensions();
@@ -124,12 +124,11 @@ function checkGroup(name,value) {
         $iframe.hide().removeAttr('data-src').attr('data-lazy-loaded', 'true');
         iframe.src = src;
         $iframe.show();
-    };
+    }
 	
 	/**
 	 * Main Accordion
 	 */
-		
 	main_accordion = function() {
 		$(".js .accordion").css({display: 'block'});
 		
@@ -150,7 +149,7 @@ function checkGroup(name,value) {
 				if (ui.newPanel.length > 0) {
 					$(ui.newPanel).find('iframe[data-src]').each(function () {
 						lazy_load_iframe(this);
-					})
+					});
 				}
 				$(ui.oldPanel).find('iframe[data-lazy-loaded]').attr('src', function (i, val) {
 					return val;
@@ -229,7 +228,7 @@ function checkGroup(name,value) {
 			var $header = $('.site-header');
 			if (viewport.width < 768) {
 				return $header.addClass('autoheight');
-			};
+			}
 			$header.removeClass('autoheight').css( 'height', '' );
 			$body.removeClass('active');
 		};
@@ -289,8 +288,6 @@ function checkGroup(name,value) {
 			$('.info-panel').slideUp('slow');
 			$('body').removeClass('open');
 		});
-		
-		obsfucate_email();
 	};
 	
 	/**
@@ -341,7 +338,7 @@ function checkGroup(name,value) {
 				$search.focus(function () {
 					$menu.show();
 				});
-			};
+			}
 		}
 		searchExpand();
 		
@@ -380,18 +377,21 @@ function checkGroup(name,value) {
 		/* Wrap the logo in a div to create the 404 page */
 		$(".site-logo").wrap("<div class='message404'></div>");
 	};
-	
+
 	/**
-	 * Unscramble the email address and make it clickable.
-	 * (source): http://www.jquery4u.com/snippets/jquery-scramble-web-page-email-addresses/
+	 * Auto add protocal to url form validation
 	 */
-    obsfucate_email = function() {
-        $('.ot-email').each(function () {    
-            var $email = $(this);    
-            var address = $email.text().replace(/\s*\[at\]\s*/, '@').replace(/\s*\[dot\]\s*/g, '.');    
-            $email.html('<a href="mailto:' + address + '" target="_blank">' + address + '</a>');  
-        });
-    };
+	input_url_force_protocol = function() {
+		$('.auto-protocol').blur(function() {
+			var string = $(this).val();
+			if (! string.match(/^https?:/)){
+				string = "http://" + string;
+			}
+			$(this).val(function() {
+				return string;
+			});
+		});
+	};
 	
 	/**
 	 * Ajax Page Load - history.js
@@ -420,7 +420,7 @@ function checkGroup(name,value) {
 					title = search + " - Search Results - Opening Times";
 				History.pushState('ajax', title, path);
 			});
-		}
+		};
 		ajax_click();
 					
 		// Bind to state change
@@ -437,6 +437,7 @@ function checkGroup(name,value) {
 			$body.removeClass('active').css( "overflow", "visible" );
 			opening_times_accordion();
 			ajax_click();
+			input_url_force_protocol();
 			
 			/* 
 			// Update Google analytics
@@ -444,20 +445,17 @@ function checkGroup(name,value) {
 			page = loc.hash ? loc.hash.substring(1) : loc.pathname + loc.search;
 			ga('send', 'pageview', page);
 			*/
-		}
+		};
 		
 		// Load Ajax
 		load_ot_ajax = function() {
 			State = History.getState(); // Note: Using History.getState() instead of event.state
-			
-			// Debugging
-			// History.log('statechange:', State.data, State.title, State.url);
-			// console.log(event);
-			
+					
 			$("body").prepend('<div id="ajax-loader"><span>Loading</span></div>');
 			$("#ajax-loader").fadeIn();
 			$("#content").load(State.url + ' #content > *', function(data, status, xhr) {
-				if ( status == "error" ) {
+			//$("#main").load(State.url + ' #primary, #secondary', function(data) {
+				if ( status === "error" ) {
 					var msg = "Sorry but there was an error: ",
 						msg2 = "Please reload the page.";
 					$( "#ajax-loader" ).wrap( "<div id='ajax-error'></div>" ).html( msg + xhr.status + " " + xhr.statusText + "<br>" + msg2 );
@@ -466,25 +464,60 @@ function checkGroup(name,value) {
 						$(this).detach();
 					});
 					callback_scripts();
+					//var request = $(data);
+					//$('#menu-navigation').replaceWith($('#menu-navigation', request));
 				}
 				
 				// Updates the menu
 				//var request = $(data);
-				//$('#menu-main-menu').replaceWith($('#menu-main-menu', request));
+				//$('#menu-navigation').replaceWith($('#menu-navigation', request));
 				
 			});
 		};
 	};
 	
 	/* Sticky Footer */
-	$('<div id="push"></div>').appendTo('#page')
-	
+	$('<div id="push"></div>').appendTo('#page');
+
+	/* Firefox menu form normalisation */
+	$('.search-form').height($(".menu-item").height());
+
 	/* Konami code */
 	$(window).konami({
 		cheat: function () {
 			$body.addClass("konami").append('<audio src="../wp-content/themes/opening_times/assets/timba.mp3" preload="auto" autoplay loop></audio>');
-			$body.ready(function(){setTimeout(function(){changefont("serif")},400);setTimeout(function(){changefont("cursive")},800);setTimeout(function(){changefont("monospace")},1200);setTimeout(function(){changefont("fantasy")},1600);setTimeout(function(){changefont("sans-serif")},2000);setTimeout(function(){changefont("Symbol")},2400);setTimeout(function(){changefont("Webdings")},2800);setTimeout(function(){changefont("Wingdings")},3200)});
-			function changefont(a){$("body").css({"font-family":a});setTimeout(function(){changefont(a)},3200)};		
+			$body.ready(function(){
+				setTimeout(function(){
+					changefont("serif");
+				},400);
+				setTimeout(function(){
+					changefont("cursive");
+				},800);
+				setTimeout(function(){
+					changefont("monospace");
+				},1200);
+				setTimeout(function(){
+					changefont("fantasy");
+				},1600);
+				setTimeout(function(){
+					changefont("sans-serif");
+				},2000);
+				setTimeout(function(){
+					changefont("Symbol");
+				},2400);
+				setTimeout(function(){
+					changefont("Webdings");
+				},2800);
+				setTimeout(function(){
+					changefont("Wingdings");
+				},3200);
+			});
+			function changefont(a){
+				$("body").css({"font-family":a});
+				setTimeout(function(){
+					changefont(a);
+				},3200);
+			}
 		}
 	});
 	
@@ -526,10 +559,11 @@ jQuery(document).ready(function($) {
     preventZoom();
     dropdowns();
     ajax_load();
+    input_url_force_protocol();
     addFieldToCheck("email", "Email address");
     addFieldToCheck("emailconfirm", "Confirm your email address");
     opening_times_accordion();
     if ($('body').hasClass('error404')) {
         four_oh_four();
-    };
+    }
 });

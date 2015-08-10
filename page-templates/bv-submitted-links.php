@@ -11,8 +11,14 @@ get_header(); ?>
     <main id="main" class="site-main accordion gradienter container-fluid" role="main">
 	
 		<?php
+			// the selected category
+		 	$bv_links_category = get_theme_mod( 'ot_bv_user_selected_links_cat' );
+		 	// the selected user
+		 	$bv_links_user = get_theme_mod( 'ot_bv_user_selected_links_author' );
+
 			$args = array(
-				'author_name' => 'anonymous',
+				'author' => $bv_links_user,
+				'cat' => $bv_links_category,
 				'post_type' => array( 'article' ),
 				'posts_per_page' => -1,
 				'order' => 'DESC',
@@ -26,23 +32,25 @@ get_header(); ?>
 
             <?php while ( $user_submit->have_posts() ) : $user_submit->the_post(); ?>
 
+			<?php
+				global $post;
+				$submitted_by = get_post_meta( $post->ID, '_ot_bv_link_submit_name', true );
+				$link_url = get_post_meta( $post->ID, '_ot_bv_link_submit_link', true );
+			?>
+
 				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<header id="<?php opening_times_the_slug(); ?>" class="entry-header gradientee strap-header">
-						<h2 class="header-details archive-header-details col-sm-3"><?php opening_times_taxonomy_no_link() ?></h2>
+						<h2 class="header-details archive-header-details col-sm-3"><?php echo opening_times_link_submitter() ?></h2>
 						<h1 class="header-details archive-header-details col-sm-4"><?php the_title(); ?></h1>
-						<h3 class="header-details archive-header-details col-sm-2"><?php opening_times_category_no_link() ?></h3>
+						<h3 class="header-details archive-header-details col-sm-2"><?php opening_times_category_no_link(); ?></h3>
 						<h3 class="header-details archive-header-details col-sm-1 header-details-last"><?php echo get_the_time('Y', $post->ID); ?></h3>
 					</header>
 					<div class="accordion-content clearfix">
 						<div class="entry-content-wrap fitvids">
 							<?php echo opening_times_featured_content(); ?>
 							<div class="entry-content col-sm-7 col-lg-4">
-								<?php
-									global $post;
-									$link_url = get_post_meta( $post->ID, '_ot_bv_link_submit_link', true );
-								?>
-							
-								<a href="http://<?php the_title_attribute(); ?>" taget="_blank" class="featured-link"><?php the_title(); ?></a>
+
+								<a href="<?php echo $link_url; ?>" target="_blank" class="featured-link"><?php echo $link_url; ?></a>
 							
 								<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) ); ?>
 								

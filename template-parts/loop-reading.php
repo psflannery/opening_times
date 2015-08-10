@@ -11,6 +11,7 @@
 
 <?php
     $args = array(
+        'author' => -9, 
         'post_parent' => $post->ID,
         'post_type' => 'article',
         'order' => 'DESC', 

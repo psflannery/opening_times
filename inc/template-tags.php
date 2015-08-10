@@ -152,7 +152,7 @@ function opening_times_event_dates() {
 		$residencydate = '';
 		$residencydate .= ' ' . $clean_resindency_sd;
 		$residencydate .= ' - ' . $clean_resindency_ed;
-		echo $residencydate;
+		return $residencydate;
 	endif;
     
     if( '' != $meta_takeover_sd ):
@@ -298,7 +298,7 @@ function opening_times_featured_content() {
 
     if ( '' != get_the_post_thumbnail() ) :
         if ( '' != $link_url  ) :
-            $featured = '<figure class="featured-image col-sm-3"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</a></figure>';
+            $featured = '<figure class="featured-image col-sm-3"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') . '</a></figure>';
 
         elseif ( is_post_type_archive( 'reading' ) || (is_singular( 'reading' ) || is_singular( 'article' )) ) :
             $featured = '<figure class="featured-image">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</figure>';
@@ -361,3 +361,18 @@ function opening_times_collection_links() {
 		return $file;
     endif;
 }
+
+/**
+ * Output the the name of the person who submitted a link
+ */
+function opening_times_link_submitter() {
+	global $post;
+	$submitted_by = get_post_meta( $post->ID, '_ot_bv_link_submit_name', true );
+
+	if ( '' != $submitted_by ) :
+		echo $submitted_by;
+	else :
+		echo 'Anonymous';
+	endif;
+}
+

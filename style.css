@@ -1405,12 +1405,15 @@ output {
 .form-control::-moz-placeholder {
   color: #999999;
   opacity: 1;
+  font-size: 13px;
 }
 .form-control:-ms-input-placeholder {
   color: #999999;
+  font-size: 13px;
 }
 .form-control::-webkit-input-placeholder {
   color: #999999;
+  font-size: 13px;
 }
 .form-control::-ms-expand {
   border: 0;
@@ -1481,8 +1484,11 @@ input[type=search] {
     font-size: 12px;
   }
 }
-.expanding-search .search-form {
-  padding: 7px 0;
+.textarea-vert {
+  resize: vertical;
+}
+.textarea-no-Resize {
+  resize: none;
 }
 @media (max-width: 767px) {
   .expanding-search .search-form {
@@ -1495,16 +1501,21 @@ input[type=search] {
   border-width: 0;
   font-size: 15px;
   line-height: 1.42857143;
+  padding: 6px 10px;
+  margin: 7px 0;
 }
 .expanding-search .form-control::-moz-placeholder {
   color: #000000;
   opacity: 1;
+  font-size: 15px;
 }
 .expanding-search .form-control:-ms-input-placeholder {
   color: #000000;
+  font-size: 15px;
 }
 .expanding-search .form-control::-webkit-input-placeholder {
   color: #000000;
+  font-size: 15px;
 }
 @media (max-width: 767px) {
   .expanding-search .form-control {
@@ -1560,6 +1571,11 @@ input[type=search] {
 }
 .site-header:after {
   clear: both;
+}
+@media (min-width: 768px) {
+  .navigation-menu {
+    float: left;
+  }
 }
 @media (min-width: 768px) {
   .social-menu {

@@ -235,10 +235,17 @@ input[type=search] {
   }
 }
 
+// Text Area Resizing
+.textarea-vert { 
+  resize: vertical; 
+}
+.textarea-no-Resize { 
+  resize: none; 
+}
+
 // Expanding Search Form
 .expanding-search {
 	.search-form {
-		padding: ceil(( @menu-padding/2 )) 0;
 		@media (max-width: @screen-xs-max) {
 			font-size: @font-size-mid;
 			padding: 0;
@@ -249,7 +256,9 @@ input[type=search] {
 		border-width: 0;
 		font-size: @font-size-mid;
 		line-height: @line-height-base;
-		.placeholder-text();
+		.placeholder(@color: @text-color; @font-size: @font-size-mid);
+    padding: floor( @menu-padding/2 ) @grid-gutter-width/2;
+    margin: ceil( @menu-padding/2 ) 0;
 		@media (max-width: @screen-xs-max) {
 			margin: 0;
 			padding: 11px 0;

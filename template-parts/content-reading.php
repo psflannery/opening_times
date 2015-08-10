@@ -42,7 +42,7 @@
 
             <footer class="entry-meta content-divider">
 
-                <?php opening_times_collection_meta(); ?>
+                <?php echo opening_times_collection_meta(); ?>
 
                 <?php $slug = home_url('/reading/#'. opening_times_the_slug($echo=false)); ?>
 
