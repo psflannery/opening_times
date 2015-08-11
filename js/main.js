@@ -112,8 +112,8 @@ function checkGroup(name,value) {
 ( function ( $ ) {
     /* Global Variables */
     var $window = $(window),
-    $height = $window.height(),
-    $body = $('body');
+    	$height = $window.height(),
+    	$body = $('body');
 	
     /**
      * Lazy Load iFrames
@@ -129,7 +129,7 @@ function checkGroup(name,value) {
 	/**
 	 * Main Accordion
 	 */
-	main_accordion = function() {
+	 function main_accordion() {
 		$(".js .accordion").css({display: 'block'});
 		
 		$('.accordion').accordion({
@@ -176,12 +176,12 @@ function checkGroup(name,value) {
 			}
 			
 		});
-	};
+	}
 	
 	/**
 	 * Reading Accordion
 	 */
-	reading_accordion = function() {
+	function reading_accordion() {
 		$(".js .accordion-issue").css({display: 'block'});
 
 		$('.accordion-issue').accordion({
@@ -194,23 +194,39 @@ function checkGroup(name,value) {
 				ui.oldPanel.find('.accordion').accordion("option", "active", false);
 			}
 		});
-	};
+	}
 		
 	/**
 	 * Call the Opening Times Accordions
 	 */
-	opening_times_accordion = function() {
-		// http://stackoverflow.com/questions/5339876/how-to-check-jquery-plugin-and-functions-exists
+	function opening_times_accordion() {
 		if ($.fn.accordion) {
 			reading_accordion();
 			main_accordion();
 		}
-	};
+	}
 	
 	/**
 	 * Mobile Navigation
 	 */
-	mobile_nav = function() {
+
+	/* Adjust the size of the header according to the size of the viewport */
+	function header_resize() {
+		viewport = updateViewportDimensions();
+		var $header = $('.site-header');
+		if (viewport.width < 768) {
+			return $header.addClass('autoheight');
+		}
+		$header.removeClass('autoheight').css( 'height', '' );
+		$body.removeClass('active');
+	}
+	
+	/* Set an element to the height of the window */
+	function setDivHeight () {
+		$( '.autoheight' ).css( 'height', $( window ).height() );		
+	}
+
+	function mobile_nav() {
 		/* Toggle the navigation menu for small screens */
 		// http://blog.teamtreehouse.com/using-jquery-to-detect-when-css3-animations-and-transitions-end	
 		$('.menu-toggle').click(function (e) {
@@ -221,30 +237,9 @@ function checkGroup(name,value) {
 				$('body.active').css('overflow', 'hidden');
 			});
 		});
-		
-		/* Adjust the size of the header according to the size of the viewport */
-		header_resize = function() {
-			viewport = updateViewportDimensions();
-			var $header = $('.site-header');
-			if (viewport.width < 768) {
-				return $header.addClass('autoheight');
-			}
-			$header.removeClass('autoheight').css( 'height', '' );
-			$body.removeClass('active');
-		};
+
 		header_resize();
-		
-		/* Set an element to the height of the window */
-		setDivHeight = function () {
-			$( '.autoheight' ).css( 'height', $( window ).height() );		
-		};
 		setDivHeight();
-		
-		$(window).resize(function () {
-			header_resize();
-			setDivHeight();
-		});
-		
 		
 		/* Add a menu hamburger svg icon to the top of the page */
 		$('<svg version="1.1" id="menu-open" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25px" height="15px" viewBox="0 0 25 15" enable-background="new 0 0 25 15" xml:space="preserve">\
@@ -252,14 +247,14 @@ function checkGroup(name,value) {
 			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="14" x2="25" y2="14"/>\
 			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="7.359" x2="25" y2="7.359"/>\
 		</svg>').appendTo('.menu-toggle');
-	};
+	}
 	
 	/**
 	 * Dropdowns
 	 */
-	dropdowns = function() {
+	function dropdowns() {
 		/* Open and switch between the header dropdowns */
-		toggler = function (e) {
+		var toggler = function (e) {
 			var toToggle = $(this).data().toggleId;
 			var visible = function() {
 				if ($('.info-panel').is(':visible')) {
@@ -288,7 +283,7 @@ function checkGroup(name,value) {
 			$('.info-panel').slideUp('slow');
 			$('body').removeClass('open');
 		});
-	};
+	}
 	
 	/**
 	 * Layout
@@ -297,7 +292,45 @@ function checkGroup(name,value) {
 	 *
 	 * These all need to be wrapped in a function so that they can be called back after an ajax page load.
 	 */
-	layout = function() {
+
+	/* Fade out the Social Nav when the search box is in focus */
+	function searchExpand() {
+		viewport = updateViewportDimensions();
+		var $menu = $('.social-menu a'),
+		$search = $('.social-menu .search-field');
+		if (viewport.width > 768) {
+			$search.focus(function () {
+				$menu.hide();
+			}).blur(function () {
+				$menu.fadeIn(500);
+			});
+		} else {
+			$search.focus(function () {
+				$menu.show();
+			});
+		}
+	}
+
+	/**
+	 * Layout Hacks
+	 *
+	 * Mostly small hacks and tweaks to configure the layout, some of which are often simpler to do like this than through the Wordpress backend.
+	 * All of these need to be called back after the ajax page load.
+	 *
+	 * In time all of these should be imlpemented server side.
+	 */
+	function layout_hacks() {
+		/* Remove inline styles from wp-caption */
+		$(".wp-caption").removeAttr('style');
+		
+		/* Add a class to the first article in the editor selection on the reading pages */
+		$('.editor-selection > :first-child').addClass("pseudo-content-divider-top-articles-xs-max");
+		
+		/* Wordpress placeholder hack */
+		$('.search-field').attr("placeholder", "Search");
+	}
+
+	function layout() {
 		/* Launch the gradients */
 		$('.gradienter').rainbow();
 	
@@ -322,66 +355,25 @@ function checkGroup(name,value) {
 			return false;
 		});
 		
-		/* Fade out the Social Nav when the search box is in focus */
-		// http://jsfiddle.net/q6BpH/1/
-		function searchExpand() {
-			viewport = updateViewportDimensions();
-			var $menu = $('.social-menu a'),
-				$search = $('.social-menu .search-field');
-			if (viewport.width > 768) {
-				$search.focus(function () {
-					$menu.hide();
-				}).blur(function () {
-					$menu.fadeIn(500);
-				});
-			} else {
-				$search.focus(function () {
-					$menu.show();
-				});
-			}
-		}
 		searchExpand();
-		
-		$(window).resize(function () {
-			searchExpand();
-		});
-	};
-	
-	/**
-	 * Layout Hacks
-	 *
-	 * Mostly small hacks and tweaks to configure the layout, some of which are often simpler to do like this than through the Wordpress backend.
-	 * All of these need to be called back after the ajax page load.
-	 *
-	 * In time all of these should be imlpemented server side.
-	 */
-	layout_hacks = function() {
-		/* Remove inline styles from wp-caption */
-		// http://wordpress.stackexchange.com/questions/89221/removing-inline-styles-from-wp-caption-div
-		$(".wp-caption").removeAttr('style');
-		
-		/* Add a class to the first article in the editor selection on the reading pages */
-		$('.editor-selection > :first-child').addClass("pseudo-content-divider-top-articles-xs-max");
-		
-		/* Wordpress placeholder hack */
-		$('.search-field').attr("placeholder", "Search");
-	};
+		layout_hacks();
+	}
 	
 	/**
 	 * Layout adjustments for the 404 page
 	 */
-	four_oh_four = function() {
+	function four_oh_four() {
 		/* Add focus to 404 page search form */
 		$(".page-content .search-field").focus();
 		
 		/* Wrap the logo in a div to create the 404 page */
 		$(".site-logo").wrap("<div class='message404'></div>");
-	};
+	}
 
 	/**
 	 * Auto add protocal to url form validation
 	 */
-	input_url_force_protocol = function() {
+	function input_url_force_protocol() {
 		$('.auto-protocol').blur(function() {
 			var string = $(this).val();
 			if (! string.match(/^https?:/)){
@@ -391,19 +383,18 @@ function checkGroup(name,value) {
 				return string;
 			});
 		});
-	};
+	}
 	
 	/**
 	 * Ajax Page Load - history.js
 	 */
-	ajax_load = function() {
-		var
-		History = window.History, // Note: Using a capital H instead of a lower h
-		State = History.getState();
-		//$log = $('#log');
-				
+	function ajax_load() {
+		var History = window.History, // Note: Using a capital H instead of a lower h
+			State = History.getState();
+			//$log = $('#log');
+
 		// If the link rel is set to `ajax`, trigger the pushstate
-		ajax_click = function() {
+		function ajax_click() {
 			$('a[rel=ajax]').on('click', function(e) {
 				e.preventDefault();
 				var path = $(this).attr('href'),
@@ -420,17 +411,11 @@ function checkGroup(name,value) {
 					title = search + " - Search Results - Opening Times";
 				History.pushState('ajax', title, path);
 			});
-		};
+		}	
 		ajax_click();
 					
-		// Bind to state change
-		// When the statechange happens, load the appropriate url via ajax
-		History.Adapter.bind(window, 'statechange', function() { // Note: Using statechange instead of popstate
-			load_ot_ajax();
-		});
-		
 		// Callback the scripts needed after the Ajax page load.
-		callback_scripts = function() {
+		function callback_scripts() {
 			layout_hacks();
 			layout();
 			mobile_nav();
@@ -438,17 +423,23 @@ function checkGroup(name,value) {
 			opening_times_accordion();
 			ajax_click();
 			input_url_force_protocol();
-			
+
 			/* 
 			// Update Google analytics
 			var loc = window.location,
 			page = loc.hash ? loc.hash.substring(1) : loc.pathname + loc.search;
 			ga('send', 'pageview', page);
 			*/
-		};
+		}
+
+		// Bind to state change
+		// When the statechange happens, load the appropriate url via ajax
+		History.Adapter.bind(window, 'statechange', function() { // Note: Using statechange instead of popstate
+			load_ot_ajax();
+		});
 		
 		// Load Ajax
-		load_ot_ajax = function() {
+		function load_ot_ajax() {
 			State = History.getState(); // Note: Using History.getState() instead of event.state
 					
 			$("body").prepend('<div id="ajax-loader"><span>Loading</span></div>');
@@ -464,8 +455,6 @@ function checkGroup(name,value) {
 						$(this).detach();
 					});
 					callback_scripts();
-					//var request = $(data);
-					//$('#menu-navigation').replaceWith($('#menu-navigation', request));
 				}
 				
 				// Updates the menu
@@ -473,8 +462,8 @@ function checkGroup(name,value) {
 				//$('#menu-navigation').replaceWith($('#menu-navigation', request));
 				
 			});
-		};
-	};
+		}
+	}
 	
 	/* Sticky Footer */
 	$('<div id="push"></div>').appendTo('#page');
@@ -528,12 +517,12 @@ function checkGroup(name,value) {
      */
     var viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]');
 
-    preventZoom = function() {
+    function preventZoom () {
         if (viewportmeta && navigator.platform.match(/iPad|iPhone|iPod/i)) {
-            var formFields = document.querySelectorAll('input, select, textarea');
-            var contentString = 'width=device-width,initial-scale=1,maximum-scale=';
-            var i = 0;
-            var fieldLength = formFields.length;
+            var formFields = document.querySelectorAll('input, select, textarea'),
+            	contentString = 'width=device-width,initial-scale=1,maximum-scale=',
+            	i = 0,
+            	fieldLength = formFields.length;
 
             var setViewportOnFocus = function() {
                 viewportmeta.content = contentString + '1';
@@ -548,22 +537,37 @@ function checkGroup(name,value) {
                 formFields[i].onblur = setViewportOnBlur;
             }
         }
+    }
+
+	ot_resize = function() {
+		header_resize();
+		setDivHeight();
+		searchExpand();
+	};
+
+    ot_launch = function() {
+		opening_times_accordion();
+		mobile_nav();
+		dropdowns();
+		layout();
+		input_url_force_protocol();
+		ajax_load();
+		preventZoom();
+		if ($('body').hasClass('error404')) {
+        	four_oh_four();
+    	}
     };
 	
 })( jQuery );
 
 jQuery(document).ready(function($) {
-    mobile_nav();
-    layout();
-    layout_hacks();
-    preventZoom();
-    dropdowns();
-    ajax_load();
-    input_url_force_protocol();
+	ot_launch();
+	ot_resize();
+
     addFieldToCheck("email", "Email address");
     addFieldToCheck("emailconfirm", "Confirm your email address");
-    opening_times_accordion();
-    if ($('body').hasClass('error404')) {
-        four_oh_four();
-    }
+
+    $(window).resize(function () {
+		ot_resize();
+	});
 });
