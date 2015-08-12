@@ -2,37 +2,30 @@
 /**
  * The template used for displaying the Articles on the Reading Page.
  *
- * Creates a loop to list all the child pages of each Issue
- * Used in the Reading Archive and the Single Reading Issue Page
+ * Creates a loop that lists all the articles in each Issue.
+ * Used in the Reading Archive and the Single Reading Issue Page.
  *
  * @package Opening Times
  */
 ?>
 
 <?php
-    $args = array(
-        'author' => -9, 
-        'post_parent' => $post->ID,
-        'post_type' => 'article',
-        'order' => 'DESC', 
-        'numberposts' => -1,
-    );
-    $articles = new WP_query($args); 
-?>
+    $attached_articles = get_post_meta( get_the_ID(), '_ot_attached_articles', true );
 
-<?php if ($articles->have_posts()) : ?>
+    if ( '' != $attached_articles ) :
 
-    <?php while ($articles->have_posts()) : $articles->the_post(); ?>
+        foreach ( $attached_articles as $attached_article ) :
 
-        <?php get_template_part( 'template-parts/content', 'reading' ); ?>
+            $post = get_post( $attached_article );
+            setup_postdata($post);
+            get_template_part( 'template-parts/content', 'reading' );
 
-    <?php endwhile; ?>
-   
-<?php else : ?>
+        endforeach;
 
-    <?php get_template_part( 'template-parts/content', 'none' ); ?>
-	
-<?php endif; ?>
- 
-<?php // reset the query
+    else :
+
+        get_template_part( 'template-parts/content', 'none' );
+
+    endif;
+
 wp_reset_postdata();

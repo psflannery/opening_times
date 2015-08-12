@@ -564,10 +564,10 @@ jQuery(document).ready(function($) {
 	ot_launch();
 	ot_resize();
 
-    addFieldToCheck("email", "Email address");
-    addFieldToCheck("emailconfirm", "Confirm your email address");
+	addFieldToCheck("email", "Email address");
+	addFieldToCheck("emailconfirm", "Confirm your email address");
 
-    $(window).resize(function () {
+	$(window).resize(function () {
 		ot_resize();
 	});
 });
