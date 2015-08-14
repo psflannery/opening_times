@@ -9,7 +9,7 @@
 
 get_header(); ?>
 	
-    <main id="main" class="site-main accordion-issue container-fluid" role="main">
+    <main id="main" class="site-main accordion-issue container-fluid gradienter" role="main">
 
         <?php if ( have_posts() ) : ?>
 
