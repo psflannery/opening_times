@@ -77,12 +77,21 @@ add_action( 'after_setup_theme', 'opening_times_setup' );
  */
 function opening_times_widgets_init() {
 	register_sidebar( array(
-		'name'          => __( 'Contact Dropdown Widget Area', 'opening_times' ),
+		'name'          => __( 'Mailing List Dropdown Widget Area', 'opening_times' ),
 		'id'            => 'sidebar-1',
 		'before_widget' => '<div id="%1$s" class="widget %2$s row" role="complementary">',
+		'after_widget'  => '<div>',
+		'before_title'  => '',
+		'after_title'   => '',
+	) );
+
+	register_sidebar( array(
+		'name'          => __( 'About Dropdown Widget Area', 'opening_times' ),
+		'id'            => 'sidebar-2',
+		'before_widget' => '<div id="%1$s" class="widget %2$s clearfix" role="complementary">',
 		'after_widget'  => '</div>',
-		'before_title'  => '<h1 class="widget-title">',
-		'after_title'   => '</h1>',
+		'before_title'  => '',
+		'after_title'   => '',
 	) );
 }
 add_action( 'widgets_init', 'opening_times_widgets_init' );

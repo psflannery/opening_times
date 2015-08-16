@@ -126,22 +126,6 @@ function opening_times_customize_register( $wp_customize ) {
 	
 	// Add the About Menu Setting and Control
 	$wp_customize->add_setting(
-		'ot_about-menu',
-		array(
-			'sanitize_callback' => 'ot_sanitize_integer',
-		)
-	);
-	
-	$wp_customize->add_control(
-		'ot_about-menu',
-		array(
-			'type' => 'dropdown-pages',
-			'label' => 'About',
-			'section' => 'ot_dropdown_select',
-		)
-	);
-	
-	$wp_customize->add_setting(
 		'ot_about_menu_ID',
 		array(
 			'sanitize_callback' => 'ot_sanitize_text',
@@ -158,22 +142,6 @@ function opening_times_customize_register( $wp_customize ) {
 	);
 	
 	// Add the Mailing List Setting and Control
-	$wp_customize->add_setting(
-		'ot_mailing_list',
-		array(
-			'sanitize_callback' => 'ot_sanitize_integer',
-		)
-	);
-	
-	$wp_customize->add_control(
-		'ot_mailing_list',
-		array(
-			'type' => 'dropdown-pages',
-			'label' => 'Mailing List',
-			'section' => 'ot_dropdown_select',
-		)
-	);
-	
 	$wp_customize->add_setting(
 		'ot_mailing-list_menu_ID',
 		array(

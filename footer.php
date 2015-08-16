@@ -11,8 +11,8 @@
         </div><!-- #content -->
     </div><!-- #page -->
 
-    <?php get_template_part( 'template-parts/dropdown', 'about' ); ?>
-    <?php get_template_part( 'template-parts/dropdown', 'mailing_list' ); ?>
+    <?php get_sidebar('about'); ?>
+    <?php get_sidebar('mailing-list'); ?>
 
     <footer id="colophon" class="site-footer" role="contentinfo">
     
