@@ -84,7 +84,6 @@ function opening_times_widgets_init() {
 		'before_title'  => '',
 		'after_title'   => '',
 	) );
-
 	register_sidebar( array(
 		'name'          => __( 'About Dropdown Widget Area', 'opening_times' ),
 		'id'            => 'sidebar-2',
