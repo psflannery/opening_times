@@ -2,7 +2,13 @@
 // --------------------------------------------------
 
 // Individual components
+.about-statement {
+	@media (max-width: @screen-sm-max) {
+		margin-bottom: @grid-gutter-width * 2;
+	}
+}
 .about-output {
+	&:extend(.about-statement);
 	h2 {
 		display: inline;
 		float: left;

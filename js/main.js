@@ -406,8 +406,8 @@ function checkGroup(name,value) {
 			$(".search-form").submit(function(e) {
 				e.preventDefault();
 				var search = $("[name=s]").val(),
-					//path = window.location.origin + '?s=' + search,
-					path = '?s=' + search,
+					path = window.location.origin + '?s=' + search,
+					//path = '?s=' + search,
 					title = search + " - Search Results - Opening Times";
 				History.pushState('ajax', title, path);
 			});
@@ -424,12 +424,10 @@ function checkGroup(name,value) {
 			ajax_click();
 			input_url_force_protocol();
 
-			/* 
 			// Update Google analytics
 			var loc = window.location,
 			page = loc.hash ? loc.hash.substring(1) : loc.pathname + loc.search;
 			ga('send', 'pageview', page);
-			*/
 		}
 
 		// Bind to state change
@@ -553,19 +551,18 @@ function checkGroup(name,value) {
 		input_url_force_protocol();
 		ajax_load();
 		preventZoom();
+		ot_resize();
 		if ($('body').hasClass('error404')) {
         	four_oh_four();
     	}
+    	addFieldToCheck("email", "Email address");
+		addFieldToCheck("emailconfirm", "Confirm your email address");
     };
 	
 })( jQuery );
 
 jQuery(document).ready(function($) {
 	ot_launch();
-	ot_resize();
-
-	addFieldToCheck("email", "Email address");
-	addFieldToCheck("emailconfirm", "Confirm your email address");
 
 	$(window).resize(function () {
 		ot_resize();
