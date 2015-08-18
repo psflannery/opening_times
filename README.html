@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+</head>
+<body>
+<h1 id="openingtimes">Opening Times</h1>
+
+<p>The theme for the main Opening Times website.
+http://otdac.org/</p>
+
+<p>Version: 1.3.2
+Date: 18/8/15</p>
+
+<p>Contains the main theme files responsible for presentation. All theme agnostic functionality like custom post-types and taxanomies are located in a separate plugin.</p>
+
+<p>This version of the theme is intended to address perfomance in both the front and backend. Much of the code has been optimised and tidied and is now structured in a way to allow for quick implementation of any future additions or customisations.
+This version can be used for production, but there are a few known, but edge case bugs realting to seaching and the 404 page.</p>
+
+<p>List of additions and theme features in no particular order&#8230;</p>
+
+<ul>
+<li>Retina images - @x2 images size added and automatically created upon upload. Retina.js used to serve the correct size based on screen resolution.</li>
+<li>Lazyload iframes - with so many video going into the Reading section, page loading time was being effected. Videos now only load when the parent accordion is opened.</li>
+<li>Ajaxified - Pages loaded via ajax so that the Opening Times logo spin animation doesn&#8217;t get interupted as you navigate through the site. Using History.js to update permalinks and keep the back button working.</li>
+<li>Extra Accordion callbacks - closing an accordion will now only reset its child iframe, not every single one on the page.</li>
+<li>Mobile performance - off canvas menu performs a little more smoothly and resizes properly when changing the window size.</li>
+<li>Customizer - Dropdowns and menu controls now set in the theme customizer.</li>
+<li>Code scrub - reorganised file structure, made sure things were properly escaped. Yawn :P</li>
+</ul>
+
+<h2 id="todo">To Do</h2>
+
+<ul>
+<li>Open parent accordion when child is accessed via a permalink. On older Issues, the reading article accordion still opens, but the parent doesn&#8217;t. Am THIS close to getting it sort, but am also THIS far.</li>
+<li>Update the active menu with an <code>.active</code> class.</li>
+<li>Sort out permalink issues when searching from anything other than the home page.</li>
+<li>Tidyup template and .js for the 404 page to make it work better with History.js</li>
+</ul>
+
+</body>
+</html>

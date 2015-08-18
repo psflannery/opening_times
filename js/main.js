@@ -293,6 +293,17 @@ function checkGroup(name,value) {
 	 * These all need to be wrapped in a function so that they can be called back after an ajax page load.
 	 */
 
+	/* Menu layout helper */
+	function menuMidsize() {
+		viewport = updateViewportDimensions();
+		var test = $('.about-statement').outerHeight(true) + 'px';
+		if ( ! (viewport.width > 768 && viewport.width < 992) ) {
+			$('.about-team').css('top', 0);
+		} else {
+		$('.about-team').css('top', test);
+		}
+	}
+
 	/* Fade out the Social Nav when the search box is in focus */
 	function searchExpand() {
 		viewport = updateViewportDimensions();
@@ -541,12 +552,14 @@ function checkGroup(name,value) {
 		header_resize();
 		setDivHeight();
 		searchExpand();
+		menuMidsize();
 	};
 
     ot_launch = function() {
 		opening_times_accordion();
 		mobile_nav();
 		dropdowns();
+		menuMidsize();
 		layout();
 		input_url_force_protocol();
 		ajax_load();
@@ -565,6 +578,8 @@ jQuery(document).ready(function($) {
 	ot_launch();
 
 	$(window).resize(function () {
-		ot_resize();
-	});
+        waitForFinalEvent(function () {
+            ot_resize();
+        }, timeToWaitForLast, "screenz resize");
+    });
 });
