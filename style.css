@@ -1553,9 +1553,6 @@ input[type=search] {
   background: #ffffff;
   border-bottom: 1px solid #000000;
   min-height: 75px;
-  top: 0;
-  right: 0;
-  left: 0;
   z-index: 1000;
 }
 .site-header:before,
@@ -1582,7 +1579,6 @@ input[type=search] {
 @media (min-width: 768px) {
   .social-menu {
     float: right;
-    margin-right: 65px;
   }
 }
 .site-title {
@@ -1629,7 +1625,6 @@ input[type=search] {
   color: #000000;
   cursor: pointer;
   display: block;
-  float: left;
   font-size: 15px;
   line-height: 1.42857143;
   padding: 13px 10px;
@@ -2574,15 +2569,16 @@ object {
     display: none !important;
   }
 }
-@media (min-width: 768px) {
-  .info-panel {
-    position: relative;
-  }
-}
 @media (max-width: 991px) {
   .about-statement,
-  .about-output {
+  .about-output,
+  .about-team {
     margin-bottom: 40px;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .about-output {
+    float: right;
   }
 }
 .about-output h2 {
@@ -2590,14 +2586,6 @@ object {
   float: left;
   line-height: 1.42857143;
   margin: 0 0.5em 0 0;
-}
-.about-team {
-  transition: top .3s ease;
-}
-@media (min-width: 768px) and (max-width: 991px) {
-  .about-team {
-    position: absolute;
-  }
 }
 .about-team h2 {
   line-height: 1.42857143;

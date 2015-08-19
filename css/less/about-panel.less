@@ -1,12 +1,6 @@
 // About
 // --------------------------------------------------
 
-// Individual components
-.info-panel {
-	@media (min-width: @screen-sm-min) {
-		position: relative;
-	}
-}
 .about-statement {
 	@media (max-width: @screen-sm-max) {
 		margin-bottom: @grid-gutter-width * 2;
@@ -14,6 +8,9 @@
 }
 .about-output {
 	&:extend(.about-statement);
+	@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+		float: right;
+	}
 	h2 {
 		display: inline;
 		float: left;
@@ -22,10 +19,7 @@
 	}
 }
 .about-team {
-	transition: top .3s ease;
-	@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-		position: absolute;
-	}
+	&:extend(.about-statement);
 	h2 {
 		line-height: @line-height-base;
 		margin: 0;
