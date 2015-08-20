@@ -425,9 +425,21 @@ function checkGroup(name,value) {
 			input_url_force_protocol();
 
 			// Update Google analytics
+			/*
 			var loc = window.location,
 			page = loc.hash ? loc.hash.substring(1) : loc.pathname + loc.search;
 			ga('send', 'pageview', page);
+			*/
+
+			/*
+			 * Log all jQuery AJAX requests to Google Analytics
+			 * See: http://www.alfajango.com/blog/track-jquery-ajax-requests-in-google-analytics/
+			 */
+			if (typeof ga !== "undefined" && ga !== null) {
+				$(document).ajaxSend(function(event, xhr, settings){
+					ga('send', 'pageview', settings.url);
+				});
+			}
 		}
 
 		// Bind to state change
