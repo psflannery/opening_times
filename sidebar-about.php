@@ -11,7 +11,7 @@ if ( ! is_active_sidebar( 'sidebar-2' ) ) {
 ?>
 
 <section id="about" class="info-panel info-columns" aria-hidden="true" role="complementary">
-    
+
     <?php dynamic_sidebar( 'sidebar-2' ); ?>
 
 </section>

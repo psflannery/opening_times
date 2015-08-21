@@ -520,34 +520,34 @@ function checkGroup(name,value) {
 		}
 	});
 	
-    /**
-     * Prevent iOS from zooming onfocus
-     * https://github.com/h5bp/mobile-boilerplate/pull/108
-     * Adapted from original jQuery code here: http://nerd.vasilis.nl/prevent-ios-from-zooming-onfocus/
-     */
-    var viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]');
+	/**
+	 * Prevent iOS from zooming onfocus
+	 * https://github.com/h5bp/mobile-boilerplate/pull/108
+	 * Adapted from original jQuery code here: http://nerd.vasilis.nl/prevent-ios-from-zooming-onfocus/
+	 */
+	var viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]');
 
-    function preventZoom () {
-        if (viewportmeta && navigator.platform.match(/iPad|iPhone|iPod/i)) {
-            var formFields = document.querySelectorAll('input, select, textarea'),
-            	contentString = 'width=device-width,initial-scale=1,maximum-scale=',
-            	i = 0,
-            	fieldLength = formFields.length;
+	function preventZoom () {
+		if (viewportmeta && navigator.platform.match(/iPad|iPhone|iPod/i)) {
+			var formFields = document.querySelectorAll('input, select, textarea'),
+			contentString = 'width=device-width,initial-scale=1,maximum-scale=',
+			i = 0,
+			fieldLength = formFields.length;
 
-            var setViewportOnFocus = function() {
-                viewportmeta.content = contentString + '1';
-            };
+			var setViewportOnFocus = function() {
+				viewportmeta.content = contentString + '1';
+			};
 
-            var setViewportOnBlur = function() {
-                viewportmeta.content = contentString + '10';
-            };
+			var setViewportOnBlur = function() {
+				viewportmeta.content = contentString + '10';
+			};
 
-            for (; i < fieldLength; i++) {
-                formFields[i].onfocus = setViewportOnFocus;
-                formFields[i].onblur = setViewportOnBlur;
-            }
-        }
-    }
+			for (; i < fieldLength; i++) {
+				formFields[i].onfocus = setViewportOnFocus;
+				formFields[i].onblur = setViewportOnBlur;
+			}
+		}
+	}
 
 	ot_resize = function() {
 		header_resize();
@@ -555,7 +555,7 @@ function checkGroup(name,value) {
 		searchExpand();
 	};
 
-    ot_launch = function() {
+	ot_launch = function() {
 		opening_times_accordion();
 		mobile_nav();
 		dropdowns();
@@ -565,11 +565,11 @@ function checkGroup(name,value) {
 		preventZoom();
 		ot_resize();
 		if ($('body').hasClass('error404')) {
-        	four_oh_four();
-    	}
-    	addFieldToCheck("email", "Email address");
+			four_oh_four();
+		}
+		addFieldToCheck("email", "Email address");
 		addFieldToCheck("emailconfirm", "Confirm your email address");
-    };
+	};
 	
 })( jQuery );
 
@@ -577,8 +577,8 @@ jQuery(document).ready(function($) {
 	ot_launch();
 
 	$(window).resize(function () {
-        waitForFinalEvent(function () {
-            ot_resize();
-        }, timeToWaitForLast, "screenz resize");
-    });
+		waitForFinalEvent(function () {
+			ot_resize();
+		}, timeToWaitForLast, "screenz resize");
+	});
 });
