@@ -114,6 +114,10 @@ output {
   border: 1px solid @input-border;
   border-radius: @input-border-radius; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
   .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
+  
+  // iOS reset
+  -webkit-appearance: none;
+  box-shadow: none;
 
   // Customize the `:focus` state to imitate native WebKit styles.
   .form-control-focus();
