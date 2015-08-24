@@ -193,6 +193,18 @@ function opening_times_javascript_detection() {
 add_action( 'wp_head', 'opening_times_javascript_detection', 0 );
 
 /**
+ * Add a class to the thumbnail in archive view
+ *
+ * Sizing to fit the grid
+ *
+ * @since Opening Times 1.3.8
+ */
+function opening_times_thumbnail_float() {
+	if ( ! ( is_post_type_archive( 'reading' ) || ( is_singular( 'reading' ) || is_singular( 'article' ) ) ) )
+	return 'col-sm-3';
+}
+
+/**
  * Retina Images
  *
  * Checks to see if the uploaded file is an image. If it is, then it processes it using the opening_times_retina_support_create_images() function

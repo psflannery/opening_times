@@ -39,9 +39,9 @@ function opening_times_setup() {
 	 * @link http://codex.wordpress.org/Function_Reference/add_theme_support#Post_Thumbnails
 	 */
 	add_theme_support( 'post-thumbnails', array( 
-		'post', 'article',
+		'post', 
+		'article',
 	) );
-	add_image_size( 'reading-thumb', 300, 200, true);
 	add_image_size( 'accordion-thumb', 300, 9999 ); //300 pixels wide (and unlimited height)
 
 	// This theme uses wp_nav_menu() in two locations.
@@ -77,18 +77,18 @@ add_action( 'after_setup_theme', 'opening_times_setup' );
  */
 function opening_times_widgets_init() {
 	register_sidebar( array(
-		'name'          => __( 'Mailing List Dropdown Widget Area', 'opening_times' ),
+		'name'          => __( 'About Dropdown Widget Area', 'opening_times' ),
 		'id'            => 'sidebar-1',
-		'before_widget' => '<div id="%1$s" class="widget %2$s row" role="complementary">',
-		'after_widget'  => '<div>',
+		'before_widget' => '<div id="%1$s" class="widget %2$s clearfix" role="complementary">',
+		'after_widget'  => '</div>',
 		'before_title'  => '',
 		'after_title'   => '',
 	) );
 	register_sidebar( array(
-		'name'          => __( 'About Dropdown Widget Area', 'opening_times' ),
+		'name'          => __( 'Mailing List Dropdown Widget Area', 'opening_times' ),
 		'id'            => 'sidebar-2',
-		'before_widget' => '<div id="%1$s" class="widget %2$s clearfix" role="complementary">',
-		'after_widget'  => '</div>',
+		'before_widget' => '<div id="%1$s" class="widget %2$s row" role="complementary">',
+		'after_widget'  => '<div>',
 		'before_title'  => '',
 		'after_title'   => '',
 	) );

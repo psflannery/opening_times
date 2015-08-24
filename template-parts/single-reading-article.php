@@ -20,7 +20,7 @@
     <div class="accordion-content clearfix">
         <div class="entry-content-wrap fitvids col-sm-6 col-sm-push-4">
 
-            <?php opening_times_featured_content(); ?>
+            <?php echo opening_times_featured_content(); ?>
 
             <div class="entry-content">		
 

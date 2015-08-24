@@ -292,48 +292,43 @@ function ot_return_future_content_thumbnail() {
  */
 function opening_times_featured_content() {
 	global $post;
-    $oembed = get_post_meta( $post->ID, '_ot_embed_url', true );
-    $link_url = get_post_meta( $post->ID, '_ot_link_url', true );
-    $file_url = get_post_meta( $post->ID, '_ot_file', true );
+	$oembed = get_post_meta( $post->ID, '_ot_embed_url', true );
+	$link_url = get_post_meta( $post->ID, '_ot_link_url', true );
+	$file_url = get_post_meta( $post->ID, '_ot_file', true );
 
-    if ( '' != get_the_post_thumbnail() ) :
-        if ( '' != $link_url  ) :
-            $featured = '<figure class="featured-image col-sm-3"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') . '</a></figure>';
-
-        elseif ( is_post_type_archive( 'reading' ) || (is_singular( 'reading' ) || is_singular( 'article' )) ) :
-            $featured = '<figure class="featured-image">' . get_the_post_thumbnail( $post->ID, 'reading-thumb') . '</figure>';
-
-        else :
-            $featured = '<figure class="featured-image col-sm-3">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') .'</figure>';
-
-        endif;
-		
-		return $featured;
-
-    elseif ( '' != $oembed ) :
-        // If there is no thumbnail, but there is an embed, and we're not in the reading section or take-overs section. This will format the posts the appear in the archives.
-        if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) && !is_singular( array ( 'reading', 'take-overs', 'article' ) ) ) :
-            $featured = '<figure class="col-sm-3">' . apply_filters( 'the_content', $oembed ) . '</figure>';
-
-        // If there is no thumbnail, but there is an embed, and we ARE in the TAKE-OVERS section
-        elseif ( '' != $oembed && ( is_post_type_archive( 'take-overs' ) || is_singular( 'take-overs' ) ) ) :
-            $featured = '<figure class="col-sm-5 fitvids">' . apply_filters( 'the_content', $oembed ) . '</figure>';
-
-        // If there is no thumbnail, but there is an embed, and we ARE in the READING section
-        elseif ( '' != $oembed ) :
-            $featured = '<figure>' . apply_filters( 'the_content', $oembed ) . '</figure>';
-
-        endif;
-		
-		return $featured;
-
-    elseif ( !is_post_type_archive( 'reading' ) && !is_singular( array ( 'reading', 'article' ) ) ) :
-        // None of the above, everything is empty
-        $featured = '<figure class="featured-image col-sm-3">' . ot_return_future_content_thumbnail() . '</figure>';
+	if ( '' != get_the_post_thumbnail() ) :
+		if ( '' != $link_url  ) :
+			$featured = '<figure class="featured-image '. opening_times_thumbnail_float() .'"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') . '</a></figure>';
+		else :
+			$featured = '<figure class="featured-image '. opening_times_thumbnail_float() .'">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') .'</figure>';
+		endif;
 
 		return $featured;
-		
-    endif;
+
+	elseif ( '' != $oembed ) :
+		// If there is no thumbnail, but there is an embed, and we're not in the reading section or take-overs section. This will format the posts the appear in the archives.
+		if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) && !is_singular( array ( 'reading', 'take-overs', 'article' ) ) ) :
+			$featured = '<figure class="col-sm-3">' . apply_filters( 'the_content', $oembed ) . '</figure>';
+
+		// If there is no thumbnail, but there is an embed, and we ARE in the TAKE-OVERS section
+		elseif ( '' != $oembed && ( is_post_type_archive( 'take-overs' ) || is_singular( 'take-overs' ) ) ) :
+			$featured = '<figure class="col-sm-5 fitvids">' . apply_filters( 'the_content', $oembed ) . '</figure>';
+
+		// If there is no thumbnail, but there is an embed, and we ARE in the READING section
+		elseif ( '' != $oembed ) :
+			$featured = '<figure>' . apply_filters( 'the_content', $oembed ) . '</figure>';
+
+		endif;
+
+		return $featured;
+
+	elseif ( !is_post_type_archive( 'reading' ) && !is_singular( array ( 'reading', 'article' ) ) ) :
+		// None of the above, everything is empty
+		$featured = '<figure class="featured-image col-sm-3">' . ot_return_future_content_thumbnail() . '</figure>';
+
+		return $featured;
+
+	endif;
 }
 
 /**

@@ -5,7 +5,7 @@
  * @package Opening Times
  */
 
-if ( ! is_active_sidebar( 'sidebar-1' ) ) {
+if ( ! is_active_sidebar( 'sidebar-2' ) ) {
     return;
 }
 ?>
@@ -14,7 +14,7 @@ if ( ! is_active_sidebar( 'sidebar-1' ) ) {
     
     <div class="pseudo-content-divider-top">
     	
-    	<?php dynamic_sidebar( 'sidebar-1' ); ?>
+    	<?php dynamic_sidebar( 'sidebar-2' ); ?>
 
 	</div>
 

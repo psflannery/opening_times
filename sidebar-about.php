@@ -5,13 +5,13 @@
  * @package Opening Times
  */
 
-if ( ! is_active_sidebar( 'sidebar-2' ) ) {
+if ( ! is_active_sidebar( 'sidebar-1' ) ) {
     return;
 }
 ?>
 
 <section id="about" class="info-panel info-columns" aria-hidden="true" role="complementary">
 
-    <?php dynamic_sidebar( 'sidebar-2' ); ?>
+    <?php dynamic_sidebar( 'sidebar-1' ); ?>
 
 </section>

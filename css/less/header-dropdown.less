@@ -2,10 +2,13 @@
 // --------------------------------------------------
 
 .site-info {
-	#gradient.vertical(@start-color: @body-bg; @end-color: @overlay; @start-percent: 0%; @end-percent: 50%);
-	margin-top: @header-height;
-	position: relative;
-	z-index: @zindex-header;
+	height: 100%;
+	@media (min-width: @screen-sm-min) {
+		#gradient.vertical(@start-color: @body-bg; @end-color: @overlay; @start-percent: 0%; @end-percent: 50%);
+		position: relative;
+		margin-top: @header-height;
+		z-index: @zindex-header;
+	}
 }
 .drop-down {
 	.clearfix();
