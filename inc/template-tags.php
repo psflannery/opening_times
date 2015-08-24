@@ -298,9 +298,9 @@ function opening_times_featured_content() {
 
 	if ( '' != get_the_post_thumbnail() ) :
 		if ( '' != $link_url  ) :
-			$featured = '<figure class="featured-image '. opening_times_thumbnail_float() .'"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') . '</a></figure>';
+			$featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') . '</a></figure>';
 		else :
-			$featured = '<figure class="featured-image '. opening_times_thumbnail_float() .'">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') .'</figure>';
+			$featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') .'</figure>';
 		endif;
 
 		return $featured;
