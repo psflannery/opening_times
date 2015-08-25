@@ -115,8 +115,8 @@ function opening_times_tag_list() {
  * Display the category name without it being wrapped in a link
  */
 function opening_times_category_no_link() {
-    $categories = get_the_category_list( __( ', ', 'opening_times' ) );
-    echo strip_tags( $categories );
+	$categories = get_the_category_list( __( ', ', 'opening_times' ) );
+	echo strip_tags( $categories );
 }
 
 
@@ -126,10 +126,9 @@ function opening_times_category_no_link() {
 function opening_times_taxonomy_no_link() {
 	global $post;
 	$terms_as_text = get_the_term_list( $post->ID, 'artists', '', ', ', '' );
-    $terms_as_text .= get_the_term_list( $post->ID, 'authors', '', ', ', '' );
+	$terms_as_text .= get_the_term_list( $post->ID, 'authors', '', ', ', '' );
 	echo strip_tags( $terms_as_text );
 }
-
 
 /**
  * Outputs the residency and take-over dates in a pretty format.
@@ -139,10 +138,10 @@ function opening_times_event_dates() {
 
 	$meta_resindency_sd = get_post_meta( $post->ID, '_ot_residency_start_date', true );
 	$meta_resindency_ed = get_post_meta( $post->ID, '_ot_residency_end_date', true );
-    
-    $meta_takeover_sd = get_post_meta( $post->ID, '_ot_take_over_start_date', true );
+
+	$meta_takeover_sd = get_post_meta( $post->ID, '_ot_take_over_start_date', true );
 	$meta_takeover_ed = get_post_meta( $post->ID, '_ot_take_over_end_date', true );
-		
+
 	if( '' != $meta_resindency_sd ):
 		//convert to pretty formats
 		$clean_resindency_sd = date( "F Y", $meta_resindency_sd );
@@ -154,8 +153,8 @@ function opening_times_event_dates() {
 		$residencydate .= ' - ' . $clean_resindency_ed;
 		return $residencydate;
 	endif;
-    
-    if( '' != $meta_takeover_sd ):
+
+	if( '' != $meta_takeover_sd ):
 		//convert to pretty formats
 		$clean_takeover_sd = date( "d F Y", $meta_takeover_sd );
 		$clean_takeover_ed = date( "d F Y", $meta_takeover_ed );
@@ -180,11 +179,11 @@ function opening_times_collection_meta() {
 	$link_url = get_post_meta( $post->ID, "_ot_link_url", true );
 	$postyear = get_the_time('Y', $post->ID);
 	$user_description = get_the_author_meta('description');
-    $residency_start_date = get_post_meta( $post->ID, '_ot_residency_start_date', true );
-	
+	$residency_start_date = get_post_meta( $post->ID, '_ot_residency_start_date', true );
+
 	$meta = '<dl class="ot-collection-meta ot-meta dl-inline">';
 	if ( get_the_terms( $post->ID, 'artists') ):
-        $meta .= '<dt>' . esc_html( 'Artist', 'opening_times' ) . '</dt>';
+		$meta .= '<dt>' . esc_html( 'Artist', 'opening_times' ) . '</dt>';
 		$meta .= '<dd>' . get_the_term_list( $post->ID, 'artists', ' ', ', ', '' ) . '</dd>';
 	endif;
 	if ( in_category( 'editorial-introduction' ) ):
@@ -204,15 +203,15 @@ function opening_times_collection_meta() {
 		$meta .= '<dd> <a rel="ajax" href="' . get_year_link( $postyear ) . '">' . $postyear . '</a></dd>';
 	endif;
 	$meta .= '</dl>';
-    
-    if ( in_category( 'residency' ) && '' != $residency_start_date ):
-        $meta .= '<dl class="ot-collection-meta ot-meta dl-inline">';
-        $meta .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
-        $meta .= '<dd>' . opening_times_event_dates() . '</dd>';
-        $meta .= '</dl>';
+
+	if ( in_category( 'residency' ) && '' != $residency_start_date ):
+		$meta .= '<dl class="ot-collection-meta ot-meta dl-inline">';
+		$meta .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
+		$meta .= '<dd>' . opening_times_event_dates() . '</dd>';
+		$meta .= '</dl>';
 	endif;
-    
-    return $meta;
+
+return $meta;
 }
 
 
@@ -220,61 +219,64 @@ function opening_times_collection_meta() {
  * Prints HTML with meta information for the Take-overs.
  */
 function opening_times_takeover_meta() {
-    if ( 'take-overs' == get_post_type() ) : 
-        $takeover = '<dl class="ot-event-meta ot-meta dl-inline">';
-        $takeover .= '<dt>' . esc_html( 'Website', 'opening_times' ) . '</dt>';
-        $takeover .= '<dd>' . opening_times_collection_links() . '</dd>';
-        $takeover .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
-        $takeover .= '<dd>' . ' ' . opening_times_event_dates() . '</dd>';
-        $takeover .= '</dl>'; 
-		
+	if ( 'take-overs' == get_post_type() ) : 
+		$takeover = '<dl class="ot-event-meta ot-meta dl-inline">';
+		$takeover .= '<dt>' . esc_html( 'Website', 'opening_times' ) . '</dt>';
+		$takeover .= '<dd>' . opening_times_collection_links() . '</dd>';
+		$takeover .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
+		$takeover .= '<dd>' . ' ' . opening_times_event_dates() . '</dd>';
+		$takeover .= '</dl>'; 
+
 		return $takeover;
-    endif;
+	endif;
 }
+
 
 /**
  * The template tag for the the Artist bio.
  */
 function opening_times_artist_bio() {
-    global $post;
-    $artist_description = get_the_terms( $post->ID, 'artists');
-    if ( !is_post_type_archive( 'reading' ) && !is_singular( 'reading' ) ) : // display the artist bio if it exists, and don't display them on the reading pages.
+	global $post;
+	$artist_description = get_the_terms( $post->ID, 'artists');
+	if ( !is_post_type_archive( 'reading' ) && !is_singular( 'reading' ) ) : // display the artist bio if it exists, and don't display them on the reading pages.
 
-        if ( '' != $artist_description ) :
-            foreach ( $artist_description as $artist ) {
-                if (  $artist->description ) {
-                    echo '<aside class="artist-bio ot-meta ot-bio" role="complementary">' . wpautop( wptexturize( $artist->description ) ) . '</aside>';
-                }
-            };
-        endif;
-            
-    endif;
+		if ( '' != $artist_description ) :
+			foreach ( $artist_description as $artist ) {
+				if (  $artist->description ) {
+					echo '<aside class="artist-bio ot-meta ot-bio" role="complementary">' . wpautop( wptexturize( $artist->description ) ) . '</aside>';
+				}
+			};
+		endif;
+
+	endif;
 }
+
 
 /**
  * The template used for the User Description AKA the Editor Bio
  */
 function opening_times_editor_bio() {
-    global $post;
-    $user_description = get_the_author_meta('description');
-    $user_url = get_the_author_meta('user_url');
+	global $post;
+	$user_description = get_the_author_meta('description');
+	$user_url = get_the_author_meta('user_url');
 
-    if ( '' != $user_description ) :
-        $editor = '<aside class="editor-bio">';
-        if ( 'article' == get_post_type() ) :
-            $editor .= '<p>' . esc_html( 'Selected by: ', 'opening_times' ) . '<span>' . the_author_posts_link() . '</span></p>';
-        endif;
+	if ( '' != $user_description ) :
+		$editor = '<aside class="editor-bio">';
+	if ( 'article' == get_post_type() ) :
+		$editor .= '<p>' . esc_html( 'Selected by: ', 'opening_times' ) . '<span>' . the_author_posts_link() . '</span></p>';
+	endif;
 
-        $editor .= wpautop( wptexturize( $user_description ) );
-        if ( '' != $user_url ) :
-            $editor .= '<p><a href="' . esc_url( $user_url ) . '" target="_blank">' . esc_html( $user_url ) . '</a></p>';
-        endif;
+	$editor .= wpautop( wptexturize( $user_description ) );
+	if ( '' != $user_url ) :
+		$editor .= '<p><a href="' . esc_url( $user_url ) . '" target="_blank">' . esc_html( $user_url ) . '</a></p>';
+	endif;
 
-        $editor .= '</aside>';
-		
-		return $editor;
-    endif;
+	$editor .= '</aside>';
+
+	return $editor;
+	endif;
 }
+
 
 /**
  * Return, not echo, the future content thumbnail `get_template_part`
@@ -282,10 +284,11 @@ function opening_times_editor_bio() {
  * @link https://kovshenin.com/2013/get_template_part-within-shortcodes/
  */
 function ot_return_future_content_thumbnail() {
-    ob_start();
-    get_template_part( 'img/inline', 'future-content-thumbnail.svg' );
-    return ob_get_clean();
+	ob_start();
+	get_template_part( 'img/inline', 'future-content-thumbnail.svg' );
+	return ob_get_clean();
 }
+
 
 /**
  * Output the featured content
@@ -331,31 +334,33 @@ function opening_times_featured_content() {
 	endif;
 }
 
+
 /**
  * Output the Collection Links
  */
 function opening_times_collection_links() {
 	global $post;
-    $file_url = get_post_meta( $post->ID, '_ot_file', true );
-    $link_url = get_post_meta( $post->ID, "_ot_link_url", true );
+	$file_url = get_post_meta( $post->ID, '_ot_file', true );
+	$link_url = get_post_meta( $post->ID, "_ot_link_url", true );
 	$links = '';
 
-    if ( '' != $link_url ) :
-        foreach ( $link_url as $link ) :
-            if ( 'take-overs' != get_post_type() ) :
-                $links .= '<a href="' . esc_url( $link ) . '" target="_blank" class="featured-link">' .  esc_html( $link ) . '</a>';
-            else :
-                $links = '<a href="' . esc_url( $link ) . '" target="_blank">' . esc_html( $link ) . '</a>';
-            endif;
-        endforeach;
+	if ( '' != $link_url ) :
+		foreach ( $link_url as $link ) :
+			if ( 'take-overs' != get_post_type() ) :
+				$links .= '<a href="' . esc_url( $link ) . '" target="_blank" class="featured-link">' .  esc_html( $link ) . '</a>';
+			else :
+				$links = '<a href="' . esc_url( $link ) . '" target="_blank">' . esc_html( $link ) . '</a>';
+			endif;
+		endforeach;
 		return $links;
-    endif;
+	endif;
 
-    if ( '' != $file_url ) :
-        $file = '<a href="' . esc_url( $file_url ) . '" target="_blank" class="featured-link">' .  esc_html( $file_url ) . '</a>';
+	if ( '' != $file_url ) :
+		$file = '<a href="' . esc_url( $file_url ) . '" target="_blank" class="featured-link">' .  esc_html( $file_url ) . '</a>';
 		return $file;
-    endif;
+	endif;
 }
+
 
 /**
  * Output the the name of the person who submitted a link
@@ -367,7 +372,6 @@ function opening_times_link_submitter() {
 	if ( '' != $submitted_by ) :
 		echo $submitted_by;
 	else :
-		echo 'Anonymous';
+		esc_html_e( 'Anonymous', 'opening_times' );
 	endif;
 }
-
