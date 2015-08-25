@@ -200,7 +200,7 @@ function opening_times_collection_meta() {
 	endif;		
 	if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) ) :
 		$meta .= '<dt>' . esc_html( 'Year', 'opening_times' ) . '</dt>';
-		$meta .= '<dd> <a rel="ajax" href="' . get_year_link( $postyear ) . '">' . $postyear . '</a></dd>';
+		$meta .= '<dd><a rel="ajax" href="' . get_year_link( $postyear ) . '">' . $postyear . '</a></dd>';
 	endif;
 	$meta .= '</dl>';
 
@@ -211,7 +211,7 @@ function opening_times_collection_meta() {
 		$meta .= '</dl>';
 	endif;
 
-return $meta;
+	return $meta;
 }
 
 
