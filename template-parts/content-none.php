@@ -21,12 +21,10 @@
         <?php elseif ( is_search() ) : ?>
 
             <p><?php esc_html_e( 'Sorry, we didn\'t find any results.', 'opening_times' ); ?></p>
-            <?php get_search_form(); ?>
 
         <?php else : ?>
 
             <p><?php esc_html_e( 'We\'ve not published anything here yet. Try searching for something else.', 'opening_times' ); ?></p>
-            <?php get_search_form(); ?>
 
         <?php endif; ?>
     </div>

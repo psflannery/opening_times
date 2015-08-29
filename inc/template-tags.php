@@ -262,18 +262,18 @@ function opening_times_editor_bio() {
 
 	if ( '' != $user_description ) :
 		$editor = '<aside class="editor-bio">';
-	if ( 'article' == get_post_type() ) :
-		$editor .= '<p>' . esc_html( 'Selected by: ', 'opening_times' ) . '<span>' . the_author_posts_link() . '</span></p>';
-	endif;
+		if ( 'article' == get_post_type() ) :
+			$editor .= '<p>' . esc_html( 'Selected by: ', 'opening_times' ) . '<span><a href="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '">' . get_the_author() . '</a></span></p>';
+		endif;
 
-	$editor .= wpautop( wptexturize( $user_description ) );
-	if ( '' != $user_url ) :
-		$editor .= '<p><a href="' . esc_url( $user_url ) . '" target="_blank">' . esc_html( $user_url ) . '</a></p>';
-	endif;
+		$editor .= wpautop( wptexturize( $user_description ) );
+		if ( '' != $user_url ) :
+			$editor .= '<p><a href="' . esc_url( $user_url ) . '" target="_blank">' . esc_html( $user_url ) . '</a></p>';
+		endif;
 
-	$editor .= '</aside>';
+		$editor .= '</aside>';
 
-	return $editor;
+		return $editor;
 	endif;
 }
 
@@ -358,20 +358,5 @@ function opening_times_collection_links() {
 	if ( '' != $file_url ) :
 		$file = '<a href="' . esc_url( $file_url ) . '" target="_blank" class="featured-link">' .  esc_html( $file_url ) . '</a>';
 		return $file;
-	endif;
-}
-
-
-/**
- * Output the the name of the person who submitted a link
- */
-function opening_times_link_submitter() {
-	global $post;
-	$submitted_by = get_post_meta( $post->ID, '_ot_bv_link_submit_name', true );
-
-	if ( '' != $submitted_by ) :
-		echo $submitted_by;
-	else :
-		esc_html_e( 'Anonymous', 'opening_times' );
 	endif;
 }

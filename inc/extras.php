@@ -34,7 +34,7 @@ add_filter( 'body_class', 'opening_times_body_classes' );
  *
  */
 function opening_times_post_classes( $classes, $class, $post_id ) {
-    if ( ( !is_page() && !is_post_type_archive( 'reading' ) ) || ( is_post_type_archive( 'reading' ) && 'article' == get_post_type() ) || is_page_template( 'page-templates/bv-submitted-links.php' )  ) {
+    if ( ( !is_page() && !is_post_type_archive( 'reading' ) ) || ( is_post_type_archive( 'reading' ) && 'article' == get_post_type() ) ) {
 		$classes[] = 'strap-container';
 		$classes[] = 'veiled';
     }
