@@ -6,67 +6,6 @@
  */
 
 /**
- * Custom Controls
- */
-
-// User Select Control
-if ( ! class_exists( 'WP_Customize_Control' ) )
-return NULL;
-class User_Dropdown_Custom_Control extends WP_Customize_Control {
-	private $users = false;
-	public function __construct($manager, $id, $args = array(), $options = array()) {
-		$this->users = get_users( $options );
-		parent::__construct( $manager, $id, $args );
-	}
-	// Render the content of the category dropdown
-	public function render_content() {
-		if(empty($this->users)) {
-			return false;
-		}
-	?>
-		<label>
-			<span class="customize-control-title" ><?php echo esc_html( $this->label ); ?></span>
-			<select <?php $this->link(); ?>>
-			<?php 
-				foreach( $this->users as $user ) {
-					printf('<option value="%s" %s>%s</option>', $user->data->ID, selected($this->value(), $user->data->ID, false), $user->data->display_name);
-				} 
-			?>
-			</select>
-		</label>
-		<?php
-	}
-}
-
-// Category Control
-if ( ! class_exists( 'WP_Customize_Control' ) )
-return NULL;
-class Category_Dropdown_Custom_Control extends WP_Customize_Control {
-	private $cats = false;
-	public function __construct($manager, $id, $args = array(), $options = array()) {
-		$this->cats = get_categories( $options );
-		parent::__construct( $manager, $id, $args );
-	}
-	// Render the content of the category dropdown
-	public function render_content() {
-		if(!empty($this->cats)) {
-		?>
-			<label>
-				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-				<select <?php $this->link(); ?>>
-				<?php
-					foreach ( $this->cats as $cat ) {
-						printf('<option value="%s" %s>%s</option>', $cat->term_id, selected($this->value(), $cat->term_id, false), $cat->name);
-					}
-				?>
-				</select>
-			</label>
-			<?php
-		}
-	}
-}	
-
-/**
  * Add postMessage support for site title and description for the Theme Customizer.
  *
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
@@ -154,57 +93,6 @@ function opening_times_customize_register( $wp_customize ) {
 			'type' => 'text',
 		)
 	);
-
-	/*-----------------------------------------------------------*
- 	 * User Selected Links - Ben Vickers
- 	 *-----------------------------------------------------------*/
-	$wp_customize->add_section(
-	    'ot_bv_user_selected_links',
-	    array(
-	        'title'     => 'User Submitted Links',
-	        'description' => sprintf( __( 'Configure the category and user to loop through for the submitted links section.', 'opening_times' ) ),
-	        'priority'  => 120
-	    )
-	);
-
-	// Category Select
-	$wp_customize->add_setting(
-		'ot_bv_user_selected_links_cat',
-		array(
-			'sanitize_callback' => 'ot_sanitize_integer',
-		)
-	);
-
-	$wp_customize->add_control(
-		new Category_Dropdown_Custom_Control(
-			$wp_customize,
-			'ot_bv_user_selected_links_cat',
-			array(
-				'label'    => 'Category',
-				'section'  => 'ot_bv_user_selected_links',
-			)
-		)
-	);
-
-	// User Select
-	$wp_customize->add_setting(
-		'ot_bv_user_selected_links_author',
-		array(
-			'sanitize_callback' => 'ot_sanitize_integer',
-		)
-	);
-
-	$wp_customize->add_control(
-		new User_Dropdown_Custom_Control(
-			$wp_customize,
-			'ot_bv_user_selected_links_author',
-			array(
-				'label'    => 'User',
-				'section'  => 'ot_bv_user_selected_links',
-			)
-		)
-	);
-
 }
 add_action( 'customize_register', 'opening_times_customize_register' );
 

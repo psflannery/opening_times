@@ -1,22 +1,24 @@
 <?php
 /**
- * @package Opening Times
- */
+* @package Opening Times
+*/
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
     <header id="<?php opening_times_the_slug(); ?>" class="entry-header gradientee strap-header">
-        <?php if ( !is_archive('reading') ) : ?>
-            <h2 class="header-details col-sm-4"><?php opening_times_taxonomy_no_link(); ?></h2>
-            <h1 class="header-details col-sm-4"><?php the_title(); ?></h1>
-            <h3 class="header-details col-sm-2 header-details-last"><?php opening_times_category_no_link() ?></h3>
-        <?php else : ?>
-            <h2 class="header-details col-sm-4 reading-header-details-first"><?php opening_times_taxonomy_no_link(); ?></h2>
-            <h1 class="header-details col-sm-4"><?php the_title(); ?></h1>
-            <h3 class="header-details col-sm-2 reading-header-details-last"><?php opening_times_category_no_link() ?></h3>
-        <?php endif; ?>
+
+    <?php if ( !is_archive('reading') ) : ?>
+        <h2 class="header-details col-sm-4"><?php opening_times_taxonomy_no_link(); ?></h2>
+        <h1 class="header-details col-sm-4"><?php the_title(); ?></h1>
+        <h3 class="header-details col-sm-2 header-details-last"><?php opening_times_category_no_link() ?></h3>
+    <?php else : ?>
+        <h2 class="header-details col-sm-4 reading-header-details-first"><?php opening_times_taxonomy_no_link(); ?></h2>
+        <h1 class="header-details col-sm-4"><?php the_title(); ?></h1>
+        <h3 class="header-details col-sm-2 reading-header-details-last"><?php opening_times_category_no_link() ?></h3>
+    <?php endif; ?>
+    
     </header>
-	
+
     <div class="accordion-content clearfix">
         <div class="entry-content-wrap fitvids col-sm-6 col-sm-push-4">
 
@@ -27,6 +29,7 @@
                 <?php echo opening_times_collection_links(); ?>
 
                 <?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) ); ?>
+                
                 <?php
                     wp_link_pages( array(
                         'before' => '<div class="page-links">' . __( 'Pages:', 'opening_times' ),
@@ -53,9 +56,9 @@
             </footer>
         </div>
         <div class="col-sm-4 col-sm-pull-6 content-divider-xs-max">
-        
+
             <?php echo opening_times_editor_bio(); ?>
-            
+
         </div>
     </div>	
 </article>
