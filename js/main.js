@@ -423,29 +423,19 @@ function checkGroup(name,value) {
 			opening_times_accordion();
 			ajax_click();
 			input_url_force_protocol();
-
-			// Update Google analytics
-			/*
-			var loc = window.location,
-			page = loc.hash ? loc.hash.substring(1) : loc.pathname + loc.search;
-			ga('send', 'pageview', page);
-			*/
-
-			/*
-			 * Log all jQuery AJAX requests to Google Analytics
-			 * See: http://www.alfajango.com/blog/track-jquery-ajax-requests-in-google-analytics/
-			 */
-			if (typeof ga !== "undefined" && ga !== null) {
-				$(document).ajaxSend(function(event, xhr, settings){
-					ga('send', 'pageview', settings.url);
-				});
-			}
 		}
 
 		// Bind to state change
 		// When the statechange happens, load the appropriate url via ajax
 		History.Adapter.bind(window, 'statechange', function() { // Note: Using statechange instead of popstate
 			load_ot_ajax();
+
+			// Google Analytics
+			//if (typeof ga !== "undefined" && ga !== null) {
+			var loc = window.location,
+			page = loc.hash ? loc.hash.substring(1) : loc.pathname + loc.search;
+			__gaTracker('send', 'pageview', page);
+			//}
 		});
 		
 		// Load Ajax
