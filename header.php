@@ -48,7 +48,7 @@
 
             </nav>
             <div id="info" class="dropdown site-info"></div>
-            <div class="center-fixed">
+            <div class="center-fixed site-logo-container">
 
                 <?php get_template_part('img/inline', 'ot-logo-black.svg'); ?>
             

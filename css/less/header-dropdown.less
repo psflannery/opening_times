@@ -3,6 +3,9 @@
 
 .site-info {
 	height: 100%;
+	@media (max-width: @screen-xs-max) {
+		background: @body-bg;
+	}
 	@media (min-width: @screen-sm-min) {
 		#gradient.vertical(@start-color: @body-bg; @end-color: @overlay; @start-percent: 0%; @end-percent: 50%);
 		position: relative;

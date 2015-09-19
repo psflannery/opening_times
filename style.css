@@ -1562,7 +1562,6 @@ input[type=search] {
   float: none;
 }
 .site-header {
-  background: #ffffff;
   border-bottom: 1px solid #000000;
   min-height: 75px;
   z-index: 1000;
@@ -1597,6 +1596,7 @@ input[type=search] {
   margin: 0;
 }
 .main-navigation {
+  background: #ffffff;
   clear: both;
   display: block;
   float: left;
@@ -1777,6 +1777,11 @@ body {
 .site-info {
   height: 100%;
 }
+@media (max-width: 767px) {
+  .site-info {
+    background: #ffffff;
+  }
+}
 @media (min-width: 768px) {
   .site-info {
     background-image: -webkit-linear-gradient(top, #ffffff 0%, rgba(255, 255, 255, 0.95) 50%);
@@ -1905,6 +1910,9 @@ body {
 }
 .header-meta-single-title {
   text-align: center;
+}
+.site-logo-container {
+  z-index: -1;
 }
 .site-logo {
   -webkit-animation: anti-clockwise 300s infinite linear;
