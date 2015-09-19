@@ -1907,9 +1907,9 @@ body {
   text-align: center;
 }
 .site-logo {
-  -webkit-animation: anti-clockwise 300s infinite;
-  -o-animation: anti-clockwise 300s infinite;
-  animation: anti-clockwise 300s infinite;
+  -webkit-animation: anti-clockwise 300s infinite linear;
+  -o-animation: anti-clockwise 300s infinite linear;
+  animation: anti-clockwise 300s infinite linear;
   width: 150px;
   height: 150px;
   transition: all 0.3s ease;
