@@ -1,12 +1,9 @@
 // Logo
 // --------------------------------------------------
 .site-logo {
+	.animation(anti-clockwise 300s);
 	.square(@small-logo);
-	position: fixed;
-		bottom: 50%;
-		right: 50%;
 	transition: all 0.3s ease;
-	.translate(50%; 50%);
 	@media (min-width: @screen-sm-min) {
 		.square(@large-logo);
 	}

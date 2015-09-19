@@ -332,6 +332,16 @@ hr {
   overflow: visible;
   clip: auto;
 }
+.center-fixed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
 h1,
 h2,
 h3,
@@ -1898,16 +1908,12 @@ body {
   text-align: center;
 }
 .site-logo {
+  -webkit-animation: anti-clockwise 300s;
+  -o-animation: anti-clockwise 300s;
+  animation: anti-clockwise 300s;
   width: 150px;
   height: 150px;
-  position: fixed;
-  bottom: 50%;
-  right: 50%;
   transition: all 0.3s ease;
-  -webkit-transform: translate(50%, 50%);
-  -ms-transform: translate(50%, 50%);
-  -o-transform: translate(50%, 50%);
-  transform: translate(50%, 50%);
 }
 @media (min-width: 768px) {
   .site-logo {
