@@ -43,6 +43,7 @@ function opening_times_setup() {
 		'article',
 	) );
 	add_image_size( 'accordion-thumb', 300, 9999 ); //300 pixels wide (and unlimited height)
+	add_image_size( 'accordion-retina', 600, 9999 ); //600 pixels wide (and unlimited height)
 
 	// This theme uses wp_nav_menu() in two locations.
 	register_nav_menus( array(

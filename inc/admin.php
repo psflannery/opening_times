@@ -87,12 +87,3 @@ function opening_times_cpts_css() {
     </style>";
 }
 add_action('admin_head', 'opening_times_cpts_css');
-
-/*
- * Adding HTML message to the "Featured Image" metabox
- * @link: http://code.tutsplus.com/tutorials/50-filters-of-wordpress-filters-41-50--cms-21299
- */
-function opening_times_admin_post_thumbnail_html( $html ) {
-    return $html .= '<p>Retina images are enabled: <strong>ensure the image width is at least 600px</strong></p>';
-}
-add_filter( 'admin_post_thumbnail_html', 'opening_times_admin_post_thumbnail_html' );

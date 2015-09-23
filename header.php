@@ -48,12 +48,13 @@
 
             </nav>
             <div id="info" class="dropdown site-info"></div>
-            <div class="center-fixed site-logo-container">
-
-                <?php get_template_part('img/inline', 'ot-logo-black.svg'); ?>
-            
-            </div>
         </header>
+
+        <div class="center-fixed site-logo-container">
+
+            <?php get_template_part('img/inline', 'ot-logo-black.svg'); ?>
+
+        </div>
 
         <div id="content" class="site-content">
             <h1 class="menu-toggle"><span class="screen-reader-text"><?php esc_html_e( 'Menu', 'opening_times' ); ?></span></h1>
