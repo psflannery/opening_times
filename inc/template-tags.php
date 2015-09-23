@@ -307,6 +307,7 @@ function opening_times_featured_content() {
 		endif;
 
 		return $featured;
+	//endif;
 
 	elseif ( '' != $oembed ) :
 		// If there is no thumbnail, but there is an embed, and we're not in the reading section or take-overs section. This will format the posts the appear in the archives.
@@ -324,6 +325,7 @@ function opening_times_featured_content() {
 		endif;
 
 		return $featured;
+    //endif;
 
 	elseif ( !is_post_type_archive( 'reading' ) && !is_singular( array ( 'reading', 'article' ) ) ) :
 		// None of the above, everything is empty

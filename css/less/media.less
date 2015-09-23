@@ -1,15 +1,8 @@
 // Media & Galleries
 // --------------------------------------------------
 
-/* =Media
+/* =Smileys
 ----------------------------------------------- */
-/* Make sure embeds and iframes fit their containers */
-embed,
-iframe,
-object {
-	max-width: 100%;
-}
-
 .page-content img.wp-smiley,
 .entry-content img.wp-smiley,
 .comment-content img.wp-smiley {
@@ -21,7 +14,6 @@ object {
 
 .fluid-width-video-wrapper,
 .fitvids iframe {
-	//margin-bottom: @grid-gutter-width+@line-height-computed/2;
 	margin-bottom: @line-height-computed;
 }
 
@@ -29,17 +21,13 @@ object {
 ----------------------------------------------- */
 .wp-caption {
 	max-width: 100%;
-}
-.wp-caption img[class*="wp-image-"] {
-	display: block;
-	max-width: 100%;
+	margin-bottom: @line-height-computed;
+	img[class*="wp-image-"] {
+		&:extend(p);
+	}
 }
 .wp-caption-text {
-	margin-top: -@line-height-computed;
-	margin-bottom: @grid-gutter-width;
-}
-.wp-caption .wp-caption-text {
-	//margin: 0.8075em 0;
+	font-style: italic;
 }
 
 /* =Gallery

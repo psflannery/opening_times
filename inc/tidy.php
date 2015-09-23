@@ -62,16 +62,6 @@ function opening_times_gallery_style($css) {
 add_filter('gallery_style', 'opening_times_gallery_style');
 
 /**
- * Remove the p from around imgs
- *
- * @link: http://css-tricks.com/snippets/wordpress/remove-paragraph-tags-from-around-images/
- */
-function opening_times_filter_ptags_on_images($content){
-	return preg_replace('/<p>\s*(<a .*>)?\s*(<img .* \/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
-}
-add_filter('the_content', 'opening_times_filter_ptags_on_images');
-
-/**
  * This removes the annoying […] to a Read More link
  */
 function opening_times_excerpt_more($more) {

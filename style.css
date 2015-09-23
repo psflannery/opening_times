@@ -236,6 +236,11 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
+embed,
+iframe,
+object {
+  max-width: 100%;
+}
 a {
   color: #0000ff;
   text-decoration: none;
@@ -280,10 +285,6 @@ figure {
 }
 img {
   vertical-align: middle;
-  max-width: 100%;
-  height: auto;
-}
-.img-responsive {
   display: block;
   max-width: 100%;
   height: auto;
@@ -387,7 +388,8 @@ h6 {
   font-size: 12px;
   text-decoration: underline;
 }
-p {
+p,
+.wp-caption img[class*="wp-image-"] {
   margin: 0 0 9px;
 }
 .lead {
@@ -2029,14 +2031,8 @@ body {
     width: 30%;
   }
 }
-/* =Media
+/* =Smileys
 ----------------------------------------------- */
-/* Make sure embeds and iframes fit their containers */
-embed,
-iframe,
-object {
-  max-width: 100%;
-}
 .page-content img.wp-smiley,
 .entry-content img.wp-smiley,
 .comment-content img.wp-smiley {
@@ -2053,14 +2049,10 @@ object {
 ----------------------------------------------- */
 .wp-caption {
   max-width: 100%;
-}
-.wp-caption img[class*="wp-image-"] {
-  display: block;
-  max-width: 100%;
+  margin-bottom: 18px;
 }
 .wp-caption-text {
-  margin-top: -18px;
-  margin-bottom: 20px;
+  font-style: italic;
 }
 /* =Gallery
 ----------------------------------------------- */
