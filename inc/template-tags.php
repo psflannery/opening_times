@@ -362,3 +362,31 @@ function opening_times_collection_links() {
 		return $file;
 	endif;
 }
+
+/**
+ * Output the After Reading List content
+ *
+ * Postscript/Footnote
+ * Submission Form
+ *
+ * @since Opening Times 1.4.4
+ */
+function opening_times_after_reading_list() {
+	global $post;
+
+	$footnote = wpautop( get_post_meta( $post->ID, '_ot_after_reading_footnote', true ) );
+	$article_submit = get_post_meta( $post->ID, '_ot_after_reading_post_submit', true );
+
+	$after = '';
+	if ( '' != $footnote ) :
+		$after .= '<div>';
+		$after .= $footnote;
+		$after .= '</div>';
+	endif;
+	if ( '' != $article_submit ) :
+		$after .= ot_do_frontend_form_submission_shortcode();
+	endif;
+
+	echo $after;
+}
+

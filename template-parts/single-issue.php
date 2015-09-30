@@ -40,6 +40,8 @@
         
             <?php get_template_part( 'template-parts/loop', 'reading' ); ?>	
             
+            <?php opening_times_after_reading_list(); ?>
+            
         </div>
     </div>
 </section>
