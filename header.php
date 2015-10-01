@@ -50,6 +50,8 @@
             <div id="info" class="dropdown site-info"></div>
         </header>
 
+        <?php do_action('after_header'); ?>
+
         <div class="center-fixed site-logo-container">
 
             <?php get_template_part('img/inline', 'ot-logo-black.svg'); ?>

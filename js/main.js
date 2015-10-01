@@ -441,8 +441,10 @@ function checkGroup(name,value) {
 		// Load Ajax
 		function load_ot_ajax() {
 			State = History.getState(); // Note: Using History.getState() instead of event.state
+
+			var loadingMsg = 'Loading';
 					
-			$("body").prepend('<div id="ajax-loader"><span>Loading</span></div>');
+			$("body").prepend('<div id="ajax-loader"><span>' + loadingMsg + '</span></div>');
 			$("#ajax-loader").fadeIn();
 			$("#content").load(State.url + ' #content > *', function(data, status, xhr) {
 			//$("#main").load(State.url + ' #primary, #secondary', function(data) {

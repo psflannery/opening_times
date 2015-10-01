@@ -11,6 +11,8 @@
         </div><!-- #content -->
     </div><!-- #page -->
 
+    <?php do_action('before_footer'); ?>
+
     <?php get_sidebar('about'); ?>
     <?php get_sidebar('mailing-list'); ?>
 
