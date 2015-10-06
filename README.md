@@ -4,7 +4,7 @@ Opening Times
 The theme for the main Opening Times website.
 http://otdac.org/
 
-Version: 1.4.6
+Version: 1.4.7
 Date: 30/9/15
 
 Contains the main theme files responsible for presentation. All theme agnostic functionality like custom post-types and taxanomies are located in a separate plugin.
@@ -14,7 +14,6 @@ This version can be used for production, but there are a few known, but edge cas
 
 List of additions and theme features in no particular order...
 
-* Retina images - @x2 images size added and automatically created upon upload. Retina.js used to serve the correct size based on screen resolution.
 * Lazyload iframes - with so many video going into the Reading section, page loading time was being effected. Videos now only load when the parent accordion is opened.
 * Ajaxified - Pages loaded via ajax so that the Opening Times logo spin animation doesn't get interupted as you navigate through the site. Using History.js to update permalinks and keep the back button working.
 * Extra Accordion callbacks - closing an accordion will now only reset its child iframe, not every single one on the page. 
@@ -26,5 +25,4 @@ To Do
 -----
 * Open parent accordion when child is accessed via a permalink. On older Issues, the reading article accordion still opens, but the parent doesn't. Am THIS close to getting it sort, but am also THIS far.
 * Update the active menu with an `.active` class.
-* Sort out permalink issues when searching from anything other than the home page.
 * Tidyup template and .js for the 404 page to make it work better with History.js

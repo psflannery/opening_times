@@ -11,7 +11,7 @@
     <header id="<?php opening_times_the_slug(); ?>" class="entry-header gradientee strap-header">
 
         <?php if ( 'take-overs' != get_post_type() ) : ?>
-            <h2 class="header-details archive-header-details col-sm-3"><?php opening_times_taxonomy_no_link() ?></h2>
+            <h2 class="header-details archive-header-details col-sm-3"><?php opening_times_reading_list_author_name(); ?></h2>
         <?php else : ?>
             <h2 class="header-details archive-header-details col-sm-3"><?php echo get_post_meta( $post->ID, '_ot_institution_name', true ); ?></h2> 
         <?php endif; ?>	

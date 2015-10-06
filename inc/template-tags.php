@@ -344,6 +344,7 @@ function opening_times_collection_links() {
 	global $post;
 	$file_url = get_post_meta( $post->ID, '_ot_file', true );
 	$link_url = get_post_meta( $post->ID, "_ot_link_url", true );
+	$submit_url = get_post_meta( $post->ID, '_ot_bv_link_submit_link', true );
 	$links = '';
 
 	if ( '' != $link_url ) :
@@ -354,6 +355,11 @@ function opening_times_collection_links() {
 				$links = '<a href="' . esc_url( $link ) . '" target="_blank">' . esc_html( $link ) . '</a>';
 			endif;
 		endforeach;
+		return $links;
+	endif;
+
+	if ( '' != $submit_url ) :
+		$links = '<a href="' . esc_url( $submit_url ) . '" target="_blank" class="featured-link">' . esc_url( $submit_url ) . '</a>';
 		return $links;
 	endif;
 
@@ -390,3 +396,26 @@ function opening_times_after_reading_list() {
 	echo $after;
 }
 
+/**
+ * Output the statement of responsibilty for the Reading List article
+ *
+ * Displays Author or Artist repsonsible for text
+ * ...or submitter, if a user submitted post.
+ *
+ * Submission Form
+ *
+ * @since Opening Times 1.4.7
+ */
+function opening_times_reading_list_author_name(){
+	global $post;
+	$submit_url = get_post_meta( $post->ID, '_ot_bv_link_submit_link', true );
+
+	$name = '';
+	if ( '' != $submit_url ) :
+		$name .= opening_times_bv_link_submitter();
+	else:
+		$name .= opening_times_taxonomy_no_link();
+	endif;
+
+	return $name;
+}

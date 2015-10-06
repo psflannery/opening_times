@@ -8,9 +8,9 @@
     <header id="<?php opening_times_the_slug(); ?>" class="entry-header gradientee strap-header row-reading-header">
         <?php if ( !is_search() ) : ?>
 
-            <h2 class="header-details col-sm-3 reading-header-details-first"><?php opening_times_taxonomy_no_link(); ?></h2>
+            <h2 class="header-details col-sm-3 reading-header-details-first"><?php opening_times_reading_list_author_name(); ?></h2>
             <h1 class="header-details col-sm-4 col-md-5"><?php the_title(); ?></h1>
-            <h3 class="header-details col-sm-3 col-md-2 reading-header-details-last"><?php opening_times_category_no_link() ?></h3>
+            <h3 class="header-details col-sm-3 col-md-2 reading-header-details-last"><?php opening_times_category_no_link(); ?></h3>
 
         <?php else : ?>
         
