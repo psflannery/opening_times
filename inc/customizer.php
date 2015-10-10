@@ -11,10 +11,22 @@
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function opening_times_customize_register( $wp_customize ) {
-	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
-	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
-	
+	$wp_customize->get_setting( 'blogname' )->transport              = 'postMessage';
+	$wp_customize->get_setting( 'blogdescription' )->transport       = 'postMessage';
+	$wp_customize->get_setting( 'header_textcolor' )->transport      = 'postMessage';
+	$wp_customize->get_setting( 'background_color' )->transport      = 'postMessage';
+	$wp_customize->get_setting( 'background_image' )->transport      = 'postMessage';
+	$wp_customize->get_setting( 'background_repeat' )->transport     = 'postMessage';
+	$wp_customize->get_setting( 'background_position_x' )->transport = 'postMessage';
+	$wp_customize->get_setting( 'background_attachment' )->transport = 'postMessage';
+
+	/**-----------------------------------------------------------
+	 * Site Identity
+	 *-----------------------------------------------------------*/
+
+	// Add custom description to controls or sections.
+    $wp_customize->get_control( 'blogdescription' )->description  = __( 'Tagline is hidden in this theme.', 'opening_times' );
+
 	/**-----------------------------------------------------------
 	 * Arts Council Link
 	 *-----------------------------------------------------------*/

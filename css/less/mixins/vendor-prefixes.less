@@ -4,6 +4,7 @@
 // Autoprefixer in our Gruntfile. They will be removed in v4.
 
 // - Animations
+// - Background size
 // - Backface visibility
 // - Box shadow
 // - Box sizing
@@ -48,6 +49,14 @@
 .animation-fill-mode(@fill-mode) {
   -webkit-animation-fill-mode: @fill-mode;
           animation-fill-mode: @fill-mode;
+}
+
+// Background size
+.background-size(@size) {
+  -webkit-background-size: @size;
+     -moz-background-size: @size;
+       -o-background-size: @size;
+          background-size: @size;
 }
 
 // Backface visibility

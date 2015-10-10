@@ -26,6 +26,12 @@
 
         <header id="masthead" class="site-header" role="banner">
             <h1 class="site-title"><span class="screen-reader-text"><?php bloginfo( 'name' ); ?></span></h1>
+            <?php 
+                $description = get_bloginfo( 'description', 'display' );
+                if ( $description || is_customize_preview() ) :
+            ?>
+                <p class="site-description screen-reader-text"><?php echo $description; ?></p>
+            <?php endif; ?>
             <nav id="site-navigation" class="main-navigation" role="navigation">
                 <a class="skip-link screen-reader-text screen-reader-text-focusable" href="#content"><?php esc_html_e( 'Skip to content', 'opening_times' ); ?></a>
 
