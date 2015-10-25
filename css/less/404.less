@@ -1,36 +1,20 @@
 // 404
 // --------------------------------------------------
 
-.not-found {
-	text-align: center;
-	h1 {
-		//font-size: @font-size-large;
-	}
-}
-.search-field {
-	width: 200px;
-	@media (min-width: @screen-sm-min) {
-		width: 350px;
-	}
-}
 .message404 {
-	.size(250px; 150px);
-    .translate(-50%; -50%);
-    position: fixed;
-    top: 50%;
-    left: 50%;
+	.size(@large-logo; @small-logo);
 	@media (min-width: @screen-sm-min) {
-		.size(650px; 250px);
+		.size((@small-logo*4); @large-logo);
 	}
 }
 .message404:before, .message404:after {
     content:'4';
-    font-size: 50px;
+    font-size: @small-logo/3;
     height: inherit;
-	line-height: 150px;
+	line-height: @small-logo;
 	@media (min-width: @screen-sm-min) {
-		font-size: 150px;
-		line-height: 250px;
+		font-size: @small-logo;
+		line-height: @large-logo;
 	}
 }
 .message404:before {

@@ -358,17 +358,6 @@ function checkGroup(name,value) {
 		searchExpand();
 		layout_hacks();
 	}
-	
-	/**
-	 * Layout adjustments for the 404 page
-	 */
-	function four_oh_four() {
-		/* Add focus to 404 page search form */
-		$(".page-content .search-field").focus();
-		
-		/* Wrap the logo in a div to create the 404 page */
-		$(".site-logo").wrap("<div class='message404'></div>");
-	}
 
 	/**
 	 * Auto add protocal to url form validation
@@ -556,9 +545,6 @@ function checkGroup(name,value) {
 		ajax_load();
 		preventZoom();
 		ot_resize();
-		if ($('body').hasClass('error404')) {
-			four_oh_four();
-		}
 		addFieldToCheck("email", "Email address");
 		addFieldToCheck("emailconfirm", "Confirm your email address");
 	};
