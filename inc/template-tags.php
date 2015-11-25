@@ -375,6 +375,8 @@ function opening_times_collection_links() {
  * Postscript/Footnote
  * Submission Form
  *
+ * Attatched to `after_reading_list` action hook.
+ *
  * @since Opening Times 1.4.4
  */
 function opening_times_after_reading_list() {
@@ -395,6 +397,7 @@ function opening_times_after_reading_list() {
 
 	echo $after;
 }
+add_action( 'after_reading_list', 'opening_times_after_reading_list', 1 );
 
 /**
  * Output the statement of responsibilty for the Reading List article

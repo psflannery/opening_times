@@ -37,10 +37,12 @@
             </div>
         </div>
         <div class="editor-selection accordion col-sm-6 gradienter">
+
+            <?php do_action( 'before_reading_list' ); ?>
         
             <?php get_template_part( 'template-parts/loop', 'reading' ); ?>	
             
-            <?php opening_times_after_reading_list(); ?>
+            <?php do_action( 'after_reading_list' ); ?>
             
         </div>
     </div>

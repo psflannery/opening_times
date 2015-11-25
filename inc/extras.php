@@ -86,7 +86,7 @@ add_filter( 'nav_menu_link_attributes', 'opening_times_menu_atts', 10, 3 );
 /**
  * Show all the posts in the Loop
  */
-function opening_times_all_the_posts($query) {
+function opening_times_all_the_posts( $query ) {
     if( $query->is_main_query() && !is_admin() ) {
 		$query->set('posts_per_page', '-1');
     }
@@ -94,10 +94,10 @@ function opening_times_all_the_posts($query) {
 add_action('pre_get_posts', 'opening_times_all_the_posts');
 
 /**
- * Show Custom Post Types in the archive.
+ * Show Authors and Custom Post Types in the archive.
  */
 function opening_times_add_custom_types_to_tax( $query ) {
-	if( is_category() || is_tag() && empty( $query->query_vars['suppress_filters'] ) ) {
+	if( $query->is_author || is_category() || is_tag() && empty( $query->query_vars['suppress_filters'] ) ) {
 
 		// Get all your post types
 		$post_types = get_post_types();
@@ -107,16 +107,6 @@ function opening_times_add_custom_types_to_tax( $query ) {
 	}
 }
 add_filter( 'pre_get_posts', 'opening_times_add_custom_types_to_tax' );
-
-/**
- * Show Authors used in Custom Post Types in the author archive.
- */
-function opening_times_author_archive($query) {
-    if ( $query->is_author )
-         $query->set( 'post_type', array('post', 'article') );
-    remove_action( 'pre_get_posts', 'opening_times_author_archive' );
-}
-add_action('pre_get_posts', 'opening_times_author_archive');
 
 /**
  * Echo the Post Slug
