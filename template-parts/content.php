@@ -28,14 +28,15 @@
 
             <div class="entry-content col-sm-7 col-lg-4">		
 
-                <?php if ( 'take-overs' != get_post_type() ) : ?>		
+                <?php 
+                    if ( 'take-overs' != get_post_type() ) :	
                 
-                    <?php echo opening_times_collection_links(); ?>
+                    echo opening_times_collection_links();
 
-                <?php endif; ?>
+                    endif;
 
-                <?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) ); ?>
-                <?php
+                    the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) );
+                
                     wp_link_pages( array(
                         'before' => '<div class="page-links">' . __( 'Pages:', 'opening_times' ),
                         'after'  => '</div>',
@@ -46,13 +47,15 @@
 
         <footer class="entry-meta col-sm-7 col-lg-3 pseudo-content-divider-md-max collection-meta">
 
-            <?php echo opening_times_takeover_meta(); ?>
+            <?php 
+                echo opening_times_takeover_meta();
 
-            <?php echo opening_times_collection_meta(); ?>
+                echo opening_times_collection_meta();
             
-            <?php opening_times_artist_bio(); ?>
+                opening_times_artist_bio();
 
-            <?php $slug = home_url('/#'. opening_times_the_slug($echo=false)); ?>
+                $slug = home_url('/#'. opening_times_the_slug($echo=false));
+            ?>
 
             <ul class="ot-social-links ot-meta">
                 <li><a href="<?php echo esc_url( $slug ); ?>" rel="bookmark" class="ot-permalink"><?php esc_html_e( 'Share Link', 'opening_times' ); ?></a></li>

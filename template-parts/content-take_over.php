@@ -18,8 +18,9 @@
         <div class="entry-content-wrap fitvids col-sm-5">
             <div class="entry-content">		
 
-                <?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) ); ?>
-                <?php
+                <?php 
+                    the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) );
+                
                     wp_link_pages( array(
                         'before' => '<div class="page-links">' . __( 'Pages:', 'opening_times' ),
                         'after'  => '</div>',
@@ -31,11 +32,13 @@
 
             <footer class="entry-meta content-divider">
 
-                <?php echo opening_times_collection_meta(); ?>
+                <?php 
+                    echo opening_times_collection_meta();
 
-                <?php opening_times_artist_bio(); ?>
+                    opening_times_artist_bio();
 
-                <?php $slug = home_url('take-overs/#'. opening_times_the_slug($echo=false)); ?>
+                    $slug = home_url('take-overs/#'. opening_times_the_slug($echo=false));
+                 ?>
 
                 <ul class="ot-social-links ot-meta">
                     <li><a href="<?php echo esc_url( $slug ); ?>" rel="bookmark" class="ot-permalink"><?php esc_html_e( 'Share Link', 'opening_times' ); ?></a></li>

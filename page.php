@@ -14,11 +14,12 @@ get_header(); ?>
 
     <main id="main" class="site-main gradienter container-fluid container-padding" role="main">
 
-        <?php while ( have_posts() ) : the_post(); ?>
+        <?php 
+        while ( have_posts() ) : the_post();
 
-            <?php get_template_part( 'template-parts/content', 'page' ); ?>
+            get_template_part( 'template-parts/content', 'page' );
 
-        <?php endwhile; ?>
+        endwhile; ?>
 
     </main>
 

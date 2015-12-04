@@ -25,7 +25,11 @@ add_action( 'after_setup_theme', 'opening_times_jetpack_setup' );
 function opening_times_infinite_scroll_render() {
 	while ( have_posts() ) {
 		the_post();
-		get_template_part( 'template-parts/content', get_post_format() );
+		if ( is_search() ) :
+		    get_template_part( 'template-parts/content', 'search' );
+		else :
+		    get_template_part( 'template-parts/content', get_post_format() );
+		endif;
 	}
 }
 
@@ -38,7 +42,7 @@ function opening_times_infinite_scroll_render() {
 
 add_filter( 'jetpack_implode_frontend_css', '__return_false' );
 
-function opening_times_remove_all_jetpacl_css() {
+function opening_times_remove_all_jetpack_css() {
 	wp_deregister_style( 'AtD_style' ); // After the Deadline
 	wp_deregister_style( 'jetpack_likes' ); // Likes
 	wp_deregister_style( 'jetpack_related-posts' ); //Related Posts
@@ -65,4 +69,4 @@ function opening_times_remove_all_jetpacl_css() {
 	wp_deregister_style( 'widget-grid-and-list' ); // Top Posts widget
 	wp_deregister_style( 'jetpack-widgets' ); // Widgets
 }
-add_action('wp_print_styles', 'opening_times_remove_all_jetpacl_css' );
+add_action('wp_print_styles', 'opening_times_remove_all_jetpack_css' );

@@ -9,9 +9,10 @@ get_header(); ?>
 
     <main id="main" class="site-main gradienter container-fluid" role="main">
 
-        <?php while ( have_posts() ) : the_post(); ?>
+        <?php 
+        while ( have_posts() ) : the_post();
 
-            <?php $post_type = get_post_type();
+            $post_type = get_post_type();
                 switch( $post_type ) {
                     case 'post':
                         get_template_part( 'template-parts/content', get_post_format() );
@@ -29,9 +30,8 @@ get_header(); ?>
                         get_template_part( 'template-parts/content', 'take-over' );
                     break;
                 }
-            ?>
 
-        <?php endwhile; ?>
+        endwhile; ?>
 
     </main>
 

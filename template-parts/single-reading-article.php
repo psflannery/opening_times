@@ -8,13 +8,17 @@
     <header id="<?php opening_times_the_slug(); ?>" class="entry-header gradientee strap-header">
 
     <?php if ( !is_archive('reading') ) : ?>
+
         <h2 class="header-details col-sm-4"><?php opening_times_reading_list_author_name(); ?></h2>
         <h1 class="header-details col-sm-4"><?php the_title(); ?></h1>
         <h3 class="header-details col-sm-2 header-details-last"><?php opening_times_category_no_link() ?></h3>
+   
     <?php else : ?>
+
         <h2 class="header-details col-sm-4 reading-header-details-first"><?php opening_times_reading_list_author_name(); ?></h2>
         <h1 class="header-details col-sm-4"><?php the_title(); ?></h1>
         <h3 class="header-details col-sm-2 reading-header-details-last"><?php opening_times_category_no_link() ?></h3>
+    
     <?php endif; ?>
     
     </header>
@@ -26,11 +30,11 @@
 
             <div class="entry-content">		
 
-                <?php echo opening_times_collection_links(); ?>
+                <?php 
+                    echo opening_times_collection_links();
 
-                <?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) ); ?>
+                    the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) );
                 
-                <?php
                     wp_link_pages( array(
                         'before' => '<div class="page-links">' . __( 'Pages:', 'opening_times' ),
                         'after'  => '</div>',
@@ -39,11 +43,13 @@
             </div>
             <footer class="entry-meta content-divider">
 
-                <?php echo opening_times_collection_meta(); ?>
+                <?php 
+                    echo opening_times_collection_meta();
 
-                <?php opening_times_artist_bio(); ?>
+                    opening_times_artist_bio();
 
-                <?php $slug = home_url('reading/#'. opening_times_the_slug($echo=false)); ?>
+                    $slug = home_url('reading/#'. opening_times_the_slug($echo=false)); 
+                ?>
 
                 <ul class="ot-social-links ot-meta">
                     <li><a href="<?php echo esc_url( $slug ); ?>" rel="bookmark" class="ot-permalink"><?php esc_html_e( 'Share Link', 'opening_times' ); ?></a></li>

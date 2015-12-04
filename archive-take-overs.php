@@ -11,21 +11,22 @@ get_header(); ?>
 
     <main id="main" class="site-main accordion gradienter container-fluid" role="main">
 
-        <?php if ( have_posts() ) : ?>
+        <?php 
+        if ( have_posts() ) :
 
-            <?php while ( have_posts() ) : the_post(); ?>
+            while ( have_posts() ) : the_post();
 
-                <?php get_template_part( 'template-parts/content', 'take_over' ); ?>
+                get_template_part( 'template-parts/content', 'take_over' );
 
-            <?php endwhile; ?>
+            endwhile;
 
-            <?php the_posts_navigation(); ?>
+            the_posts_navigation();
 
-        <?php else : ?>
+        else :
 
-            <?php get_template_part( 'template-parts/content', 'none' ); ?>
+            get_template_part( 'template-parts/content', 'none' );
 
-        <?php endif; ?>
+        endif; ?>
 
     </main>
 
