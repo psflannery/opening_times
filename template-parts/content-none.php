@@ -8,7 +8,7 @@
  */
 ?>
 
-<section class="no-results not-found">
+<section class="no-results not-found text-center">
     <header class="page-header">
         <h1 class="page-title"><?php esc_html_e( 'Nothing Found', 'opening_times' ); ?></h1>
     </header>
