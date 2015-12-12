@@ -316,7 +316,11 @@ function opening_times_featured_content() {
             return $featured;
         elseif ( '' != $iframe_src ) :
         // we have an iframe
-            $featured = '<div class="featured-image col-sm-5"><iframe src="about:blank" data-src="' . $iframe_src . '" width="100%" height="' . $iframe_height . '" frameborder="0"></iframe></div>';
+        	if ( ! is_single() ) :
+            	$featured = '<div class="featured-image col-sm-5"><iframe src="about:blank" data-src="' . $iframe_src . '" width="100%" height="' . $iframe_height . '" frameborder="0"></iframe></div>';
+            else :
+            	$featured = '<div class="featured-image col-sm-5"><iframe src="' . $iframe_src . '" width="100%" height="' . $iframe_height . '" frameborder="0"></iframe></div>';
+            endif;
             return $featured;
         elseif ( '' != $oembed ) :
         // we have an oembed
