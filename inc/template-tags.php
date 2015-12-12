@@ -131,7 +131,7 @@ function opening_times_taxonomy_no_link() {
 }
 
 /**
- * Outputs the residency and take-over dates in a pretty format.
+ * Outputs the residency and project dates in a pretty format.
  */
 function opening_times_event_dates() {
 	global $post;
@@ -139,8 +139,8 @@ function opening_times_event_dates() {
 	$meta_resindency_sd = get_post_meta( $post->ID, '_ot_residency_start_date', true );
 	$meta_resindency_ed = get_post_meta( $post->ID, '_ot_residency_end_date', true );
 
-	$meta_takeover_sd = get_post_meta( $post->ID, '_ot_take_over_start_date', true );
-	$meta_takeover_ed = get_post_meta( $post->ID, '_ot_take_over_end_date', true );
+	$meta_project_sd = get_post_meta( $post->ID, '_ot_project_start_date', true );
+	$meta_project_ed = get_post_meta( $post->ID, '_ot_project_end_date', true );
 
 	if( '' != $meta_resindency_sd ):
 		//convert to pretty formats
@@ -154,16 +154,16 @@ function opening_times_event_dates() {
 		return $residencydate;
 	endif;
 
-	if( '' != $meta_takeover_sd ):
+	if( '' != $meta_project_sd ):
 		//convert to pretty formats
-		$clean_takeover_sd = date( "d F Y", $meta_takeover_sd );
-		$clean_takeover_ed = date( "d F Y", $meta_takeover_ed );
+		$clean_project_sd = date( "d F Y", $meta_project_sd );
+		$clean_project_ed = date( "d F Y", $meta_project_ed );
 
 		//output the date
-		$takeoverdate = '';
-		$takeoverdate .= '' . $clean_takeover_sd;
-		$takeoverdate .= ' - ' . $clean_takeover_ed;
-		return $takeoverdate;
+		$project = '';
+		$project .= '' . $clean_project_sd;
+		$project .= ' - ' . $clean_project_ed;
+		return $project;
 	endif;
 }
 
@@ -198,7 +198,7 @@ function opening_times_collection_meta() {
 		$meta .= '<dt>' . esc_html( 'Tags', 'opening_times' ) . '</dt>';
 		$meta .= '<dd>' . get_the_tag_list( ' ', ', ', '' ) . '</dd>';
 	endif;		
-	if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) ) :
+	if ( !is_post_type_archive( array ( 'reading', 'projects' ) ) ) :
 		$meta .= '<dt>' . esc_html( 'Year', 'opening_times' ) . '</dt>';
 		$meta .= '<dd><a rel="ajax" href="' . get_year_link( $postyear ) . '">' . $postyear . '</a></dd>';
 	endif;
@@ -216,18 +216,18 @@ function opening_times_collection_meta() {
 
 
 /**
- * Prints HTML with meta information for the Take-overs.
+ * Prints HTML with meta information for the Projects.
  */
-function opening_times_takeover_meta() {
-	if ( 'take-overs' == get_post_type() ) : 
-		$takeover = '<dl class="ot-event-meta ot-meta dl-inline">';
-		$takeover .= '<dt>' . esc_html( 'Website', 'opening_times' ) . '</dt>';
-		$takeover .= '<dd>' . opening_times_collection_links() . '</dd>';
-		$takeover .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
-		$takeover .= '<dd>' . ' ' . opening_times_event_dates() . '</dd>';
-		$takeover .= '</dl>'; 
+function opening_times_project_meta() {
+	if ( 'projects' == get_post_type() ) : 
+		$project = '<dl class="ot-event-meta ot-meta dl-inline">';
+		$project .= '<dt>' . esc_html( 'Website', 'opening_times' ) . '</dt>';
+		$project .= '<dd>' . opening_times_collection_links() . '</dd>';
+		$project .= '<dt>' . esc_html( 'Dates', 'opening_times' ) . '</dt>';
+		$project .= '<dd>' . ' ' . opening_times_event_dates() . '</dd>';
+		$project .= '</dl>'; 
 
-		return $takeover;
+		return $project;
 	endif;
 }
 
@@ -310,12 +310,12 @@ function opening_times_featured_content() {
 	//endif;
 
 	elseif ( '' != $oembed ) :
-		// If there is no thumbnail, but there is an embed, and we're not in the reading section or take-overs section. This will format the posts the appear in the archives.
-		if ( !is_post_type_archive( array ( 'reading', 'take-overs' ) ) && !is_singular( array ( 'reading', 'take-overs', 'article' ) ) ) :
+		// If there is no thumbnail, but there is an embed, and we're not in the reading section or projects section. This will format the posts the appear in the archives.
+		if ( !is_post_type_archive( array ( 'reading', 'projects' ) ) && !is_singular( array ( 'reading', 'projects', 'article' ) ) ) :
 			$featured = '<figure class="col-sm-3">' . apply_filters( 'the_content', $oembed ) . '</figure>';
 
-		// If there is no thumbnail, but there is an embed, and we ARE in the TAKE-OVERS section
-		elseif ( '' != $oembed && ( is_post_type_archive( 'take-overs' ) || is_singular( 'take-overs' ) ) ) :
+		// If there is no thumbnail, but there is an embed, and we ARE in the PROJECTS section
+		elseif ( '' != $oembed && ( is_post_type_archive( 'projects' ) || is_singular( 'projects' ) ) ) :
 			$featured = '<figure class="col-sm-5 fitvids">' . apply_filters( 'the_content', $oembed ) . '</figure>';
 
 		// If there is no thumbnail, but there is an embed, and we ARE in the READING section
@@ -349,7 +349,7 @@ function opening_times_collection_links() {
 
 	if ( '' != $link_url ) :
 		foreach ( $link_url as $link ) :
-			if ( 'take-overs' != get_post_type() ) :
+			if ( 'projects' != get_post_type() ) :
 				$links .= '<a href="' . esc_url( $link ) . '" target="_blank" class="featured-link">' .  esc_html( $link ) . '</a>';
 			else :
 				$links = '<a href="' . esc_url( $link ) . '" target="_blank">' . esc_html( $link ) . '</a>';
