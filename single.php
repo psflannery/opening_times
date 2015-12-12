@@ -26,6 +26,10 @@ get_header(); ?>
                         get_template_part( 'template-parts/single', 'reading-article' );
                     break;
 
+                    case 'projects':
+                        get_template_part( 'template-parts/content', 'project' );
+                    break;
+
                     case 'take-overs':
                         get_template_part( 'template-parts/content', 'take-over' );
                     break;

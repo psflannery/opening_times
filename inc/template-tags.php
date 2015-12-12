@@ -289,53 +289,58 @@ function ot_return_future_content_thumbnail() {
 	return ob_get_clean();
 }
 
-
 /**
  * Output the featured content
+ *
+ * @return string Featured media HTML.
  */
 function opening_times_featured_content() {
 	global $post;
 	$oembed = get_post_meta( $post->ID, '_ot_embed_url', true );
 	$link_url = get_post_meta( $post->ID, '_ot_link_url', true );
-	$file_url = get_post_meta( $post->ID, '_ot_file', true );
-
-	if ( '' != get_the_post_thumbnail() ) :
-		if ( '' != $link_url  ) :
-			$featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') . '</a></figure>';
-		else :
-			$featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb') .'</figure>';
-		endif;
-
-		return $featured;
-	//endif;
-
-	elseif ( '' != $oembed ) :
-		// If there is no thumbnail, but there is an embed, and we're not in the reading section or projects section. This will format the posts the appear in the archives.
-		if ( !is_post_type_archive( array ( 'reading', 'projects' ) ) && !is_singular( array ( 'reading', 'projects', 'article' ) ) ) :
-			$featured = '<figure class="col-sm-3">' . apply_filters( 'the_content', $oembed ) . '</figure>';
-
-		// If there is no thumbnail, but there is an embed, and we ARE in the PROJECTS section
-		elseif ( '' != $oembed && ( is_post_type_archive( 'projects' ) || is_singular( 'projects' ) ) ) :
-			$featured = '<figure class="col-sm-5 fitvids">' . apply_filters( 'the_content', $oembed ) . '</figure>';
-
-		// If there is no thumbnail, but there is an embed, and we ARE in the READING section
-		elseif ( '' != $oembed ) :
-			$featured = '<figure>' . apply_filters( 'the_content', $oembed ) . '</figure>';
-
-		endif;
-
-		return $featured;
-    //endif;
-
-	elseif ( !is_post_type_archive( 'reading' ) && !is_singular( array ( 'reading', 'article' ) ) ) :
-		// None of the above, everything is empty
-		$featured = '<figure class="featured-image col-sm-3">' . ot_return_future_content_thumbnail() . '</figure>';
-
-		return $featured;
-
-	endif;
+    $iframe_src = get_post_meta( $post->ID, '_ot_iframe_url', true );
+    $iframe_height = get_post_meta( $post->ID, '_ot_iframe_height', true );
+    
+    //if ( '' != get_the_post_thumbnail() || '' != $oembed || '' != $iframe_src ) :
+    if ( '' != ( get_the_post_thumbnail() || $oembed || $iframe_src ) ) :
+    // we have something in at least 1 of the media containers
+        if ( '' != get_the_post_thumbnail() ) :
+        // we have a thumbnail
+            if ( '' != $link_url ) :
+            // ...and we have a link
+                $featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb' ) . '</a></figure>';
+            else :
+            // ...otherwise
+                $featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb' ) .'</figure>';
+            endif;
+            return $featured;
+        elseif ( '' != $iframe_src ) :
+        // we have an iframe
+            $featured = '<div class="featured-image col-sm-5"><iframe src="about:blank" data-src="' . $iframe_src . '" width="100%" height="' . $iframe_height . '" frameborder="0"></iframe></div>';
+            return $featured;
+        elseif ( '' != $oembed ) :
+        // we have an oembed
+            if ( !is_post_type_archive( array ( 'reading', 'projects' ) ) && !is_singular( array ( 'reading', 'projects', 'article' ) ) ) :
+            // we are in an "accordion" archive - ie. everything BUT reading or take-overs
+                $featured = '<figure class="col-sm-3">' . apply_filters( 'the_content', $oembed ) . '</figure>';
+            elseif ( '' != $oembed && ( is_post_type_archive( 'projects' ) || is_singular( 'projects' ) ) ) :
+            // we are in the "take-over" archive, or a single "take-over" page
+                $featured = '<figure class="col-sm-5 fitvids">' . apply_filters( 'the_content', $oembed ) . '</figure>';
+            else :
+            // we are in the reading section
+                $featured = '<figure>' . apply_filters( 'the_content', $oembed ) . '</figure>';
+            endif;
+            return $featured;
+        endif;
+    else :
+    // all 3 media containers are empty
+		if ( !is_post_type_archive( array ( 'reading' ) ) && !is_singular( array ( 'reading', 'article' ) ) ) :
+        // and we are not in the reading section
+        	$featured = '<figure class="featured-image col-sm-3">' . ot_return_future_content_thumbnail() . '</figure>';
+        	return $featured;
+        endif;
+    endif;
 }
-
 
 /**
  * Output the Collection Links
