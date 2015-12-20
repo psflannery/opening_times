@@ -48,7 +48,7 @@
         <footer class="entry-meta col-sm-7 col-lg-3 pseudo-content-divider-md-max collection-meta">
 
             <?php 
-                echo opening_times_takeover_meta();
+                echo opening_times_project_meta();
 
                 echo opening_times_collection_meta();
             

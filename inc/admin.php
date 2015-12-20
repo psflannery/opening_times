@@ -84,6 +84,10 @@ function opening_times_cpts_css() {
             content: '\\f319';
             margin-left: -1px;
         }
+        #dashboard_right_now .projects-count a:before {
+            content: '\\f508';
+            margin-left: -1px;
+        }
     </style>";
 }
 add_action('admin_head', 'opening_times_cpts_css');
