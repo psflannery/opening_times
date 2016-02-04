@@ -41,6 +41,7 @@ function opening_times_setup() {
 	add_theme_support( 'post-thumbnails', array( 
 		'post', 
 		'article',
+		'projects'
 	) );
 	add_image_size( 'accordion-thumb', 300, 9999 ); //300 pixels wide (and unlimited height)
 	add_image_size( 'accordion-retina', 600, 9999 ); //600 pixels wide (and unlimited height)

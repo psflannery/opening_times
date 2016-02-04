@@ -298,8 +298,8 @@ function opening_times_featured_content() {
 	global $post;
 	$oembed = get_post_meta( $post->ID, '_ot_embed_url', true );
 	$link_url = get_post_meta( $post->ID, '_ot_link_url', true );
-    $iframe_src = get_post_meta( $post->ID, '_ot_iframe_url', true );
-    $iframe_height = get_post_meta( $post->ID, '_ot_iframe_height', true );
+	$iframe_src = get_post_meta( $post->ID, '_ot_iframe_url', true );
+	$iframe_height = get_post_meta( $post->ID, '_ot_iframe_height', true );
     
     //if ( '' != get_the_post_thumbnail() || '' != $oembed || '' != $iframe_src ) :
     if ( '' != ( get_the_post_thumbnail() || $oembed || $iframe_src ) ) :
@@ -308,10 +308,10 @@ function opening_times_featured_content() {
         // we have a thumbnail
             if ( '' != $link_url ) :
             // ...and we have a link
-                $featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '"><a href="' . reset( $link_url ) . '" target="_blank">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb' ) . '</a></figure>';
+                $featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '"><a href="' . reset( $link_url ) . '" target="_blank">' . opening_times_post_thumbnail() . '</a></figure>';
             else :
             // ...otherwise
-                $featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '">' . get_the_post_thumbnail( $post->ID, 'accordion-thumb' ) .'</figure>';
+                $featured = '<figure class="featured-image ' . opening_times_thumbnail_float() . '">' . opening_times_post_thumbnail() .'</figure>';
             endif;
             return $featured;
         elseif ( '' != $iframe_src ) :
@@ -344,6 +344,23 @@ function opening_times_featured_content() {
         	return $featured;
         endif;
     endif;
+}
+
+/**
+ * Displays dependent on view.
+ *
+ */
+function opening_times_post_thumbnail() {
+	global $post;
+	if ( ! is_post_type_archive( 'projects' ) ) :
+
+		return get_the_post_thumbnail( $post->ID, 'accordion-thumb', array( 'alt' => the_title_attribute( 'echo=0' ) ) );
+
+	else :
+
+		return get_the_post_thumbnail( $post->ID, 'large', array( 'alt' => the_title_attribute( 'echo=0' ) ) );
+
+	endif;
 }
 
 /**
