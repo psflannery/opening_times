@@ -190,6 +190,10 @@ add_action( 'wp_head', 'opening_times_javascript_detection', 0 );
  * @since Opening Times 1.3.8
  */
 function opening_times_thumbnail_float() {
-	if ( ! ( is_post_type_archive( 'reading' ) || ( is_singular( 'reading' ) || is_singular( 'article' ) ) ) )
-	return 'col-sm-3';
+	if ( is_post_type_archive( 'projects' )  || is_singular( 'projects' ) ) {
+		return 'col-sm-5';
+	}
+	elseif ( ! ( is_post_type_archive( 'reading' ) || ( is_singular( 'reading' ) || is_singular( 'article' ) ) ) ) {
+		return 'col-sm-3';
+	}
 }
