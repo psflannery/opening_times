@@ -8,192 +8,163 @@
  */
 
 /**
- * Adds custom classes to the array of body classes.
- *
- * @param array $classes Classes for the body element.
- * @return array
- */
-function opening_times_body_classes( $classes ) {
-	if ( 'reading' == get_post_type() && is_singular( 'reading' ) ) {
-		$classes[] = 'post-type-archive-reading';
-	}
-	
-	if ( get_background_image() ) {
-		$classes[] = 'custom-background-active';
-	}
-	
-	return $classes;
-}
-add_filter( 'body_class', 'opening_times_body_classes' );
-
-/**
- * Adds custom classes to the array of post classes.
- *
- * @param array $classes Classes for the posts.
- * @return array
- *
- */
-function opening_times_post_classes( $classes, $class, $post_id ) {
-    if ( ( !is_page() && !is_post_type_archive( 'reading' ) ) || ( is_post_type_archive( 'reading' ) && 'article' == get_post_type() ) ) {
-		$classes[] = 'strap-container';
-		$classes[] = 'veiled';
-    }
-	
-	if ( 'reading' == get_post_type() ) {
-		$classes[] = 'editor-intro';
-	}
-  
-	if ( is_search() ) {
-		$classes[] = 'strap-container';
-	}
- 
-    return $classes;
-}
-add_filter( 'post_class', 'opening_times_post_classes', 10, 3 );
-
-/**
- * Add Search Form To A WordPress Menu
- *
- * @link: http://www.paulund.co.uk/add-search-form-to-a-wordpress-menu
- */
-function opening_times_nav_search_form($items, $args) {
-	if( $args->theme_location == 'social' )
-		$items .= '<li class="menu-item expanding-search">' . get_search_form( false ) . '</li>';
-	return $items;
-}
-add_filter('wp_nav_menu_items', 'opening_times_nav_search_form', 10, 2);
-
-/**
- * Add a data attribute to specified menu items to allow for toggling of the dropdowns
- *
- * @link: http://wordpress.stackexchange.com/questions/121123/how-to-add-a-data-attribute-to-a-wordpress-menu-item
- */
-function opening_times_menu_atts( $atts, $item, $args ) {
-	// The ID of the target menu item
-	$about_target = get_theme_mod( 'ot_about_menu_ID' );
-	$mailing_target = get_theme_mod( 'ot_mailing-list_menu_ID' );
-
-	if ($item->ID == $about_target && '' != $about_target) {
-		$atts['data-toggle-id'] = 'about';
-	}
-	if ($item->ID == $mailing_target && '' != $mailing_target) {
-		$atts['data-toggle-id'] = 'mailing-list';
-	}
-	return $atts;
-}
-add_filter( 'nav_menu_link_attributes', 'opening_times_menu_atts', 10, 3 );
-
-/**
- * Show all the posts in the Loop
- */
-function opening_times_all_the_posts( $query ) {
-    if( $query->is_main_query() && !is_admin() ) {
-		$query->set('posts_per_page', '-1');
-    }
-}
-add_action('pre_get_posts', 'opening_times_all_the_posts');
-
-/**
- * Show Authors and Custom Post Types in the archive.
- */
-function opening_times_add_custom_types_to_tax( $query ) {
-	if( $query->is_author || is_category() || is_tag() && empty( $query->query_vars['suppress_filters'] ) ) {
-
-		// Get all your post types
-		$post_types = get_post_types();
-
-		$query->set( 'post_type', $post_types );
-		return $query;
-	}
-}
-add_filter( 'pre_get_posts', 'opening_times_add_custom_types_to_tax' );
-
-/**
- * Echo the Post Slug
+ * Get the Post Slug
  *
  * @link: http://www.tcbarrett.com/2011/09/wordpress-the_slug-get-post-slug-function/#.U0GiBfldWSo
+ *
+ * @since opening_times 1.0.0
  */
-function opening_times_the_slug( $echo=true ){
+function opening_times_the_slug( $echo = true ) {
 	$slug = basename( get_permalink() );
+	
 	do_action( 'before_slug', $slug );
+    
 	$slug = apply_filters( 'slug_filter', $slug );
-	if( $echo ) echo $slug;
+
+	if( $echo ) 
+		echo $slug;
+		
 	do_action( 'after_slug', $slug );
+
 	return $slug;
 }
 
+
 /**
- * Set the default image link in the Image Uploader to "None"
- * Prevents annoying and unnecessary linking to attachment posts.
+ * Get the Post Parent slug
+ * 
+ * @param  boolean $echo If true, echo the post parent slug.
+ * @return string        If false, return the post parent slug.
  *
- * @link: http://andrewnorcross.com/tutorials/stop-hyperlinking-images/
+ * @since opening_times 1.0.0
  */
-function opening_times_imagelink_setup() {
-	$image_set = get_option( 'image_default_link_type' );
-	
-	if ( $image_set !== 'none' ) {
-		update_option('image_default_link_type', 'none');
-	}
+function opening_times_the_parent_slug( $echo = true ) {
+    // Get an array of Ancestors and Parents if they exist
+    $parents = get_post_ancestors( get_the_ID() );
+
+    // Get the top Level page->ID count base 1, array base 0 so -1
+    $id = ($parents) ? $parents[count($parents)-1] : $post->ID;
+    
+    // Get the parent and set the $class with the page slug (post_name)
+    $parent = get_post( $id );
+    $slug = $parent->post_name;
+
+    if( $echo )
+    	echo $slug;
+    else
+    	return $slug;
 }
-add_action('admin_init', 'opening_times_imagelink_setup', 10);
+
 
 /**
- * Add a `screen-reader-text` class to the search form's submit button.
- * Add a `form-control` class to the search form.
+ * Add a class to a specific post in the loop
+ * 
+ * @param  string  $class The class to add.
+ * @param  integer $count Which post to apply the class to. Defaults to first post.
+ * @return string         The defined class.
  *
- * @since Opening Times 1.3.0
- *
- * @param string $html Search form HTML.
- * @return string Modified search form HTML.
+ * @since Opening Times 1.0.0
  */
-function opening_times_search_form_modify( $html ) {	
-	$html = str_replace( 'class="search-submit"', 'class="search-submit screen-reader-text"', $html );
-	$html = str_replace( 'class="search-field"', 'class="search-field form-control"', $html );
-	return $html;
+function opening_times_post_class_count( $class = '', $count = 0 ) {
+	global $wp_query;
+
+	if ( '' == $class )
+		return;
+
+	if ( $count === $wp_query->current_post )
+		echo $class;
 }
-add_filter( 'get_search_form', 'opening_times_search_form_modify' );
+
 
 /**
- * Lazy Load the iframe oembeds in the Reading Section and Archives.
+ * Retrieve the format slug for a Reading post
+ * 
+ * @param  (int|object|null) $post Post ID or post object. Optional, default is the current post from the loop.
+ * @return string                  Reading slug
  *
- * @since Opening Times 1.3.0
+ * @since Opening Times 1.0.0
  */
+function opening_times_get_reading_format( $post = null ) {
+    if ( ! $post = get_post( $post ) )
+        return false;
+ 
+    $_format = get_the_terms( get_the_id(), 'format' );
+ 
+    if ( empty( $_format ) )
+        return false;
+ 
+    $format = reset( $_format );
+ 
+    return str_replace( 'reading-', '', $format->slug );
+}
 
-function opening_times_lazy_load_iframes($html, $url, $attr) {
-	if ( is_home() || is_archive() || is_singular( 'reading' ) ) {
-		$html = str_replace( 'src="', 'src="about:blank" data-src="', $html );
-		return $html;
-	} else {
-        return $html;
+
+/**
+ * Checks if the oembed is a Vimeo or YouTube video.
+ *
+ * @return bool The video check result. 
+ *
+ * @since Opening Times 1.0.0
+ */
+function opening_times_oembed_video_check( $url ) {
+    $check = false;
+    if ( strpos( $url, 'vimeo.com' ) !== false || strpos( $url, 'youtu.be' ) !== false || strpos( $url, 'youtube.com' ) !== false ) {
+        $check = true;
     }
+    
+    return $check;
 }
-add_filter('embed_oembed_html', 'opening_times_lazy_load_iframes', 10, 3);
+
 
 /**
- * JavaScript Detection.
+ * Output a transparent gif placeholder for lazyloading images.
+ * 
+ * @param  boolean $echo return or echo content
+ * @return string        1 x 1px gif placeholder
  *
- * Adds a `js` class to the root `<html>` element when JavaScript is detected.
- *
- * @since Opening Times 1.3.0
- * @props Twenty Fifteen 1.1
+ * @since Opening Times 1.0.0
  */
-function opening_times_javascript_detection() {
-	echo "<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>\n";
+function opening_times_placeholder_img( $echo = true ) {
+    $placeholder = 'data:image/gif;base64,R0lGODdhAQABAPAAAP///wAAACwAAAAAAQABAEACAkQBADs=';
+
+    if ( $echo )
+        echo $placeholder;
+    else
+        return $placeholder;
 }
-add_action( 'wp_head', 'opening_times_javascript_detection', 0 );
 
 /**
- * Add a class to the thumbnail in archive view
- *
- * Sizing to fit the grid
- *
- * @since Opening Times 1.3.8
+ * Remove inline style attr fron figure shortcode 
+ * 
+ * @since Opening Times 1.0.0
  */
-function opening_times_thumbnail_float() {
-	if ( is_post_type_archive( 'projects' )  || is_singular( 'projects' ) ) {
-		return 'col-sm-5';
-	}
-	elseif ( ! ( is_post_type_archive( 'reading' ) || ( is_singular( 'reading' ) || is_singular( 'article' ) ) ) ) {
-		return 'col-sm-3';
-	}
+add_shortcode('wp_caption', 'fixed_img_caption_shortcode');
+add_shortcode('caption', 'fixed_img_caption_shortcode');
+function fixed_img_caption_shortcode($attr, $content = null) {
+    
+    // New-style shortcode with the caption inside the shortcode with the link and image tags.
+    if ( ! isset( $attr['caption'] ) ) {
+        if ( preg_match( '#((?:<a [^>]+>\s*)?<img [^>]+>(?:\s*</a>)?)(.*)#is', $content, $matches ) ) {
+            $content = $matches[1];
+            $attr['caption'] = trim( $matches[2] );
+        }
+    }
+
+    // Allow plugins/themes to override the default caption template.
+    $output = apply_filters('img_caption_shortcode', '', $attr, $content);
+    if ( $output != '' )
+        return $output;
+
+    extract(shortcode_atts(array(
+        'id'      => '',
+        'align'   => 'alignnone',
+        'width'   => '',
+        'caption' => ''
+    ), $attr));
+    
+    if ( 1 > (int) $width || empty($caption) )
+        return $content;
+
+    if ( $id ) $id = 'id="' . esc_attr($id) . '" ';
+        return '<figure ' . $id . 'class="wp-caption ' . esc_attr($align) . '">' . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $caption . '</figcaption></figure>';
 }

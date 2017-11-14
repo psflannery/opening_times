@@ -1,0 +1,56 @@
+//
+// Expanding Search
+// --------------------------------------------------
+
+.expanding-search {
+	display: flex;
+	&__btn {
+		font-size: $font-size-nav;
+		cursor: pointer;
+		flex-direction: row;
+		z-index: $zindex-expanding-search-btn;
+	}
+	.search-form {
+		@include media-breakpoint-down(sm) {
+			width: 100%;
+		}
+		@include media-breakpoint-up(md) {
+			flex-direction: row;
+			position: absolute;
+			right: 0;
+		}
+		label {
+			@include media-breakpoint-down(sm) {
+				width: 100%;
+			}
+		}
+	}
+	.search-submit {
+		z-index: $zindex-behind;
+		font-size: $font-size-nav;
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		opacity: 0;
+  		color: transparent;
+  		cursor: pointer;
+	}
+	&.in {
+		.form-control {
+			@include media-breakpoint-up(md) {
+				width: $expanding-search-width-expanded;
+				border-bottom: $ot-border-width solid $ot-border-color;
+			}
+		}
+		.search-submit {
+			z-index: $zindex-expanding-search-btn + 1;
+		}
+	}
+	.form-control {
+		transition: width $ot-transition-timing ease;
+		@include media-breakpoint-up(md) {
+			width: $expanding-search-width;
+			margin-right: $grid-gutter-width-base/2;
+		}
+	}
+}

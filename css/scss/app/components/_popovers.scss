@@ -1,0 +1,28 @@
+//
+// Popovers
+// --------------------------------------------------
+
+.popover--large {
+    width: $ot-lg-popover-width;
+    max-width: $ot-lg-popover-width;
+    border: none;
+    box-shadow: $ot-drop-shadow-large;
+    padding: 0;
+    &:before,
+    &:after {
+    	display: none;
+    }
+    .popover-content {
+    	padding: 0;	
+    }
+    video, audio {
+		width: 100%;
+		display: flex;
+    }
+}
+.popover__media-container {
+    max-width: $ot-lg-popover-width;
+    @include media-breakpoint-up(md) {
+    	max-width: $ot-lg-popover-md-width;
+    }
+}

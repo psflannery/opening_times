@@ -1,0 +1,48 @@
+//
+// Page Transitions
+// --------------------------------------------------
+
+.sceneElement {
+    animation-duration: $ot-page-transition-suration;
+    transition-timing-function: ease-in;
+    animation-fill-mode: both;
+    //transform-style: preserve-3d;
+    .is-exiting & {
+    	transition-timing-function: ease-out;	
+    }
+}
+
+[data-transition=fade] {
+	.sceneElement {
+		animation-name: fadeIn;
+	}
+	.is-exiting & {
+		.sceneElement {
+			animation-name: fadeOut;
+		}
+	}
+}
+[data-transition=flipright] {
+	.sceneElement {
+		backface-visibility: visible !important;
+		animation-name: flipInYExit;
+	}
+	.is-exiting & {
+		.sceneElement {
+			backface-visibility: visible !important;
+			animation-name: flipInY;
+		}
+	}
+}
+[data-transition=flipleft] {
+	.sceneElement {
+		backface-visibility: visible !important;
+		animation-name: flipOutYExit;
+	}
+	.is-exiting & {
+		.sceneElement {
+			backface-visibility: visible !important;
+			animation-name: flipOutY;
+		}
+	}
+}

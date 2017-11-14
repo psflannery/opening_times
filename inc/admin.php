@@ -68,10 +68,6 @@ function opening_times_cpts_css() {
             content: '\\f330';
             margin-left: -1px;
         }
-        #dashboard_right_now .article-count a:before {
-            content: '\\f119';
-            margin-left: -1px;
-        }
         #dashboard_right_now .artists-count a:before {
             content: '\\f309';
             margin-left: -1px;
@@ -80,12 +76,16 @@ function opening_times_cpts_css() {
             content: '\\f473';
             margin-left: -1px;
         }
-        #dashboard_right_now .take-overs-count a:before {
-            content: '\\f319';
+        #dashboard_right_now .institutions-count a:before {
+            content: '\\f512';
             margin-left: -1px;
         }
-        #dashboard_right_now .projects-count a:before {
-            content: '\\f508';
+        #dashboard_right_now .news-count a:before {
+            content: '\\f119';
+            margin-left: -1px;
+        }
+        #dashboard_right_now .guest-author-count a:before {
+            content: '\\f110';
             margin-left: -1px;
         }
     </style>";

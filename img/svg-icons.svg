@@ -1,0 +1,26 @@
+<svg style="height: 0; width: 0;" class="off-screen">
+	<defs>
+		<symbol id="icon-hamburger" viewBox="0 0 32 32">
+			<path class="line line-1" d="M2 4h28v2H2z"></path>
+			<path class="line line-2" d="M2 15h28v2H2z"></path>
+			<path class="line line-3" d="M2 26h28v2H2z"></path>
+		</symbol>
+		<symbol id="icon-close" viewbox="0 0 35 35">
+			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="35" y1="0" x2="0" y2="35"></line>
+			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="0" x2="35" y2="35"></line>
+		</symbol>
+		<symbol id="icon-placeholder" viewbox="0 0 150 150">
+			<rect fill="none" stroke="#000000" stroke-width="3" stroke-miterlimit="10" width="150" height="150"></rect>
+			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="150" y1="0" x2="0" y2="150"></line>
+			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="0" x2="150" y2="150"></line>
+		</symbol>
+		<symbol id="icon-arrow-back" viewBox="0 0 24 24">
+			<path d="M0 0h24v24H0z" fill="none"/>
+			<path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+		</symbol>
+		<symbol id="icon-arrow-forward" viewBox="0 0 24 24">
+			<path d="M0 0h24v24H0z" fill="none"/>
+			<path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+		</symbol>
+	</defs>
+</svg>

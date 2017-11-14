@@ -1,0 +1,24 @@
+//
+// Editor Styles
+// --------------------------------------------------
+
+// Core Variables
+@import "../bootstrap/_variables.scss";
+@import "../bootstrap/_mixins.scss";
+
+@import "../bootstrap/_buttons.scss";
+@import "../bootstrap/_code.scss";
+@import "../bootstrap/_tables.scss";
+@import "../bootstrap/_type.scss";
+
+// App variables
+@import "base/_variables.scss";
+@import "app.scss";
+
+// Overrides
+.mce-content-body {
+	padding-left: $grid-gutter-width-base;
+	padding-right: $grid-gutter-width-base;
+	padding-top: $spacer-y*2;
+	padding-bottom: $spacer-y*2;
+}

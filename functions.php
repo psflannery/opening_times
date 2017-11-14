@@ -2,15 +2,10 @@
 /**
  * Opening Times functions and definitions
  *
+ * @link https://developer.wordpress.org/themes/basics/theme-functions/
+ *
  * @package Opening Times
  */
-
-/**
- * Set the content width based on the theme's design and stylesheet.
- */
-if ( ! isset( $content_width ) ) {
-	$content_width = 960; /* pixels */
-}
 
 if ( ! function_exists( 'opening_times_setup' ) ) :
 /**
@@ -40,27 +35,29 @@ function opening_times_setup() {
 	 */
 	add_theme_support( 'post-thumbnails', array( 
 		'post', 
+		'reading',
 		'article',
-		'projects'
 	) );
-	add_image_size( 'accordion-thumb', 300, 9999 ); //300 pixels wide (and unlimited height)
-	add_image_size( 'accordion-retina', 600, 9999 ); //600 pixels wide (and unlimited height)
+	add_image_size( 'accordion-thumb', 600, 9999 ); //600 pixels wide (and unlimited height)
 
-	// This theme uses wp_nav_menu() in two locations.
+	// This theme uses wp_nav_menu() in three locations.
 	register_nav_menus( array(
-		'primary' => __( 'Primary Menu', 'opening_times' ),
-		'social' => __( 'Secondary Menu', 'opening_times' )
+		'primary' => esc_html__( 'Primary Menu', 'opening_times' ),
+		'info'    => esc_html__( 'Footer Menu', 'opening_times' ),
 	) );
 
 	// Enable support for Post Formats.
 	add_theme_support( 'post-formats', array( 
-		'chat',
 		'link',
 	) );
 	
 	// Enable support for HTML5 markup.
 	add_theme_support( 'html5', array(
-		'comment-list',	'search-form', 'comment-form', 'gallery', 'caption',
+		'comment-list',	
+		'search-form', 
+		'comment-form', 
+		'gallery', 
+		'caption',
 	) );
 	
 	// Add Editor Styles.
@@ -70,30 +67,54 @@ function opening_times_setup() {
 	add_theme_support( 'custom-background', apply_filters( 'opening_times_background_args', array(
 		'default-color' => 'ffffff',
 	) ) );
+
+	// Add theme support for selective refresh for widgets.
+	add_theme_support( 'customize-selective-refresh-widgets' );
 }
 endif; // opening_times_setup
 add_action( 'after_setup_theme', 'opening_times_setup' );
 
+
 /**
- * Register widgetized area and update sidebar with default widgets.
+ * Set the content width in pixels, based on the theme's design and stylesheet.
+ *
+ * Priority 0 to make it available to lower priority callbacks.
+ *
+ * @global int $content_width
+ */
+function opening_times_content_width() {
+	$GLOBALS['content_width'] = apply_filters( 'opening_times_content_width', 960 );
+}
+add_action( 'after_setup_theme', 'opening_times_content_width', 0 );
+
+
+/**
+ * Register widget area.
+ *
+ * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
 function opening_times_widgets_init() {
-	register_sidebar( array(
-		'name'          => __( 'About Dropdown Widget Area', 'opening_times' ),
-		'id'            => 'sidebar-1',
-		'before_widget' => '<div id="%1$s" class="widget %2$s clearfix" role="complementary">',
-		'after_widget'  => '</div>',
-		'before_title'  => '',
-		'after_title'   => '',
-	) );
-	register_sidebar( array(
-		'name'          => __( 'Mailing List Dropdown Widget Area', 'opening_times' ),
-		'id'            => 'sidebar-2',
-		'before_widget' => '<div id="%1$s" class="widget %2$s row" role="complementary">',
-		'after_widget'  => '<div>',
-		'before_title'  => '',
-		'after_title'   => '',
-	) );
+
+	// Define sidebars
+	$sidebars = array(
+		'sidebar-1'  => esc_html__( 'About Dropdown Widget Area', 'opening_times' ),
+		'sidebar-2'  => esc_html__( 'Mailing List Dropdown Widget Area', 'opening_times' ),
+		'sidebar-3'  => esc_html__( 'Footer Widget Area', 'opening_times' ),
+		'sidebar-4'  => esc_html__( 'News Dropdown Widget Area', 'opening_times' ),
+	);
+
+	// Loop through each standard sidebar and register
+	foreach ( $sidebars as $sidebar_id => $sidebar_name ) {
+		register_sidebar( array(
+			'name'          => $sidebar_name,
+			'id'            => $sidebar_id,
+			'description'   => sprintf ( esc_html__( 'Widget area for %s', 'opening_times' ), $sidebar_name ),
+			'before_widget' => '<div id="%1$s" class="widget %2$s" role="complementary">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		) );
+	}
 }
 add_action( 'widgets_init', 'opening_times_widgets_init' );
 
@@ -101,19 +122,24 @@ add_action( 'widgets_init', 'opening_times_widgets_init' );
  * Enqueue scripts and styles.
  */
 function opening_times_scripts() {
-	//register styles
-	wp_register_style( 'opening_times-style', get_stylesheet_uri(), array(), '1.0' );
+	/**
+	 * If WP is in script debug, or we pass ?script_debug in a URL - set debug to true.
+	 */
+	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG == true ) || ( isset( $_GET['script_debug'] ) ) ? true : false;
 
-	//register scripts
-	wp_register_script( 'opening_times-main', get_template_directory_uri() . '/js/main.min.js', array( 'jquery-ui-accordion' ), '30012015', true );
-	wp_register_script( 'opening_times-plugins', get_template_directory_uri() . '/js/plugins.min.js', array( 'jquery' ), '15122013', true );
+	$version = '1.0.0';
+
+	/**
+	 * Should we load minified files?
+	 */
+	$suffix = ( true === $debug ) ? '' : '.min';
 	
-	//enqueue styles
-	wp_enqueue_style( 'opening_times-style' );
-	
-	//enqueue scripts
-	wp_enqueue_script( 'opening_times-plugins' );
-	wp_enqueue_script( 'opening_times-main' );
+	wp_enqueue_style( 'opening-times-style', get_stylesheet_uri() );
+
+	wp_enqueue_script( 'opening-times-plugins', get_template_directory_uri() . '/js/plugins.min.js', array(), $version, true );
+
+	wp_enqueue_script( 'opening-times-main', get_template_directory_uri() . '/js/main' . $suffix . '.js', array( 'jquery' ), $version, true );
+
 		
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -132,9 +158,34 @@ require get_template_directory() . '/inc/template-tags.php';
 require get_template_directory() . '/inc/extras.php';
 
 /**
+ * Load custom filters and hooks.
+ */
+require get_template_directory() . '/inc/hooks.php';
+
+/**
  * Customizer additions.
  */
-require get_template_directory() . '/inc/customizer.php';
+require get_template_directory() . '/inc/customizer/customizer.php';
+
+/**
+ * Load Jetpack compatibility file.
+ */
+require get_template_directory() . '/inc/jetpack.php';
+
+/**
+ * Load custom queries.
+ */
+require get_template_directory() . '/inc/queries.php';
+
+/**
+ * Load custom endpoints.
+ */
+require get_template_directory() . '/inc/endpoints.php';
+
+/**
+ * Load custom CMB2 features.
+ */
+require get_template_directory() . '/inc/cmb2-template-tags.php';
 
 /**
  * Load Admin customisations file.
@@ -145,3 +196,13 @@ require get_template_directory() . '/inc/admin.php';
  * Tidy up some of the default Wordpress output.
  */
 require get_template_directory() . '/inc/tidy.php';
+
+/**
+ * SVG icons functions and filters.
+ */
+require get_template_directory() . '/inc/icon-functions.php';
+
+/**
+ * Image related functions and filters.
+ */
+require get_template_directory() . '/inc/image-functions.php';

@@ -13,29 +13,25 @@
 
 get_header(); ?>
 
-    <main id="main" class="site-main accordion gradienter container-fluid" role="main">
+    <main id="main" class="site-main" role="main">
+        <div id="accordion" class="accordion gradient-container infinite" role="tablist" aria-multiselectable="true">
 
-        <?php 
-        if ( have_posts() ) :
+            <?php 
+            if ( have_posts() ) :
 
-            while ( have_posts() ) : the_post();
+                while ( have_posts() ) : the_post();
 
-                /* Include the Post-Format-specific template for the content.
-                 * If you want to override this in a child theme, then include a file
-                 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-                 */
-                get_template_part( 'template-parts/content', get_post_format() );
+                    get_template_part( 'template-parts/content', 'accordion' );
 
-            endwhile;
+                endwhile;
 
-            the_posts_navigation();
+            else :
 
-        else :
+                get_template_part( 'template-parts/content', 'none' );
 
-            get_template_part( 'template-parts/content', 'none' );
+            endif; ?>
 
-        endif; ?>
-
+        </div>
     </main>
 
 <?php get_footer(); ?>

@@ -8,23 +8,46 @@
  */
 ?>
 
-        </div><!-- #content -->
+            </div><!-- #content -->
+
+            <?php do_action('before_footer'); ?>
+
+            <footer id="colophon" class="site-footer container-fluid" role="contentinfo">
+                <div class="row">
+
+            	<?php
+                    openining_times_ace_link( '<div class="col-md-3 ace-link">', '</div>' );
+
+                    opening_times_footer_text( '<div class="col footer__info-text small">', '</div>' );
+
+                    wp_nav_menu( array( 
+                        'theme_location' => 'info',
+                        'container_class' => 'col-md-3',
+                        'depth' => '1',
+                        'menu_class' => 'navigation-menu menu nav flex-column small'
+                    ) );
+
+                    get_sidebar('footer');
+                ?>
+                
+                </div>
+            </footer>
+
+            <?php do_action( 'opening-times-after-footer' ); ?>
+
+        </div><!-- #scene -->
     </div><!-- #page -->
 
-    <?php do_action('before_footer'); ?>
+    <?php do_action( 'opening-times-after-page' ); ?>
 
-    <?php get_sidebar('about'); ?>
-    <?php get_sidebar('mailing-list'); ?>
+    <div class="center-fixed site-logo-container">
 
-    <footer id="colophon" class="site-footer" role="contentinfo">
-    
-        <?php $ac_link = get_theme_mod( 'ot_arts_council_link' ); ?>
-        <?php if ( '' != $ac_link ) : ?>
-            <a href="<?php echo esc_url( $ac_link ); ?>" target="_blank"><?php get_template_part('img/inline', 'ac-black.svg'); ?></a>
-        <?php endif; ?>
-        
-    </footer>
+        <?php opening_times_do_svg( 'ot-logo-black.svg' ); ?>
+
+    </div>
 
 <?php wp_footer(); ?>
+<?php echo opening_times_get_additional_footer_scripts(); ?>
+
 </body>
 </html>

@@ -1,0 +1,15 @@
+//
+// Images
+// --------------------------------------------------
+
+.wp-caption-text {
+	font-size: $font-size-sm;
+	color: $gray-light;
+	padding-top: ($spacer * 0.5);
+	padding-bottom: ($spacer * 1.5);
+	.issue__image--full-width & {
+		padding-left: $grid-gutter-width-base;
+    	padding-right: $grid-gutter-width-base;
+    	padding-bottom: ($spacer * 0.5);
+	}
+}

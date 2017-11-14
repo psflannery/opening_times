@@ -1,0 +1,85 @@
+//
+// Accordion
+// --------------------------------------------------
+
+.accordion-container {
+	@include media-breakpoint-down(sm) {
+		margin-left: -$grid-gutter-width-base;
+		margin-right: -$grid-gutter-width-base;
+	}
+}
+.accordion .panel {
+	border: none;
+	border-bottom: $ot-border-width solid $ot-border-color !important;
+	background-color: transparent;
+	transition: background-color $ot-transition-timing ease;
+	&.show {
+		background-color: transparentize($body-bg, 0.05);
+	}
+}
+.accordion-header {
+	cursor: pointer;
+	width: 100%;
+	padding: $spacer-y $grid-gutter-width-base/2;
+	transition: background-color $ot-transition-timing ease;
+	border-bottom: 0;
+	background-color: transparent;
+	&:hover {
+		background-color: transparentize($gray-lightest, 0.8);
+	}
+	&:first-child {
+		border-radius: 0;
+	}
+	h2 {
+		font-size: $font-size-base;
+		font-weight: normal;
+		span {
+			&:first-child {
+				@include media-breakpoint-down(sm) {
+					margin-bottom: $spacer-y/2;
+				}
+			}
+		}
+	}
+	span:last-child {
+		text-align: right;
+	}
+}
+.accordion-header--large {
+	padding-left: $grid-gutter-width-base;
+	padding-right: $grid-gutter-width-base;
+	+ div {
+		border-top: $ot-border-width solid $ot-border-color;
+	}	
+}
+.accordion-header--closed {
+	color: $body-color !important;
+	cursor: initial;
+	&:hover {
+		background-color: transparent;
+	}
+
+}
+.accordion-content {
+	padding: $card-spacer-x 0;
+}
+
+.accordion--large {
+	margin-bottom: $spacer-y * 5;
+}
+.accordion--large .panel {
+	margin-left: calc(-#{$grid-gutter-width-base/2} - #{$card-spacer-x});
+	margin-right: calc(-#{$grid-gutter-width-base/2} - #{$card-spacer-x});
+}
+
+.accordion .card-block {
+	@include media-breakpoint-up(md) {
+		padding: 0;
+	}
+}
+.accordion--large .card-block {
+	padding: $card-spacer-y * 3 $card-spacer-x * 2;
+	@include media-breakpoint-down(md) {
+		margin-bottom: $spacer-y * 2;
+	}
+}

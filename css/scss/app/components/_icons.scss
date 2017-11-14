@@ -1,0 +1,17 @@
+//
+// Icons
+// --------------------------------------------------
+
+.icon {
+	vertical-align: middle;
+}
+.icon-close {
+	@include size(100%);
+}
+.icon-placeholder {
+	@include size($icon-placeholder-size);
+}
+.icon-hamburger {
+	@include size(2rem);
+	cursor: pointer;
+}

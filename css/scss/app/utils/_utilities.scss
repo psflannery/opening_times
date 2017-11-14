@@ -1,0 +1,87 @@
+//
+// Utilities
+// --------------------------------------------------
+
+.stop-scrolling {
+    overflow: hidden;
+}
+.gradient-text {
+	color: $blue;
+}
+.word-wrap {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-all;
+  word-break: break-word;
+
+  hyphens: auto;
+}
+
+// == Positioning
+// ##
+.screen-reader-text {
+	@extend .sr-only;
+}
+
+.fixed-fs {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.center-fixed {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.off-screen {
+    @include size(0);
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    overflow: hidden;
+}
+
+// == Image
+// ##
+img.lazyload {
+	transition: all 0.25s 0.5s;
+	opacity: 0;
+	overflow: hidden;
+	&.lazy-loaded {
+		opacity: 1;
+	}
+}
+.bg-cover {
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+.img-cover {
+	object-fit: cover;
+    width: 100%;
+}
+
+.embed-wrap {
+	//overflow: hidden;
+	//position: relative;
+	@include size(100%);
+}
+.embed__aspect-ratio {
+	position: absolute;
+	top: 0;
+	left: 0;
+	iframe {
+		@include size(100%);
+	}
+}
+.intrinsic-ratio {
+	position: relative;
+	> img {
+		position: absolute;
+		top: 0;
+		width: 100%;
+	}
+}

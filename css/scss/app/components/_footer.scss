@@ -1,0 +1,17 @@
+//
+// Footer
+// --------------------------------------------------
+
+.site-footer {
+	background-color: $body-bg;
+	width: 100%;
+	padding-top: $spacer-y;
+	padding-bottom: $spacer-y;
+	z-index: $zindex-base;
+}
+
+.ace-link {
+	a {
+		margin-left: -$spacer-x * 0.75;
+	}
+}

@@ -1,0 +1,36 @@
+//
+// Core
+// --------------------------------------------------
+
+html {
+	font-size: 13px;
+	-webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+}
+a {
+	&:focus {
+		color: $red;
+	}
+}
+cite {
+	&:before {
+		content: '\2014 \0020'; //em-dash space
+	}
+}
+img, 
+svg {
+	@include img-fluid;
+}
+
+// == Scaffolding
+// ##
+
+.site {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+.site-content {
+	flex: 1;
+}

@@ -1,0 +1,32 @@
+//
+// Typography
+// --------------------------------------------------
+
+.text-truncate-md {
+	@include media-breakpoint-up(md) {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+.dl-inline {
+	dd, dt {
+		display: inline;
+		margin: 0;
+	}
+	dt {
+		font-weight: normal;
+		&:first-child {
+			&:before {
+				content: none;
+			}
+		}
+		&:before {
+			content: "\A";
+    		white-space: pre;
+		}
+		&:after {
+			content: '\003A \0020';
+		}
+	}
+}

@@ -1,0 +1,20 @@
+//
+// Buttons
+// --------------------------------------------------
+
+.btn-outline-secondary {
+	border-style: dotted;
+	color: $gray-dark;
+}
+.btn-nav {
+	> svg {
+		@include size($btn-nav-size);
+	}
+}
+.btn-group {
+	.site-info & {
+		@include media-breakpoint-down(sm) {
+			display: none
+		}
+	}
+}

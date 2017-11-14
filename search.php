@@ -7,29 +7,31 @@
 
 get_header(); ?>
 
-    <main id="main" class="site-main gradienter container-fluid container-padding" role="main">
+    <main id="main" class="site-main" role="main">
+        <div class="gradient-container container-fluid infinite">
 
-        <?php 
-        if ( have_posts() ) : ?>
+            <?php 
+            if ( have_posts() ) : ?>
 
-            <header class="page-header">
-                <h1 class="page-title"><?php printf( __( 'Search Results for: %s', 'opening_times' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
-            </header>
+                <header class="page-header">
+                    <h1 class="page-title"><?php printf( __( 'Search Results for: %s', 'opening_times' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
+                </header>
 
-            <?php while ( have_posts() ) : the_post();
+                <?php while ( have_posts() ) : the_post();
 
-                get_template_part( 'template-parts/content', 'search' );
+                    get_template_part( 'template-parts/content', 'search' );
 
-            endwhile;
+                endwhile;
 
-            the_posts_navigation();
+                //the_posts_navigation();
 
-        else :
+            else :
 
-            get_template_part( 'template-parts/content', 'none' );
+                get_template_part( 'template-parts/content', 'none' );
 
-        endif; ?>
+            endif; ?>
 
+        </div>
     </main>
 
 <?php get_footer(); ?>

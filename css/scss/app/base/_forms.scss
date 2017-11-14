@@ -1,0 +1,16 @@
+//
+// Forms
+// --------------------------------------------------
+
+.form-control {
+	border: none;
+    border-bottom: $ot-border-width solid $ot-border-color;
+    background-color: transparent;
+}
+
+
+// Front End Submit
+// --------------------------------------------------
+.cmb2-id--ot-bv-link-submit-email-honeypot {
+	display: none;
+}

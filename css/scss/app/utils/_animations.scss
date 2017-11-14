@@ -1,0 +1,81 @@
+//
+// Animations
+// --------------------------------------------------
+
+// Anti-clockwise
+@keyframes anti-clockwise { 
+	from { transform: rotate(0deg) } 
+	to { transform: rotate(-360deg) }
+}
+
+// Flip in
+@keyframes flipInY {
+  from {
+    transform: perspective(1200px);
+  }
+  to {
+    transform: perspective(1200px) rotate3d(0, 1, 0, 90deg);
+    animation-timing-function: ease-in;
+  }
+}
+@keyframes flipInYExit {
+  from {
+    transform: perspective(1200px) rotate3d(0, 1, 0, -90deg);
+    animation-timing-function: ease-in;
+  }
+  to {
+    transform: perspective(1200px);
+  }
+}
+
+// Flip out
+@keyframes flipOutY {
+  from {
+    transform: perspective(1200px);
+  }
+  to {
+    transform: perspective(1200px) rotate3d(0, 1, 0, -90deg);
+    animation-timing-function: ease-in;
+  }
+}
+@keyframes flipOutYExit {
+  from {
+    transform: perspective(1200px) rotate3d(0, 1, 0, 90deg);
+    animation-timing-function: ease-in;
+  }
+  to {
+    transform: perspective(1200px);
+  }  
+}
+
+// Fade In
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+// Fade out
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+// Zoom
+@keyframes zoom-reset {
+  to {
+        background-position: 9px 100%; 
+    } 
+}
+@keyframes zooming {
+    to {
+        background-position: 9px 100%;
+    }
+}

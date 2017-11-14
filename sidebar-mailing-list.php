@@ -10,12 +10,15 @@ if ( ! is_active_sidebar( 'sidebar-2' ) ) {
 }
 ?>
 
-<section id="mailing-list" class="info-panel" aria-hidden="true" role="complementary">
-    
-    <div class="pseudo-content-divider-top">
+<section id="collapse-mailing" class="collapse container-fluid" aria-hidden="true" role="tabpanel">
+    <div class="site-info__container">
     	
     	<?php dynamic_sidebar( 'sidebar-2' ); ?>
 
-	</div>
+    	<button type="button" class="close site-info__close" aria-label="Close">
 
+			<?php echo opening_times_get_svg_icon( array( 'icon' => 'close', 'title' => 'close' ) ); ?>
+
+		</button>
+	</div>
 </section>

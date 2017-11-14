@@ -9,6 +9,8 @@
  
 /**
  * Clean up the Wordpress Head
+ *
+ * @since Opening Times 1.0.0
  */
 function opening_times_head_cleanup() {
 	// EditURI link
@@ -44,6 +46,8 @@ add_filter( 'wp_head', 'opening_times_remove_wp_widget_recent_comments_style', 1
 
 /**
  * Remove injected CSS from recent comments widget
+ *
+ * @since Opening Times 1.0.0
  */
 function opening_times_remove_recent_comments_style() {
 	global $wp_widget_factory;
@@ -55,25 +59,18 @@ add_action('wp_head', 'opening_times_remove_recent_comments_style', 1);
 
 /**
  * Remove injected CSS from gallery
+ *
+ * @since Opening Times 1.0.0
  */
-function opening_times_gallery_style($css) {
+function opening_times_gallery_style( $css ) {
   return preg_replace("!<style type='text/css'>(.*?)</style>!s", '', $css);
 }
 add_filter('gallery_style', 'opening_times_gallery_style');
 
 /**
- * This removes the annoying […] to a Read More link
- */
-function opening_times_excerpt_more($more) {
-	global $post;
-	return '...  <a class="excerpt-read-more" href="'. get_permalink($post->ID) . '" title="'. __('View ', 'opening_times') . get_the_title($post->ID).'">'. __('view', 'opening_times') .'</a>';
-}
-add_filter('excerpt_more', 'opening_times_excerpt_more');
-
-/**
  * Remove Query String From Scripts and Stylesheets
  *
- * @since Opening Times 1.3.0
+ * @since Opening Times 1.0.0
  *
  * @link: http://www.paulund.co.uk/remove-query-string-stylesheets
  */

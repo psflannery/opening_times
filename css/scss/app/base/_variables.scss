@@ -1,0 +1,134 @@
+//
+// App Variables
+// --------------------------------------------------
+
+//== Font Size
+//
+//##
+
+$font-size-nav:        1.15rem;
+$font-size-blockquote: 1.25em;
+$font-size-headline:   4rem;
+
+//== Logo
+//
+//##
+
+$logo-sm: 150px;
+$logo-md: 250px;
+
+//== Icons
+//
+//##
+
+$icon-placeholder-size: 150px;
+
+//== Images
+//
+//##
+
+$feature-thumb-width:	300px;
+
+//== Borders
+//
+//##
+
+$ot-border-width: 1px;
+$ot-border-color: $black;
+
+//== Drop Shadows
+//
+//##
+
+$ot-drop-shadow-large: 0 0 4rem 3px rgba($black, 0.3);
+$ot-drop-shadow-mid: 0 0 1.5rem rgba($black, 0.3);
+$ot-drop-shadow-mid-light: 0 0 1.5rem rgba($black, 0.05);
+//0 0 20px 7px #f1f1f1;
+
+//== Transitions
+//
+//##
+
+$ot-transition-timing:        0.3s;
+$ot-page-transition-suration: 1s;
+
+//== Buttons
+//
+//##
+
+$btn-nav-size:				  1.5rem;
+
+//== Media Sample Links
+//
+//##
+
+$ot-media-sample-link-color:      $white;
+$ot-media-sample-audio-bg-color:  $yellow;
+$ot-media-sample-audio-hover:     $link-color;
+$ot-media-sample-video-bg-color:  $link-color;
+
+//== Popovers
+//
+//##
+
+$ot-lg-popover-width:    350px;
+$ot-lg-popover-md-width: 500px;
+
+//== Offcanvas
+//
+//##
+
+$offcanvas-bg-color:         $white;
+$offcanvas-bg-color-inverse: $gray-dark;
+$offcanvas-width-base:       50%;
+
+//== Expanding Search
+//
+//##
+
+$expanding-search-btn-bg:		  $white;
+$expanding-search-width:          0px;
+$expanding-search-width-expanded: calc(33.333333vw - 15px);
+
+
+// Z-index master list
+//
+//##
+
+$zindex-behind:               -1;
+$zindex-base:                 1; 
+$zindex-expanding-search-btn: 10;
+//$zindex-dropdown-backdrop:    990;
+//$zindex-navbar:               1000;
+//$zindex-dropdown:             1000;
+//$zindex-fixed:                1030;
+//$zindex-sticky:               1030;
+$zindex-slides-navigation:    1033;
+$zindex-offcanvas-overlay:    1034;
+$zindex-offcanvas:            1035;
+//$zindex-modal-backdrop:       1040;
+//$zindex-modal:                1050;
+//$zindex-popover:              1060;
+//$zindex-tooltip:              1070;
+
+// Flickity
+// 
+// ##
+$flickity-nav-btn-size:           44px;
+$flickity-nav-btn-color:          $white;
+$flickity-nav-btn-hover-color:    $white;
+$flickity-nav-btn-arrow-color:    $black;
+$flickity-nav-btn-arrow-size:     60%;
+$flickity-nav-btn-arrow-offset:   (100% - $flickity-nav-btn-arrow-size) / 2;
+$flickity-nav-btn-active-opacity: 0.6;
+
+$flickity-page-dot-size:          10px;
+$flickity-page-dot-color:         gray("800");
+
+$flickity-cell-width:             100%;
+
+$flickity-cell-width-md:          50%;
+$flickity-cell-width-lg:          33.333333%;
+
+$flickity-progress-bar-color:     $white;
+$flickity-progress-bar-height:    3px;

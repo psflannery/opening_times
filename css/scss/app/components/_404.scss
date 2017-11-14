@@ -1,0 +1,26 @@
+//
+// 404
+// --------------------------------------------------
+
+.message404 {
+	@include size($logo-sm * 1.75, $logo-sm);
+	z-index: $zindex-behind;
+	@include media-breakpoint-up(md) {
+		@include size($logo-md * 2, $logo-md);
+	}
+	&:before,
+	&:after {
+		content:'4';
+		font-size: $logo-sm/2;
+		line-height: $logo-sm;
+		@include media-breakpoint-up(md) {
+			line-height: $logo-md;
+		}
+	}
+	&:before {
+		float: left;
+	}
+	&:after {
+		float: right;
+	}
+}

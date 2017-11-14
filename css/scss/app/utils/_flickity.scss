@@ -1,0 +1,140 @@
+//
+// Flickity
+// --------------------------------------------------
+
+.flickity-enabled {
+    position: relative;
+    &:focus {
+        outline: none;
+    }
+}
+.flickity-viewport {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+.flickity-slider {
+    position: absolute;
+    @include size(100%);
+}
+
+// draggable
+.flickity-enabled.is-draggable {
+    tap-highlight-color: transparent;
+    user-select: none;
+    .flickity-viewport {
+        cursor: move;
+        cursor: grab;
+        &.is-pointer-down {
+            cursor: grabbing;
+        }
+    }
+}
+
+// previous/next buttons
+.flickity-prev-next-button {
+    position: absolute;
+    top: 50%;
+    @include size($flickity-nav-btn-size);
+    border: none;
+    border-radius: 50%;
+    background: $flickity-nav-btn-color;
+    background: rgba($flickity-nav-btn-color, 0.75);
+    cursor: pointer;
+    transform: translateY(-50%);
+    &:hover {
+        background: $flickity-nav-btn-hover-color;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: $btn-focus-box-shadow;
+    }
+    &:active {
+        opacity: $flickity-nav-btn-active-opacity;
+    }
+    &:disabled {
+        opacity: $flickity-nav-btn-active-opacity / 2;
+        cursor: auto;  
+    }
+    &.previous {
+        left: 10px;
+    }
+    &.next {
+        right: 10px;
+    }
+    svg {
+        position: absolute;
+        left: $flickity-nav-btn-arrow-offset;
+        top: $flickity-nav-btn-arrow-offset;
+        @include size($flickity-nav-btn-arrow-size);
+    }
+    .arrow {
+        fill: $flickity-nav-btn-arrow-color;
+    }
+}
+
+// page dots
+.flickity-page-dots {
+    position: absolute;
+    width: 100%;
+    bottom: -($spacer * 2);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+    line-height: 1;
+    .dot {
+        display: inline-block;
+        @include size($flickity-page-dot-size);
+        margin: 0 8px;
+        background: $flickity-page-dot-color;
+        border-radius: 50%;
+        opacity: 0.25;
+        cursor: pointer;
+        &.is-selected {
+            opacity: 1;
+        }
+    }
+}
+
+// progress bar
+.progress-bar {
+    @include size(0, $flickity-progress-bar-height);
+    background: $flickity-progress-bar-color;
+}
+
+// carousel
+.carousel {
+    margin-left: -$grid-gutter-width-base/2;
+    margin-right: -$grid-gutter-width-base/2;
+    overflow: hidden;
+    &:after {
+        content: 'flickity';
+        display: none;
+        @include media-breakpoint-down(sm) {
+            content: '';
+        }
+    }
+}
+.carousel-cell {
+    float: left;
+    width: $flickity-cell-width;
+    padding-right: $grid-gutter-width-base/2;
+    padding-left: $grid-gutter-width-base/2;
+    @include media-breakpoint-up(md) {
+        color: $gray-light;
+        width: $flickity-cell-width-md;
+    }
+    @include media-breakpoint-up(lg) {
+        width: $flickity-cell-width-lg;   
+    }
+    &:nth-of-type(n+4) {
+        display: none;
+        .flickity-enabled & {
+            display: block;
+        }
+    }
+    &.is-selected {
+        color: $body-color;
+    }
+}

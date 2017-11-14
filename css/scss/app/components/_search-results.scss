@@ -1,0 +1,17 @@
+//
+// Search Results
+// --------------------------------------------------
+
+.search-result {
+	&.card {
+		background-color: transparent;
+		border: none;
+		border-bottom: $ot-border-width solid $ot-border-color !important;
+		padding-top: $spacer-y;
+	}
+	.entry-title {
+		font-size: $font-size-base;
+		font-weight: normal;
+		margin-bottom: $spacer-y;
+	}
+}

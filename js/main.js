@@ -1,14 +1,99 @@
-/**
- * Get Viewport Dimensions
- * returns object with viewport dimensions to match css in width and height properties
- * ( source: http://andylangton.co.uk/blog/development/get-viewport-size-width-and-height-javascript )
- */
-function updateViewportDimensions() {
-    var w=window,d=document,e=d.documentElement,g=d.getElementsByTagName('body')[0],x=w.innerWidth||e.clientWidth||g.clientWidth,y=w.innerHeight||e.clientHeight||g.clientHeight;
-    return { width:x,height:y };
+// Definitions
+var type;
+
+// Detect Mobile Browser
+function mobilecheck() {
+    var check = false;
+    (function(a){if(/(android|ipad|playbook|silk|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))){check = true;}})(navigator.userAgent||navigator.vendor||window.opera);
+    return check;
 }
-// setting the viewport width
-var viewport = updateViewportDimensions();
+
+// Detect YouTube and Vimeo urls
+function parseVideo(url) {
+    // http://stackoverflow.com/questions/5612602/improving-regex-for-parsing-youtube-vimeo-urls
+    // - Supported YouTube URL formats:
+    //   - http://www.youtube.com/watch?v=My2FRPA3Gf8
+    //   - http://youtu.be/My2FRPA3Gf8
+    //   - https://youtube.googleapis.com/v/My2FRPA3Gf8
+    // - Supported Vimeo URL formats:
+    //   - http://vimeo.com/25451551
+    //   - http://player.vimeo.com/video/25451551
+    // - Also supports relative URLs:
+    //   - //player.vimeo.com/video/25451551
+
+    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+    if ( RegExp.$3.indexOf('youtu') > -1 ) {
+        type = 'youtube';
+    }
+    else if ( RegExp.$3.indexOf('vimeo') > -1 ) {
+        type = 'vimeo';
+    }
+
+    return {
+        type: type,
+        id: RegExp.$6
+    };
+}
+
+// Detect audio and video urls
+function parseMedia(url) {
+	var extension = url.substr( ( url.lastIndexOf('.') + 1 ) );
+
+	switch(extension) {
+		case 'mp3':
+		case 'aac':
+		case 'ogg':
+			type = 'audio';
+			break;
+		case 'mp4':
+		case 'webm':
+			type = 'video';
+			break;
+		case 'jpg':
+		case 'jpeg':
+		case 'png':
+		case 'gif':
+			type = 'image';
+			break;
+	}
+
+	return type;
+}
+
+/**
+ * File skip-link-focus-fix.js.
+ *
+ * Helps with accessibility for keyboard only users.
+ *
+ * Learn more: https://git.io/vWdr2
+ */
+( function() {
+	var isWebkit = navigator.userAgent.toLowerCase().indexOf( 'webkit' ) > -1,
+	    isOpera  = navigator.userAgent.toLowerCase().indexOf( 'opera' )  > -1,
+	    isIe     = navigator.userAgent.toLowerCase().indexOf( 'msie' )   > -1;
+
+	if ( ( isWebkit || isOpera || isIe ) && document.getElementById && window.addEventListener ) {
+		window.addEventListener( 'hashchange', function() {
+			var id = location.hash.substring( 1 ),
+				element;
+
+			if ( ! ( /^[A-z0-9_-]+$/.test( id ) ) ) {
+				return;
+			}
+
+			element = document.getElementById( id );
+
+			if ( element ) {
+				if ( ! ( /^(?:a|select|input|button|textarea)$/i.test( element.tagName ) ) ) {
+					element.tabIndex = -1;
+				}
+
+				element.focus();
+			}
+		}, false );
+	}
+})();
 
 /**
  * Throttle Resize-triggered Events
@@ -26,345 +111,655 @@ var waitForFinalEvent = (function () {
 // how long to wait before deciding the resize has stopped, in ms. Around 50-100 should work ok.
 var timeToWaitForLast = 100;
 
-/**
- * skip-link-focus-fix.js
- */
-( function() {
-    var is_webkit = navigator.userAgent.toLowerCase().indexOf( 'webkit' ) > -1,
-    is_opera  = navigator.userAgent.toLowerCase().indexOf( 'opera' )  > -1,
-    is_ie     = navigator.userAgent.toLowerCase().indexOf( 'msie' )   > -1;
-
-    if ( ( is_webkit || is_opera || is_ie ) && 'undefined' !== typeof( document.getElementById ) ) {
-        var eventMethod = ( window.addEventListener ) ? 'addEventListener' : 'attachEvent';
-        window[ eventMethod ]( 'hashchange', function() {
-            var element = document.getElementById( location.hash.substring( 1 ) );
-
-            if ( element ) {
-                if ( ! /^(?:a|select|input|button|textarea)$/i.test( element.tagName ) )
-                element.tabIndex = -1;
-
-                element.focus();
-            }
-        }, false );
-    }
-})();
-
-/**
- * Mailing List
- */
-function checkform() {
-	for (i=0;i<fieldstocheck.length;i++){
-		if (eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].type") == "checkbox") {
-			if (document.subscribeform.elements[fieldstocheck[i]].checked) {
-			} else {
-				alert("Please enter your "+fieldnames[i]);
-				eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].focus()");
-				return false;
-			}
-		} else {
-			if (eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].value") == "") {
-				alert("Please enter your "+fieldnames[i]);
-				eval("document.subscribeform.elements['"+fieldstocheck[i]+"'].focus()");
-				return false;
-			}
-		}
-	}
-	for (i=0;i<groupstocheck.length;i++) {
-		if (!checkGroup(groupstocheck[i],groupnames[i])) {
-			return false;
-		}
-	}
-	if (! compareEmail()) {
-		alert("Email addresses you entered do not match");
-		return false;
-	}
-	return true;
-}
-var fieldstocheck = new Array();
-var fieldnames = new Array();
-function addFieldToCheck(value,name) {
-	fieldstocheck[fieldstocheck.length] = value;
-	fieldnames[fieldnames.length] = name;
-}
-var groupstocheck = new Array();
-var groupnames = new Array();
-function addGroupToCheck(value,name) {
-	groupstocheck[groupstocheck.length] = value;
-	groupnames[groupnames.length] = name;
-}
-function compareEmail() {
-	return (document.subscribeform.elements["email"].value == document.subscribeform.elements["emailconfirm"].value);
-}
-function checkGroup(name,value) {
-	option = -1;
-	for (i=0;i<document.subscribeform.elements[name].length;i++) {
-		if (document.subscribeform.elements[name][i].checked) {
-			option = i;
-		}
-	}
-	if (option == -1) {
-		alert ("Please enter your "+value);
-		return false;
-	}
-	return true;
-}
-
 ( function ( $ ) {
-    /* Global Variables */
-    var $window = $(window),
-    	$height = $window.height(),
-    	$body = $('body');
-	
-    /**
-     * Lazy Load iFrames
-     */
-    function lazy_load_iframe(iframe) {
-        var $iframe = $(iframe),
-        src = $iframe.attr('data-src');
-        $iframe.hide().removeAttr('data-src').attr('data-lazy-loaded', 'true');
-        iframe.src = src;
-        $iframe.show();
-    }
-	
-	/**
-	 * Main Accordion
-	 */
-	 function main_accordion() {
-		$(".js .accordion").css({display: 'block'});
-		
-		$('.accordion').accordion({
-			active: false,
-			activate: function( event, ui ){
-				viewport = updateViewportDimensions();
-				if ( viewport.width < 1200 ) {
-					var scrollTop = $( this ).scrollTop();
-					if( ui.newHeader.length > 0 ) {
-						var top = $( ui.newHeader ).offset().top;
-						$( 'html, body' ).animate({ scrollTop: scrollTop + top }, 500, 'easeOutQuart' );
+	// Global Definitions
+	var breakpoints = {
+			screen_xl: 1200,
+			screen_lg: 992,
+			screen_md: 768,
+			screen_sm: 576,
+			screen_xs: 480,
+		},
+		page = 1,
+		volFade_duration = 1000;
+
+	// Calculate if screen size is smaller/larger than default breakpoint
+	function screenLessThan( breakpoint ) {
+
+		// Get the width of the current window
+		var windowWidth = $( window ).width();
+
+		// Return true/false if window with is equal or smaller than breakpoint
+		return ( parseInt( windowWidth ) <= parseInt( breakpoint ) );
+	}
+
+	// Do Lazy Load
+	function lazy_load_media( el ) {
+		var $el = $(el);
+
+		$el.each(function() {
+			var $src = $el.data('src');
+
+			// Bail if we have already performed a lazy load.
+			if ( $el.is('[data-lazy-loaded]') ) {
+				return;
+			}
+
+			$el.attr('src', $src).attr('data-lazy-loaded', 'true').addClass('lazy-loaded');
+		});
+	}
+
+	// SmoothState
+	function ot_smooth_state() {
+        var $body = $('body'),
+            $main = $('#page'),
+            $site = $('html, body'),
+            //transition = 'fade',
+            smoothState,
+	        options = {
+	           	prefetch: true,
+	            prefetchOn: 'mouseover touchstart',
+	            cacheLength: 2,
+	            blacklist: '.post-edit-link',
+	            onStart: {
+	                duration: 1000,
+	                //render: function (url, $container) {
+	                render: function () {
+	                    $main.addClass('is-exiting');
+	                    $site.animate({scrollTop: 0});
+	                    //$body.addClass('stop-scrolling');
+	                }
+	            },
+	            onReady: {
+	                duration: 0,
+	                render: function ( $container, $newContent ) {
+	                    $container.html($newContent);
+	                    $container.removeClass('is-exiting');
+	                }
+	            },
+	            //onAfter: function($container, $newContent) {
+	            onAfter: function() {
+	                $body.removeClass('stop-scrolling');
+	                $('#overlay').remove();
+
+	                // rest the page counter
+	                page = 0;
+	                ot_page_load();
+	            },
+            };
+
+        smoothState = $main.smoothState(options).data('smoothState');
+	}
+
+	// Set autoplay attribute
+	function media_autoplay_att( el ) {
+		var $iframe = $(el).find('iframe');
+
+		$iframe.attr('data-autoplay', '');
+	}
+
+	// Adjust mobile url params
+	function mobile_url_params( el ) {
+		if( mobilecheck() ) {
+			var $iframe = $(el).find('iframe'),
+				vid = $iframe .is(['data-src']) ? $iframe .data('src') : $iframe .attr('src');
+
+			$iframe.each(function () {
+				var src = $(this).attr('src');
+
+				parseVideo( vid );
+				
+				if ( type === 'vimeo' ) {
+					$(this).attr('src', src.replace('background=1', 'background=0'));
+				}
+			});
+		}
+	}
+
+ 	// Hide popovers
+	function hidePopover( el ) {
+		if( $('.popover').length ) {
+			$(el).find('.media-sample').popover('hide');
+		}
+	}
+
+	// Play media
+	function playMedia( panel, vol ) {
+		var media = panel.find('video, audio'),
+			iframe = panel.find('iframe'),
+			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+
+		// play HTML5 media elements
+		if( $(media).length > 0 ) {
+			media.each(function(){
+				var $this = $(this),
+					element = $this.get(0);
+
+				if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
+					
+					// Set the volume
+					$this.prop('volume', vol);
+
+					if(element.volume === 0) {
+						element.play().then(function() {
+							$this.animate({volume: vol}, volFade_duration * 2);
+						});
 					} else {
-						var top = $(ui.oldHeader).offset().top;
-						$( 'html, body' ).animate({ scrollTop: scrollTop + top }, 500, 'easeOutQuart' );
+						element.play();
 					}
 				}
-				if (ui.newPanel.length > 0) {
-					$(ui.newPanel).find('iframe[data-src]').each(function () {
-						lazy_load_iframe(this);
+			});
+		}
+
+		// play embedded videos
+		if( $(iframe).length > 0 ) {
+			iframe.each(function() {
+				// determine embed type
+				parseVideo( vid );
+
+				var element = iframe.get(0);
+
+				if ( type === 'vimeo' && element.hasAttribute('data-autoplay') ) {
+					element.contentWindow.postMessage('{"method": "play"}', '*');
+				}
+
+				if ( type === 'youtube' && element.hasAttribute('data-autoplay') ) {
+					element.contentWindow.postMessage('{"event": "command", "func": "playVideo", "args": ""}', '*');
+				}
+			});
+		}
+	}
+
+	// Stop media
+	function stopMedia( panel ) {
+		var media = panel.find('video, audio'),
+			iframe = panel.find('iframe'),
+			// This works, but maybe better to determine if src is set,
+			// as performing these actions on a data attr is silly.
+			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+
+		// pause HTML5 media elements
+		if( $(media).length > 0 ) {
+			media.each(function(){
+				var $this = $(this),
+					element = $this.get(0);
+
+				if( ! element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
+					$this.animate({volume: 0}, volFade_duration, function () {
+						element.pause();
 					});
 				}
-				$(ui.oldPanel).find('iframe[data-lazy-loaded]').attr('src', function (i, val) {
-					return val;
-				});
-			},
-			animate: { easing: 'easeOutQuart', duration: 500 }, 
-			header: '.entry-header',
-			heightStyle: 'content',
-			icons: false,
-			collapsible: true,
-			create: function( e, ui ) {
-				var $this = $( this );
-				$( window ).on( "hashchange", function( e ) {
-					// var headers = $this.accordion( "option", "header" ),
-					// http://stackoverflow.com/questions/15501932/jquery-ui-cannot-call-methods-on-dialog-prior-to-initialization-attempted-to-c
-					var	headers = $('.accordion').accordion( "option", "header" );
-					header = $( location.hash ),
-					index = $this.find( headers ).index( header );
-					if ( index >= 0 ) {
-						$this.accordion( "option", "active", index );    
-					}
-				});
-				$( window ).trigger( "hashchange" );
-			}
-			
-		});
-	}
-	
-	/**
-	 * Reading Accordion
-	 */
-	function reading_accordion() {
-		$(".js .accordion-issue").css({display: 'block'});
-
-		$('.accordion-issue').accordion({
-			animate: { easing: 'easeOutQuart', duration: 500 }, 
-			header: '.editor-title',
-			heightStyle: 'content',
-			icons: false,
-			collapsible: true,
-			beforeActivate: function (event, ui) {
-				ui.oldPanel.find('.accordion').accordion("option", "active", false);
-			}
-		});
-	}
-		
-	/**
-	 * Call the Opening Times Accordions
-	 */
-	function opening_times_accordion() {
-		if ($.fn.accordion) {
-			reading_accordion();
-			main_accordion();
-		}
-	}
-	
-	/**
-	 * Mobile Navigation
-	 */
-
-	/* Adjust the size of the header according to the size of the viewport */
-	function header_resize() {
-		viewport = updateViewportDimensions();
-		var $header = $('.site-header');
-		if (viewport.width < 768) {
-			return $header.addClass('autoheight');
-		}
-		$header.removeClass('autoheight').css( 'height', '' );
-		$body.removeClass('active');
-	}
-	
-	/* Set an element to the height of the window */
-	function setDivHeight () {
-		$( '.autoheight' ).css( 'height', $( window ).height() );		
-	}
-
-	function mobile_nav() {
-		/* Toggle the navigation menu for small screens */
-		// http://blog.teamtreehouse.com/using-jquery-to-detect-when-css3-animations-and-transitions-end	
-		$('.menu-toggle').click(function (e) {
-			$body.toggleClass('active').css('overflow', 'hidden');
-			e.preventDefault();
-			$body.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function() {
-				$body.css('overflow', 'visible');
-				$('body.active').css('overflow', 'hidden');
 			});
-		});
+		}
 
-		header_resize();
-		setDivHeight();
-		
-		/* Add a menu hamburger svg icon to the top of the page */
-		$('<svg version="1.1" id="menu-open" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25px" height="15px" viewBox="0 0 25 15" enable-background="new 0 0 25 15" xml:space="preserve">\
-			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="1" x2="25" y2="1"/>\
-			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="14" x2="25" y2="14"/>\
-			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="7.359" x2="25" y2="7.359"/>\
-		</svg>').appendTo('.menu-toggle');
-	}
-	
-	/**
-	 * Dropdowns
-	 */
-	function dropdowns() {
-		/* Open and switch between the header dropdowns */
-		var toggler = function (e) {
-			var toToggle = $(this).data().toggleId;
-			var visible = function() {
-				if ($('.info-panel').is(':visible')) {
-					$("body").addClass("open");
-				} else {
-					$('body').removeClass('open');
+		// pause embedded videos
+		if( $(iframe).length > 0 ) {
+			iframe.each(function() {
+				// determine embed type
+				parseVideo( vid );
+
+				var element = iframe.get(0);
+
+				if ( type === 'vimeo' && ! element.hasAttribute('data-keepplaying') ) {
+					element.contentWindow.postMessage('{"method": "pause"}', '*');
 				}
+
+				if ( type === 'youtube' && ! element.hasAttribute('data-keepplaying') ) {
+					element.contentWindow.postMessage('{"event": "command", "func": "pauseVideo", "args": ""}', '*');
+				}
+			});
+		}
+	}
+
+	// Lower bg volume
+	function lowerVolume( panel, vol ) {
+		var media = panel.find('video, audio'),
+			iframe = panel.find('iframe'),
+			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+
+		// lower volume of HTML5 media elements
+		if( $(media).length > 0 ) {
+			media.each(function(){
+				var $this = $(this);
+
+				$this.animate({volume: vol}, volFade_duration);
+			});
+		}
+
+		// lower volume of embedded videos
+		if( $(iframe).length > 0 ) {
+			iframe.each(function() {
+				// determine embed type
+				parseVideo( vid );
+
+				var element = iframe.get(0);
+
+				if ( type === 'vimeo' ) {
+					element.contentWindow.postMessage('{"method": "setVolume", "value":0.1}', '*');
+				}
+			});
+		}
+	}
+
+	// Raise bg volume
+	function raiseVolume( panel, vol ) {
+		var media = panel.find('video, audio'),
+			iframe = panel.find('iframe'),
+			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+
+		// raise volume of HTML5 media elements
+		if( $(media).length > 0 ) {
+			media.each(function(){
+				var $this = $(this);
+
+				$this.animate({volume: vol}, volFade_duration);
+			});
+		}
+
+		// raise volume of embedded videos
+		if( $(iframe).length > 0 ) {
+			iframe.each(function() {
+				// determine embed type
+				parseVideo( vid );
+
+				var element = iframe.get(0);
+
+				if ( type === 'vimeo' ) {
+					element.contentWindow.postMessage('{"method": "setVolume", "value":' + vol + '}', '*');
+				}          
+			});
+		}
+	}
+
+	// Aspect Ratio -- full screen, centered images and embeds
+	function opening_times_fs_aspect_ratio() {
+		var $fsmedia = $('.aspect-ratio');
+
+		$fsmedia.each(function() {
+			var imgHeight = $(this).find('img').attr('height') ? $(this).find('img').attr('height') : '9',
+				imgWidth = $(this).find('img').attr('width') ? $(this).find('img').attr('width') : '16',
+				aspectRatio;
+
+			// Do we want the intrinsic-ratio?
+			if ( $(this).is('.intrinsic-ratio') ) {
+				aspectRatio = imgHeight / imgWidth;
+
+				$(this).css('padding-bottom', (aspectRatio * 100)+'%');
+				return;
+			}
+
+			// Or to fill the screen and maintain ratio?
+			aspectRatio = imgWidth / imgHeight;
+			
+			var $container = $('.slide');
+
+			$(this).attr('data-ratio', aspectRatio);
+
+			if ( ! screenLessThan( breakpoints.screen_md ) ) {
+				$(this).removeClass('embed-responsive embed-responsive-16by9');
+				if ( $(this).data('ratio') > 1 ) {
+					$(this).addClass('landscape');
+					if ($container.width() / $container.height() >= aspectRatio) {
+						$(this).css({
+							'height': $container.width() / aspectRatio,
+							'width': $container.width(),
+							'margin-left': '0',
+							'margin-top': (($container.height() - $(this).height()) / 2)
+						});
+					} else {
+						$(this).css({
+							'height': $container.height(),
+							'width': $container.height() * aspectRatio,
+							'margin-top': '0',
+							'margin-left': (($container.width() - $(this).width()) / 2)
+						});
+					}
+				} else {
+					$(this).addClass('portrait');
+				}
+
+			} else {
+				$(this).removeAttr('style').addClass('embed-responsive embed-responsive-16by9');
+			}
+		});
+	}
+
+	// Expanding Search Bar
+	function ot_search_expand_btn(e) {
+		e.stopPropagation();
+
+		var $searchWrap = $('.expanding-search'),
+			$input = $('.expanding-search .search-field'),
+			$menu = $('.navigation-social a');
+
+		if ( ! $searchWrap.is('.in') ) {
+			e.preventDefault();
+
+			$searchWrap.addClass('in');
+			$input.focus();
+			$menu.addClass('invisible');
+
+			var bodyFn = function(event) {
+				if( $(event.target).is($input) ) {
+					return;
+				}
+				$searchWrap.removeClass('in');
+				$input.blur();
+				$menu.removeClass('invisible');
+				$(document).off('click', bodyFn);
 			};
 
-			$("#" + toToggle).slideToggle('slow', 'easeOutQuart', visible).siblings().slideUp('slow', 'easeOutQuart', visible);
+			$(document).on('click', bodyFn);
+			
+		} else if ( $searchWrap.is('.in') && /^\s*$/.test( $input.val() ) ) {
 			e.preventDefault();
-		};
-		$('[data-toggle-id]').on("click", toggler);
-		
-		/* Relocate drop-down content into the header */
-		$('#info').html($('.info-panel').detach());
-		
-		/* Add an open/close svg icon to the header drop-down */
-		$('<svg version="1.1" id="close-cross" class="closer" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="35px" height="35px" viewBox="0 0 35 35" enable-background="new 0 0 35 35" xml:space="preserve">\
-			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="35" y1="0" x2="0" y2="35"/>\
-			<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="0" y1="0" x2="35" y2="35"/>\
-		</svg>').appendTo('.info-panel');
-		
-		/* Close the menu by clicking on the cross */
-		$('.closer').on('click', function() {
-			$('.info-panel').slideUp('slow');
-			$('body').removeClass('open');
-		});
-	}
-	
-	/**
-	 * Layout
-	 *
-	 * Various functions to help layout the page.
-	 *
-	 * These all need to be wrapped in a function so that they can be called back after an ajax page load.
-	 */
 
-	/* Fade out the Social Nav when the search box is in focus */
-	function searchExpand() {
-		viewport = updateViewportDimensions();
-		var $menu = $('.social-menu a'),
-		$search = $('.social-menu .search-field');
-		if (viewport.width > 768) {
-			$search.focus(function () {
-				$menu.hide();
-			}).blur(function () {
-				$menu.fadeIn(500);
-			});
-		} else {
-			$search.focus(function () {
-				$menu.show();
-			});
+			$searchWrap.removeClass('in');
+			$input.blur();
+			$menu.removeClass('invisible');
 		}
 	}
 
-	/**
-	 * Layout Hacks
-	 *
-	 * Mostly small hacks and tweaks to configure the layout, some of which are often simpler to do like this than through the Wordpress backend.
-	 * All of these need to be called back after the ajax page load.
-	 *
-	 * In time all of these should be imlpemented server side.
-	 */
-	function layout_hacks() {
-		/* Remove inline styles from wp-caption */
-		$(".wp-caption").removeAttr('style');
-		
-		/* Add a class to the first article in the editor selection on the reading pages */
-		$('.editor-selection > :first-child').addClass("pseudo-content-divider-top-articles-xs-max");
-		
-		/* Wordpress placeholder hack */
-		$('.search-field').attr("placeholder", "Search");
+	function ot_search_toggle() {
+		var $expand = $('[data-toggle="search-expand"]'),
+			$input = $('.expanding-search .search-field'),
+			$submit = $('.expanding-search .search-submit'),
+			$menu = $('.navigation-social a');
+
+		if ( ! screenLessThan( breakpoints.screen_md ) ) {
+			$expand.on('click', ot_search_expand_btn);
+			$submit.on('click', ot_search_expand_btn);
+			$input.attr('placeholder', '');
+
+			$submit.addClass('btn').removeClass('screen-reader-text');
+		} else {
+			$expand.off('click', ot_search_expand_btn);
+			$submit.off('click', ot_search_expand_btn);
+			$input.attr('placeholder', 'Search');
+
+			$menu.removeClass('invisible');
+			$submit.addClass('screen-reader-text').removeClass('btn');
+		}
 	}
 
-	function layout() {
-		/* Launch the gradients */
-		$('.gradienter').rainbow();
-	
-		/* FitVids */
-		$(".fitvids").fitVids({ customSelector: "iframe[data-src*='player.vimeo.com'], iframe[data-src*='youtube.com'], iframe[data-src*='youtube-nocookie.com'], iframe[data-src*='kickstarter.com'][data-src*='video.html']"});
-			
-		/* Pullquotes */
-		$('span.pullquote').each(function() { 
-			var $parentParagraph = $(this).parent('p'); 
-			$parentParagraph.css('position', 'relative'); 
-			$(this).clone().addClass('pulledquote').prependTo($parentParagraph); 
-		});
-		
-		/* Open the Sharing Links in a new, smaller window */
-		$('.popout-link a').click(function() {
-			var	top = ($(window).height()/2)-(480/2);
-			var left = ($(window).width()/2)-(480/2);
-			var NWin = window.open($(this).prop('href'), '', 'height=480, width=480 top=' + top + ', left= ' + left);
-			if (window.focus){
-				NWin.focus();
+	// Art directed popovers
+	// The WordPress editor keeps stripping out the video html from the regular popover shortcode.
+	// This is a temporary fix that extends the media sample shortcode until that can be resolved.
+	function ot_media_popovers( el ) {
+		$(el).each(function() {
+			var $this = $(this),
+				mediaSrc = $this.data('media'),
+				placementType = $this.closest('.slide__text--sidebar').length > 0 ? 'right' : 'bottom',
+				triggerType = $this.closest('.accordion-header').length > 0 ? 'hover' : 'click',
+				mediaType;
+
+			parseMedia(mediaSrc);
+
+			if ( type === 'audio' ) {
+				mediaType = '<audio src="' + mediaSrc + '" loop autoplay controls controlsList="nodownload"></audio>';
+			} 
+			if ( type === 'video' ) {
+				mediaType = '<video src="' + mediaSrc + '" loop autoplay></video>';
+			} 
+			if ( type === 'image' ) {
+				mediaType = '<img src="' + mediaSrc + '">';
 			}
-			return false;
+
+			$this.popover({
+				placement: placementType,
+				html: true,
+				template: '<div class="popover popover--large" role="tooltip"><div class="popover-content"><div class="popover__media-container"></div></div></div>',
+				content: mediaType,
+				trigger: triggerType,
+			});
 		});
-		
-		searchExpand();
-		layout_hacks();
 	}
 
-	/**
-	 * Auto add protocal to url form validation
-	 */
-	function input_url_force_protocol() {
-		$('.auto-protocol').blur(function() {
+	// Custom flikity navigation btns
+	function ot_flickity_nav( $el, $prev, $next, event ) {
+		// Go to previous cell
+		$prev.on( event, function() {
+			$el.flickity('previous');
+		});
+
+		// Go to next cell
+		$next.on( event, function() {
+			$el.flickity('next');
+		});
+	}
+
+	// Custom flickity button atts
+	function ot_flickity_btn_atts( el, $prev, $next, $nav ) {
+		el.on( 'cellSelect', function() {
+			var target = el.selectedCell.target,
+				isCarouselEnd = false;
+
+			if ( target === el.cells[0].target ) {
+				isCarouselEnd = !isCarouselEnd;
+
+				$prev.attr('disabled', true);
+			} else if ( target === el.getLastCell().target ) {
+				isCarouselEnd = !isCarouselEnd;
+
+				$next.attr('disabled', true);
+			} else {
+				isCarouselEnd = isCarouselEnd;
+
+				$nav.removeAttr('disabled');
+			}
+		});
+	}
+
+	// Flickity infinite scroll
+	function ot_flickity_append_items( carousel, el ) {
+		carousel.on( 'settle.flickity', function() {
+			if ( el.selectedIndex === el.cells.length - 1 ) {
+				makeCellHtml( carousel );
+			}
+		});
+	}
+
+	// Build additional Flickity Cells
+	function makeCellHtml( carousel ) {
+		page++;
+
+		//var url = '/wp-json/wp/v2/news?page=' + page + '&offset=3&per_page=3';
+		var url = '/wp-json/wp/v2/news?page=' + page + '';
+
+		$.getJSON(url).done(function( data ) {
+			$.each( data, function( index, item ) {
+				var $cell = $(
+					'<div class="carousel-cell page-' + page + '">' + 
+						'<h2 class="entry-header">' + item.title.rendered + '</h2>' + 
+						'<div class="entry-content">' + item.content.rendered + '</div>' + 
+					'</div>'
+				);
+
+				carousel.flickity( 'append', $cell );
+			});
+  		}).fail(function( jqxhr, textStatus, error ) {
+			var err = textStatus + ', ' + error;
+			console.log( 'Request Failed: ' + err );
+		});
+	}
+
+	// Gradient Text
+	function makeGradients( $el, selector, h, s, l ) {
+		$el.gradienter({
+			hueStart: h, 
+			selector: selector, 
+			saturation: s, 
+			lightness: l
+		});
+	}
+
+	// Actions that happen on page load, or via ajax callback
+	function ot_page_load() {
+		// Definitions
+		var eventtype = mobilecheck() ? 'touchstart' : 'click',
+			$window = $(window),
+			hash = window.location.hash,
+		    $scene = $('#scene'),
+			$accordion = $('.accordion .collapse'),
+			$gradients = $('.gradient-container'),
+			$infoCollapse = $('.site-info .collapse'),
+			$infoClose = $('.site-info .close'),
+		    $splashTop = $('.splash-top__link'),
+		    $autoProtocol = $('.auto-protocol'),
+		    $infinite = $('.infinite'),
+		    $anchorScroll = $('a[href*="#"]:not([href="#"], [data-toggle="collapse"], .ot-social-links a)'),
+			isSidebarOpen = false;
+
+		// Launch the gradients
+		makeGradients( $gradients, '.gradient-text', 240, 100, 50 );
+
+		// Expand the search form on focus
+		ot_search_toggle();
+
+		// Call aspect ratio
+		opening_times_fs_aspect_ratio();
+		//$window.resize(opening_times_fs_aspect_ratio).trigger('resize');
+
+		$accordion.on('show.bs.collapse', function () {
+			var $this = $(this);
+
+			$this.parent('.card').addClass('show');
+
+			// Show sidebar captions
+			if ( $this.closest('.card').is('.slide_text--sidebar') ) {
+				var $target = $($this.closest('.slide_text--sidebar').attr('data-caption'));
+
+				// Hide the issue list
+				$('.reading__issue-list').addClass('out');
+				
+				// Show the captions
+				$target.addClass('in');
+			}
+		});
+
+		$accordion.on('shown.bs.collapse', function () {
+			var $this = $(this);
+
+			// Load media when accordion opened
+			if( $this.has('.lazyload').length ) {
+				var $el = $($this.find('.lazyload'));
+
+				$el.each(function() {
+					lazy_load_media( this );
+				});
+			}
+
+			// Play media when accordion opened
+			playMedia( $this, 0.2 );
+			mobile_url_params( $this );
+		});
+
+		$accordion.on('hide.bs.collapse', function () {
+			var $this = $(this),
+				$issueList = $('.reading__issue-list');
+
+			$this.parent('.card').removeClass('show');
+
+			// Remove sidebar captions
+			if ( $this.closest('.card').is('.slide_text--sidebar') ) {
+				var $target = $($this.closest('.slide_text--sidebar').attr('data-caption'));
+
+				// Remove caption
+				$target.removeClass('in');
+
+				// Reinstate issue list
+				if ( $('.slide_text--sidebar.show').length === 0 ) {
+					$issueList.removeClass('out');
+				}
+
+				// Remove sidebar popover
+				hidePopover( $target );
+			} else {
+				// Remove content popover
+				hidePopover( this );
+			}
+		});
+
+		$accordion.on('hidden.bs.collapse', function () {
+			var $this = $(this);
+
+			// Pause media on accordion close
+			stopMedia( $this );
+		});
+
+		// Site info toggle
+		$infoCollapse.on('show.bs.collapse', function () {
+			$(this).siblings().collapse('hide');
+		});
+
+		// Close the info panels
+		$infoClose.on(eventtype, function() {
+			$(this).closest('.collapse').collapse('hide');
+		});
+
+
+		// Flickity options
+		var $newsDropdown = $('#collapse-news'),
+			flickityOptions = {
+				cellSelector: '.carousel-cell',
+				cellAlign: 'left',
+				prevNextButtons: false,
+				pageDots: false,
+				watchCSS: true,
+			},
+			$carousel = $('.carousel');
+
+		// Navigate the news items
+		var $btnNav = $('.btn-nav'),
+			$btnPrev = $('.btn-prev'),
+			$btnNext = $('.btn-next');
+
+		// Init Flickity when news panel is opened
+		$newsDropdown.one('shown.bs.collapse', function () {
+			// Init the flickity instance
+			$carousel.flickity(flickityOptions);
+			
+			// Access flickity data
+			var flkty = $carousel.data('flickity');
+
+			// Trigger flickity resize to position previously hidden cells
+			$carousel.flickity('resize');
+
+			// Add new items at last cell
+			ot_flickity_append_items( $carousel, flkty ); 
+
+			// Add custom navigation btns
+			ot_flickity_nav( $carousel, $btnPrev, $btnNext, eventtype );
+
+			// Add custom btn atts
+			ot_flickity_btn_atts( flkty, $btnPrev, $btnNext, $btnNav );
+		});
+
+		// Close the news panel
+		$newsDropdown.on('hidden.bs.collapse', function () {
+			// Reset flickity position
+			$carousel.flickity( 'select', 0, false, true );
+		});
+
+
+		// Open accordion corresponding to location hash
+		var $accordionId = $(hash + '.collapse');
+
+        if ( hash && $accordionId ) {
+        	$accordionId.prev('.collapsed').trigger(eventtype);
+        }
+
+        // Open accodion from new commission splash.
+		$splashTop.on(eventtype, function() {
+			var $splashPanel = $($(this).data('open'));
+
+			$splashPanel.prev('.collapsed').trigger(eventtype);
+		});
+
+		// Auto add protocol to url form validation
+		$autoProtocol.blur(function() {
 			var string = $(this).val();
+			
 			if (! string.match(/^https?:/)){
 				string = "http://" + string;
 			}
@@ -372,191 +767,158 @@ function checkGroup(name,value) {
 				return string;
 			});
 		});
-	}
-	
-	/**
-	 * Ajax Page Load - history.js
-	 */
-	function ajax_load() {
-		var History = window.History, // Note: Using a capital H instead of a lower h
-			State = History.getState();
-			//$log = $('#log');
 
-		// If the link rel is set to `ajax`, trigger the pushstate
-		function ajax_click() {
-			$('a[rel=ajax]').on('click', function(e) {
-				e.preventDefault();
-				var path = $(this).attr('href'),
-					title = $(this).text() + " - Opening Times";
-				History.pushState('ajax', title, path);
-			});
+		// Infinite Scroll
+		/*
+		if( $infinite.length ) {
+			var $loadMore = $('.site-main > div');
+
+			$loadMore.append( '<span class="load-more"></span>' );
 			
-			// need to ensure this is always set to base url
-			$(".search-form").submit(function(e) {
-				e.preventDefault();
-				var search = $("[name=s]").val(),
-					path = window.location.origin + '?s=' + search,
-					//path = '?s=' + search,
-					title = search + " - Search Results - Opening Times";
-				History.pushState('ajax', title, path);
-			});
-		}	
-		ajax_click();
+			var button = $('.load-more'),
+				page = 2,
+				loading = false,
+				scrollHandling = {
+					allow: true,
+					reallow: function() {
+						scrollHandling.allow = true;
+					},
+					//(milliseconds) adjust to the highest acceptable value
+					delay: 400
+				};
+
+			$window.scroll(function(){
+				if( ! loading && scrollHandling.allow ) {
+					scrollHandling.allow = false;
+					setTimeout(scrollHandling.reallow, scrollHandling.delay);
 					
-		// Callback the scripts needed after the Ajax page load.
-		function callback_scripts() {
-			layout_hacks();
-			layout();
-			mobile_nav();
-			$body.removeClass('active').css( "overflow", "visible" );
-			opening_times_accordion();
-			ajax_click();
-			input_url_force_protocol();
-		}
-
-		// Bind to state change
-		// When the statechange happens, load the appropriate url via ajax
-		History.Adapter.bind(window, 'statechange', function() { // Note: Using statechange instead of popstate
-			load_ot_ajax();
-
-			// Google Analytics
-			//if (typeof ga !== "undefined" && ga !== null) {
-			var loc = window.location,
-			page = loc.hash ? loc.hash.substring(1) : loc.pathname + loc.search;
-			__gaTracker('send', 'pageview', page);
-			//}
-		});
-		
-		// Load Ajax
-		function load_ot_ajax() {
-			State = History.getState(); // Note: Using History.getState() instead of event.state
-
-			var loadingMsg = 'Loading';
+					var offset = $(button).offset().top - $window.scrollTop();
 					
-			$("body").prepend('<div id="ajax-loader"><span>' + loadingMsg + '</span></div>');
-			$("#ajax-loader").fadeIn();
-			$("#content").load(State.url + ' #content > *', function(data, status, xhr) {
-			//$("#main").load(State.url + ' #primary, #secondary', function(data) {
-				if ( status === "error" ) {
-					var msg = "Sorry but there was an error: ",
-						msg2 = "Please reload the page.";
-					$( "#ajax-loader" ).wrap( "<div id='ajax-error'></div>" ).html( msg + xhr.status + " " + xhr.statusText + "<br>" + msg2 );
-				} else {
-					$("#ajax-loader").fadeOut("fast", function() { 
-						$(this).detach();
-					});
-					callback_scripts();
+					if( 2000 > offset ) {
+						loading = true;
+						var data = {
+							action: 'opening_times_ajax_load_more',
+							page: page,
+							query: otloadmore.query,
+						};
+
+						$.post(otloadmore.url, data, function(res) {
+							if( res.success) {
+								$infinite.append( res.data );
+								$infinite.append( button );
+								page = page + 1;
+								loading = false;
+
+								// Callback scripts here
+								makeGradients( $gradients, '.gradient-text', 240, 100, 50 );
+
+							} else {
+								console.log(res);
+							}
+						}).fail(function( jqxhr, textStatus, error ) {
+							var err = textStatus + ', ' + error;
+							console.log(err);
+						});
+					}
 				}
-				
-				// Updates the menu
-				//var request = $(data);
-				//$('#menu-navigation').replaceWith($('#menu-navigation', request));
-				
 			});
 		}
-	}
+		*/
+
 	
-	/* Sticky Footer */
-	$('<div id="push"></div>').appendTo('#page');
+		// Smooth Scroll to anchor
+		$anchorScroll.on(eventtype, function() {
+			if (location.pathname.replace(/^\//,'') === this.pathname.replace(/^\//,'') && location.hostname === this.hostname) {
+				
+				var target = $(this.hash);
+				//var headerHeight = $('.site-header').outerHeight(true) + $('.entry-header').outerHeight(true);
 
-	/* Firefox menu form normalisation */
-	$('.search-form').height($(".menu-item").height());
+				target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+				
+				if (target.length) {
+					$('html, body').animate({
+						//scrollTop: target.offset().top -headerHeight
+						scrollTop: target.offset().top
+					}, 500 );
+					return false;
+				}
+			}
+		});
 
-	/* Konami code */
-	$(window).konami({
-		cheat: function () {
-			$body.addClass("konami").append('<audio src="../wp-content/themes/opening_times/assets/timba.mp3" preload="auto" autoplay loop></audio>');
-			$body.ready(function(){
-				setTimeout(function(){
-					changefont("serif");
-				},400);
-				setTimeout(function(){
-					changefont("cursive");
-				},800);
-				setTimeout(function(){
-					changefont("monospace");
-				},1200);
-				setTimeout(function(){
-					changefont("fantasy");
-				},1600);
-				setTimeout(function(){
-					changefont("sans-serif");
-				},2000);
-				setTimeout(function(){
-					changefont("Symbol");
-				},2400);
-				setTimeout(function(){
-					changefont("Webdings");
-				},2800);
-				setTimeout(function(){
-					changefont("Wingdings");
-				},3200);
-			});
-			function changefont(a){
-				$("body").css({"font-family":a});
-				setTimeout(function(){
-					changefont(a);
-				},3200);
+		// Popovers
+		$('[data-toggle="popover"]').popover();
+
+		// Popover show
+		$scene.on('shown.bs.popover', function () {
+			var $popoverLg = $('.popover--large');
+
+			if( $popoverLg.length ) {
+				lowerVolume( $('.accordion .show'), 0.1 );
+			}
+		});
+
+		// Popover close
+		$scene.on('hidden.bs.popover', function () {
+			raiseVolume( $('.accordion .show'), 0.9 );
+		});
+
+		// Call Media popovers
+		ot_media_popovers( '.media-sample' );
+
+		// Ensure all slide iframes have autoplay attr
+		media_autoplay_att( '.autoplay' );
+
+        // Toggle offcanvas       
+        $scene.on(eventtype, '[data-toggle="offcanvas"]', function(e) {
+            e.preventDefault();
+
+            var $this = $(this),
+                $target = $($this.attr('data-target'));
+                
+            isSidebarOpen = !isSidebarOpen;
+
+            $target.toggleClass('in');
+            $this.toggleClass('active');
+
+            if ( isSidebarOpen ) {
+                $scene.addClass('stop-scrolling').append('<div id="overlay" class="fixed-fs offcanvas__overlay" data-toggle="offcanvas" data-target="#site-navigation"></div>');
+            } else {
+                $scene.removeClass('stop-scrolling');
+                $('#overlay').remove();
+            }
+
+            $this.attr('aria-expanded', function (i, attr) {
+                return attr === 'true' ? 'false' : 'true';
+            });
+        });
+	}
+
+	// Resize
+	function ot_resize() {
+		opening_times_fs_aspect_ratio();
+		ot_search_toggle();
+
+		if ( $('.slide__text--sidebar').length > 0 ) {
+			if ( screenLessThan( breakpoints.screen_md ) ) {
+				$('.reading__issue-list').removeClass('out');
+				$('.slide__text--sidebar').removeClass('in');
 			}
 		}
+	}
+
+	$(document).ready(function() {
+		// Prepare to launch
+		ot_smooth_state();
+		ot_page_load();
+
+		$(window).resize(function () {
+			waitForFinalEvent(function () {
+					ot_resize();
+				}, 
+				timeToWaitForLast, 
+				"screenz resize"
+			);
+		});
 	});
-	
-	/**
-	 * Prevent iOS from zooming onfocus
-	 * https://github.com/h5bp/mobile-boilerplate/pull/108
-	 * Adapted from original jQuery code here: http://nerd.vasilis.nl/prevent-ios-from-zooming-onfocus/
-	 */
-	var viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]');
 
-	function preventZoom () {
-		if (viewportmeta && navigator.platform.match(/iPad|iPhone|iPod/i)) {
-			var formFields = document.querySelectorAll('input, select, textarea'),
-			contentString = 'width=device-width,initial-scale=1,maximum-scale=',
-			i = 0,
-			fieldLength = formFields.length;
-
-			var setViewportOnFocus = function() {
-				viewportmeta.content = contentString + '1';
-			};
-
-			var setViewportOnBlur = function() {
-				viewportmeta.content = contentString + '10';
-			};
-
-			for (; i < fieldLength; i++) {
-				formFields[i].onfocus = setViewportOnFocus;
-				formFields[i].onblur = setViewportOnBlur;
-			}
-		}
-	}
-
-	ot_resize = function() {
-		header_resize();
-		setDivHeight();
-		searchExpand();
-	};
-
-	ot_launch = function() {
-		opening_times_accordion();
-		mobile_nav();
-		dropdowns();
-		layout();
-		input_url_force_protocol();
-		ajax_load();
-		preventZoom();
-		ot_resize();
-		addFieldToCheck("email", "Email address");
-		addFieldToCheck("emailconfirm", "Confirm your email address");
-	};
-	
 })( jQuery );
-
-jQuery(document).ready(function($) {
-	ot_launch();
-
-	$(window).resize(function () {
-		waitForFinalEvent(function () {
-			ot_resize();
-		}, timeToWaitForLast, "screenz resize");
-	});
-});

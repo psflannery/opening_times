@@ -1,46 +1,37 @@
 <?php
 /**
  * Jetpack Compatibility File
+ * 
  * See: http://jetpack.me/
  *
  * @package Opening Times
  */
 
-/**
- * Add theme support for Infinite Scroll.
- * See: http://jetpack.me/support/infinite-scroll/
- */
-function opening_times_jetpack_setup() {
-	add_theme_support( 'infinite-scroll', array(
-		'container' => 'main',
-		'render'    => 'opening_times_infinite_scroll_render',
-		'footer'    => 'page',
-	) );
-}
-add_action( 'after_setup_theme', 'opening_times_jetpack_setup' );
 
 /**
- * Custom render function for Infinite Scroll.
+ * Filter the list of Post Types available in the WordPress.com REST API.
+ *
+ * @param array $allowed_post_types Array of whitelisted Post Types.
+ * @return array $allowed_post_types Array of whitelisted Post Types, including our Custom Post Types.
+ *
+ * @since Opening Times 1.0.0
  */
-function opening_times_infinite_scroll_render() {
-	while ( have_posts() ) {
-		the_post();
-		if ( is_search() ) :
-		    get_template_part( 'template-parts/content', 'search' );
-		else :
-		    get_template_part( 'template-parts/content', get_post_format() );
-		endif;
-	}
+function opening_times_allow_post_type_wpcom( $allowed_post_types ) {
+    $allowed_post_types[] = 'reading, articles';
+
+    return $allowed_post_types;
 }
+add_filter( 'rest_api_allowed_post_types', 'opening_times_allow_post_type_wpcom');
+
 
 /**
  * Remove Jetpack  CSS
  *
  * First, make sure Jetpack doesn't concatenate all its CSS
  * Then, remove each CSS file, one at a time
+ *
+ * @since Opening Times 1.0.0
  */
-
-add_filter( 'jetpack_implode_frontend_css', '__return_false' );
 
 function opening_times_remove_all_jetpack_css() {
 	wp_deregister_style( 'AtD_style' ); // After the Deadline
@@ -69,4 +60,5 @@ function opening_times_remove_all_jetpack_css() {
 	wp_deregister_style( 'widget-grid-and-list' ); // Top Posts widget
 	wp_deregister_style( 'jetpack-widgets' ); // Widgets
 }
+add_filter( 'jetpack_implode_frontend_css', '__return_false' );
 add_action('wp_print_styles', 'opening_times_remove_all_jetpack_css' );

@@ -1,0 +1,482 @@
+//
+// App
+// --------------------------------------------------
+
+/*
+Theme Name: Opening Times
+Theme URI: http://otdac.org/
+Author: Paul Flannery
+Author URI: http://paulflannery.co.uk/
+Description: A theme for Opening Times a not-for-profit, digital art commissioning body and platform for artworks whose primary means of encounter is online. Launching June 2014
+Version: 1.0.0
+Date: 14/11/17
+License: GNU General Public License
+License URI: license.txt
+Text Domain: opening_times
+Domain Path: /languages/
+Tags: white, three-columns, fluid-layout, responsive-layout, custom-menu, editor-style, featured-images, post-formats, translation-ready
+GitHub Theme URI: https://github.com/psflannery/opening_times
+GitHub Branch: master
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012-2013 Automattic, Inc.
+*/
+
+//
+// Load core variables and mixins
+// --------------------------------------------------
+
+// *** Vendor ***
+@import "_custom";
+@import "../bootstrap/bootstrap";
+
+// *** Settings ***
+@import "base/_variables";
+
+// *** Base ***
+@import "base/_core";
+@import "base/_typography";
+@import "base/_forms";
+@import "base/_buttons";
+
+// *** Utils ***
+@import "utils/_utilities";
+@import "utils/_flickity";
+@import "utils/_animations";
+@import "utils/_page-transitions";
+
+// *** Components ***
+@import "components/_logo";
+@import "components/_header";
+@import "components/_expanding-search";
+@import "components/_offcanvas";
+@import "components/_accordion";
+@import "components/_footer";
+@import "components/_images";
+@import "components/_icons";
+@import "components/_popovers";
+@import "components/_search-results";
+@import "components/_404";
+
+// Dev use only - comment out for production
+//@import "../dev/dev-tools.scss";
+
+
+.entry-links {
+	.card-header,
+	.card-header + div {
+		@include media-breakpoint-down(sm) {
+			padding-left: $grid-gutter-width-base;
+			padding-right: $grid-gutter-width-base;
+		}
+	}
+}
+
+.featured-link {
+	display: block;
+	&:last-of-type {
+		margin-bottom: $spacer-y;
+	}
+}
+.featured-image {
+	.accordion & {
+		max-width: $feature-thumb-width;
+	}
+}
+
+// Pages
+// --------------------------------------------------
+.page-title {
+	font-size: $font-size-lg; // TODO - set sizes for all headings!!!
+	margin-top: $spacer * 2.25;
+	margin-bottom: $spacer * 1.25;
+}
+
+// Reading Pages
+// --------------------------------------------------
+.reading {
+	&.card {
+		border: none;
+		//border-bottom: $ot-border-width solid $ot-border-color;
+		background-color: transparent;
+	}
+}
+.issue-title {
+    margin-top: $spacer * 8;
+    margin-bottom: $spacer * 8;
+    span {
+    	display: block;
+    }
+    &__author {
+		font-size: $font-size-lg; //1.5??
+		color: $gray-light;
+    }
+    &__sub {
+    	font-size: $font-size-headline;
+    	font-weight: bold;
+    }
+    &__standfirst {
+    	color: $gray-light;
+    }
+}
+.issue__image--full-width {
+    margin-bottom: $spacer * 2;
+    > figure {
+    	margin-left: calc(-#{$grid-gutter-width-base/2} - #{$card-spacer-x});
+		margin-right: calc(-#{$grid-gutter-width-base/2} - #{$card-spacer-x});
+    }
+}
+
+// Structure
+.issue__container {
+	border-bottom: $ot-border-width solid $ot-border-color;
+}
+.issue__issue {
+	@include media-breakpoint-up(md) {
+		box-shadow: $ot-drop-shadow-mid-light;
+	}
+}
+.issue__issue-list {
+    .list-group {
+    	@include media-breakpoint-down(sm) {
+			flex-wrap: nowrap;
+			overflow-x: auto;
+			flex-direction: row;
+			border-bottom: $ot-border-width solid $ot-border-color;
+		}
+    }
+    .active {
+    	background-color: inherit;
+    	border-color: $ot-border-color;
+    	font-weight: bold;
+    	text-transform: uppercase;
+    }
+    a {
+    	border-left: 0;
+    	border-right: 0;
+    	@include media-breakpoint-down(sm) {
+    		border-top: 0;
+    		flex: 0 0 auto;
+    		width: auto;
+    		padding-right: $spacer-x * 3;
+    		padding-left: $spacer-x * 3;
+    	}
+    	&:first-of-type {
+    		border-top: 0;
+    	}
+    	&:last-of-type {
+    		@include media-breakpoint-down(sm) {
+    			border-bottom: 0;
+    		}
+    	}
+    }
+}
+.issue__epilogue {
+	padding-bottom: $spacer-y * 3;
+	@include media-breakpoint-down(sm) {
+		padding-left: $grid-gutter-width-base;
+		padding-right: $grid-gutter-width-base;
+	}
+}
+
+.reading__issue-list {
+	.list-group-item {
+		background-color: $body-bg;
+		@include media-breakpoint-up(md) {
+			background-color: transparent;
+		}
+		&.active {
+			background-color: $body-bg;
+		}
+	}
+}
+
+// Slides
+// --------------------------------------------------
+.slide {
+	position: relative;
+	background-color: $body-bg;
+	padding-bottom: 2.5rem;
+	.card {
+		border: 0;
+		transition: all $ot-transition-timing ease;
+	}
+
+	// Elements
+	&__bg-img {
+		> .card {
+			background-size: cover;
+			background-position: center;
+			//background-attachment: fixed;
+		}
+	}
+	&__text {
+		position: absolute;
+		bottom: 2.5rem;
+		left: 0;
+		margin-bottom: 0 !important;
+		max-width: 100%;
+		color: $white;
+		background: linear-gradient(to bottom, rgba($black ,0) 0%,rgba($black ,0.65) 100%);
+		p {
+			width: 50%;
+		}
+		.row > & {
+			margin-top: $spacer-y * 1.5;
+		}
+	}
+	&__video {
+		video {
+			@include size(100%);
+			vertical-align: middle;
+		}
+	}
+
+	// Modifiers
+	&--fh {
+		//min-height: 100vh;
+		height: calc(100vh - 66px);
+	}
+}
+
+.slide-content {
+	&__header {
+		background-color: $body-bg;
+		border-bottom: $ot-border-width solid $ot-border-color;
+		margin-bottom: $spacer-y * 2;
+	}
+	&__title {
+	    font-size: $font-size-lg;
+	    font-weight: normal;
+	    padding-top: $spacer-y;
+	    padding-bottom: $spacer-y;
+	    margin-bottom: 0;
+	}
+	&__section {
+		overflow: hidden;
+	}
+}
+
+.slide-navigation {
+	position: fixed;
+	top: 50%;
+	right: $grid-gutter-width-base/2;
+	transform: translateY(-50%);
+	z-index: $zindex-slides-navigation;
+	//opacity: 0;
+	//visibility: hidden;
+	//transition: opacity $ot-transition-timing ease;
+	//&.in {
+	//	opacity: 1;
+	//	visibility: visible;
+	//}
+
+	.active {
+		transition: all $ot-transition-timing ease;
+		text-decoration: underline;
+		transform: scale(1.2);
+		transform-origin: right;
+	}
+}
+
+// Entries
+// --------------------------------------------------
+.entry-content {
+	p {
+		&:last-of-type {
+			.post-type-archive-reading & {
+				padding-bottom: $spacer-y;
+			}
+		}
+	}
+	blockquote {
+		margin-left: 15%;
+	    line-height: 1;
+		font-size: $font-size-blockquote;
+	    margin-top: $spacer-y * 4;
+	    margin-bottom: $spacer-y * 4;
+	    text-transform: uppercase;
+	}
+}
+.entry-meta {
+	.dl-inline {
+		@include media-breakpoint-down(md) {
+			border-top: $ot-border-width solid $ot-border-color;
+			padding-top: $spacer-y;
+		}
+	}
+}
+
+
+// Slide text overlay
+// --------------------------------------------------
+.slide__text-overlay {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			background-color: $body-bg;
+			border: $ot-border-width solid $ot-border-color;
+			position: absolute;
+		}
+		p {
+			&:last-of-type {
+				margin-bottom: 0;
+				padding-bottom: 0;
+			}
+		}
+	}
+}
+.slide__text--top-left,
+.slide__text--top-right  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			top: $spacer-y * 2;
+		}
+	}
+}
+.slide__text--bottom-left,
+.slide__text--bottom-right  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			bottom: $spacer-y * 2;
+		}
+	}
+}
+.slide__text--top-left,
+.slide__text--bottom-left  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			left: $grid-gutter-width-base;
+		}
+	}
+}
+.slide__text--top-right,
+.slide__text--bottom-right  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			right: $grid-gutter-width-base;
+		}
+	}
+}
+.slide__text--center {
+	.card-block {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
+.slide__text--sidebar {
+	display: none;
+	&.in {
+		display: block;
+	}
+}
+.gradient-container.list-group {
+	&.out {
+		display: none;
+	}
+}
+
+// Footnotes
+// --------------------------------------------------
+.simple-footnotes {
+	ol {
+		font-size: $font-size-sm;
+		padding-left: 0;
+	}
+}
+.article-footnote-side {
+    position: fixed;
+    top: 50%;
+    right: $grid-gutter-width-base/2;
+    translte: transformY(-50%);
+    transition: $ot-transition-timing ease;
+
+    @include size(50px);
+	background: red;
+}
+
+
+// Editor Bio
+// --------------------------------------------------
+.issue-content__bio {
+	border-top: $ot-border-width solid $ot-border-color;
+	padding-top: $spacer-y * 1.25;
+	font-size: $font-size-sm;
+	color: $gray-light;
+	strong {
+		color: $body-color;
+	}
+}
+
+// Media Sample Links
+// --------------------------------------------------
+.media-sample {
+    //padding-right: $spacer-x * 2;
+    position: relative;
+    transition: all $ot-transition-timing ease;
+    background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="9px" height="5px" viewBox="0 0 32 32"><path d="M2 26h28v2H2z"></path></svg>');
+    background-position: -45px 100%;
+    background-repeat: repeat-x;
+    animation: zoom-reset 1.0s ease-out 1;
+    cursor: pointer;
+    //display: inline-block;
+    color: $link-color;
+    &:after {
+		content: '';
+		background-repeat: no-repeat;
+		@include size(1.5em);
+		position: absolute;
+		right: 0;
+    }
+    &:hover {
+		animation: zooming .85s linear infinite;
+		background-color: rgba($ot-media-sample-link-color, 0.5);
+		color: $link-hover-color;
+    }
+    /*
+    &--audio {
+    	&:after {
+    		content: '🔊';
+    	}
+    	&:hover {
+    		color: $ot-media-sample-audio-hover;
+    	}
+    }
+    &--img {
+    	&:after {
+    		content: '📷';
+    	}
+    	&:hover {
+    		color: $ot-media-sample-audio-hover;
+    	}
+    }
+    &--video {
+    	&:after {
+    		content: '🎥';
+    	}
+    	&:hover {
+    		color: $ot-media-sample-audio-hover;
+    	}
+    }
+    */
+    .accordion-header & {
+    	animation: unset;
+    	color: initial;
+    	background-image: none;
+    	padding-right: 0;
+    }
+}
+
+// Mailing List
+// --------------------------------------------------
+.ot_mailling_list_widget {
+	.control-label {
+		align-self: center;
+		margin-bottom: 0;
+		@include media-breakpoint-up(md) {
+			text-align: right;
+		}
+	}
+}
