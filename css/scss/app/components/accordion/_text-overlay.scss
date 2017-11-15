@@ -1,0 +1,68 @@
+// Slide text overlay
+// --------------------------------------------------
+
+.slide__text-overlay {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			background-color: $body-bg;
+			border: $ot-border-width solid $ot-border-color;
+			position: absolute;
+		}
+		p {
+			&:last-of-type {
+				margin-bottom: 0;
+				padding-bottom: 0;
+			}
+		}
+	}
+}
+.slide__text--top-left,
+.slide__text--top-right  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			top: $spacer-y * 2;
+		}
+	}
+}
+.slide__text--bottom-left,
+.slide__text--bottom-right  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			bottom: $spacer-y * 2;
+		}
+	}
+}
+.slide__text--top-left,
+.slide__text--bottom-left  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			left: $grid-gutter-width-base;
+		}
+	}
+}
+.slide__text--top-right,
+.slide__text--bottom-right  {
+	.card-block {
+		@include media-breakpoint-up(lg) {
+			right: $grid-gutter-width-base;
+		}
+	}
+}
+.slide__text--center {
+	.card-block {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
+.slide__text--sidebar {
+	display: none;
+	&.in {
+		display: block;
+	}
+}
+.gradient-container.list-group {
+	&.out {
+		display: none;
+	}
+}

@@ -182,8 +182,8 @@ var timeToWaitForLast = 100;
 	                $body.removeClass('stop-scrolling');
 	                $('#overlay').remove();
 
-	                // rest the page counter
-	                page = 0;
+	                // reset the page counter
+	                page = 1;
 	                ot_page_load();
 	            },
             };
@@ -563,7 +563,6 @@ var timeToWaitForLast = 100;
 	function makeCellHtml( carousel ) {
 		page++;
 
-		//var url = '/wp-json/wp/v2/news?page=' + page + '&offset=3&per_page=3';
 		var url = '/wp-json/wp/v2/news?page=' + page + '';
 
 		$.getJSON(url).done(function( data ) {
@@ -597,7 +596,7 @@ var timeToWaitForLast = 100;
 	function ot_page_load() {
 		// Definitions
 		var eventtype = mobilecheck() ? 'touchstart' : 'click',
-			$window = $(window),
+			//$window = $(window),
 			hash = window.location.hash,
 		    $scene = $('#scene'),
 			$accordion = $('.accordion .collapse'),
@@ -606,7 +605,7 @@ var timeToWaitForLast = 100;
 			$infoClose = $('.site-info .close'),
 		    $splashTop = $('.splash-top__link'),
 		    $autoProtocol = $('.auto-protocol'),
-		    $infinite = $('.infinite'),
+		    //$infinite = $('.infinite'),
 		    $anchorScroll = $('a[href*="#"]:not([href="#"], [data-toggle="collapse"], .ot-social-links a)'),
 			isSidebarOpen = false;
 
@@ -831,13 +830,11 @@ var timeToWaitForLast = 100;
 			if (location.pathname.replace(/^\//,'') === this.pathname.replace(/^\//,'') && location.hostname === this.hostname) {
 				
 				var target = $(this.hash);
-				//var headerHeight = $('.site-header').outerHeight(true) + $('.entry-header').outerHeight(true);
 
 				target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
 				
 				if (target.length) {
 					$('html, body').animate({
-						//scrollTop: target.offset().top -headerHeight
 						scrollTop: target.offset().top
 					}, 500 );
 					return false;
@@ -873,7 +870,8 @@ var timeToWaitForLast = 100;
             e.preventDefault();
 
             var $this = $(this),
-                $target = $($this.attr('data-target'));
+                $target = $($this.attr('data-target')),
+                $body = $('body');
                 
             isSidebarOpen = !isSidebarOpen;
 
@@ -881,9 +879,10 @@ var timeToWaitForLast = 100;
             $this.toggleClass('active');
 
             if ( isSidebarOpen ) {
-                $scene.addClass('stop-scrolling').append('<div id="overlay" class="fixed-fs offcanvas__overlay" data-toggle="offcanvas" data-target="#site-navigation"></div>');
+            	$body.addClass('stop-scrolling');
+            	$scene.append('<div id="overlay" class="fixed-fs offcanvas__overlay" data-toggle="offcanvas" data-target="#site-navigation"></div>');
             } else {
-                $scene.removeClass('stop-scrolling');
+                $body.removeClass('stop-scrolling');
                 $('#overlay').remove();
             }
 

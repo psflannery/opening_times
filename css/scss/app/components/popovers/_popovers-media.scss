@@ -1,0 +1,31 @@
+// Media Popover
+// --------------------------------------------------
+
+.media-sample {
+    position: relative;
+    transition: all $ot-transition-timing ease;
+    background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="9px" height="5px" viewBox="0 0 32 32"><path d="M2 26h28v2H2z"></path></svg>');
+    background-position: -45px 100%;
+    background-repeat: repeat-x;
+    animation: zoom-reset 1.0s ease-out 1;
+    cursor: pointer;
+    color: $link-color;
+    &:after {
+		content: '';
+		background-repeat: no-repeat;
+		@include size(1.5em);
+		position: absolute;
+		right: 0;
+    }
+    &:hover {
+		animation: zooming .85s linear infinite;
+		background-color: rgba($ot-media-sample-link-color, 0.5);
+		color: $link-hover-color;
+    }
+    .accordion-header & {
+    	animation: unset;
+    	color: initial;
+    	background-image: none;
+    	padding-right: 0;
+    }
+}

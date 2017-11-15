@@ -1,0 +1,15 @@
+// Featured Content
+// --------------------------------------------------
+
+.featured-link {
+	display: block;
+	&:last-of-type {
+		margin-bottom: $spacer-y;
+	}
+}
+
+.featured-image {
+	.accordion & {
+		max-width: $feature-thumb-width;
+	}
+}

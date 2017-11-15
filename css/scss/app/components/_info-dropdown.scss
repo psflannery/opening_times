@@ -1,0 +1,58 @@
+//
+// Info dropdown
+// --------------------------------------------------
+
+.site-info__container {
+	.card {
+		border: none;
+	}
+}
+.about-team {
+	@include media-breakpoint-only(md) {
+		order: 2;
+		padding-bottom: $spacer-y * 3;
+	}
+	@include media-breakpoint-down(sm) {
+		padding-top: $spacer-y;
+		padding-bottom: $spacer-y;
+	}
+}
+.about-statement {
+	@include media-breakpoint-only(md) {
+		order: 1;
+		padding-bottom: $spacer-y * 2;
+	}
+	@include media-breakpoint-down(sm) {
+		padding-top: $spacer-y;
+		padding-bottom: $spacer-y;
+		p {
+			&:last-of-type {
+				border-bottom: $ot-border-width solid $ot-border-color;
+				margin-bottom: 0;
+				padding-bottom: $spacer-y * 2;
+			}
+		}
+	}
+}
+.about-output {
+	@include media-breakpoint-only(md) {
+		order: 3;
+	}
+	@include media-breakpoint-down(sm) {
+		padding-top: $spacer-y;
+		padding-bottom: $spacer-y;
+		p {
+			&:last-of-type {
+				border-bottom: $ot-border-width solid $ot-border-color;
+				margin-bottom: 0;
+				padding-bottom: $spacer-y * 2;
+			}
+		}
+	}
+	h2 {
+		display: inline;
+		float: left;
+		line-height: 1.42857143;
+		margin: 0 $spacer-x/2 0 0;
+	}
+}

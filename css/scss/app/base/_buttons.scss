@@ -18,3 +18,19 @@
 		}
 	}
 }
+.btn-icon-only {
+	border: none;
+	&:hover,
+	&:active {
+		background-color: $body-bg;
+		fill: blue;
+	}
+	&:focus {
+		box-shadow: none;
+	}
+}
+.btn-group {
+	.site-info__container & {
+		//margin-left: -$grid-gutter-width-base/2;
+	}
+}

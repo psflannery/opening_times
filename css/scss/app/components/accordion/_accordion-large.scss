@@ -1,0 +1,75 @@
+// Accordion Large
+// --------------------------------------------------
+.slide {
+	position: relative;
+	background-color: $body-bg;
+	padding-bottom: 2.5rem;
+	.card {
+		border: 0;
+		transition: all $ot-transition-timing ease;
+	}
+	&__bg-img {
+		> .card {
+			background-size: cover;
+			background-position: center;
+		}
+	}
+	&__text {
+		position: absolute;
+		bottom: 2.5rem;
+		left: 0;
+		margin-bottom: 0 !important;
+		max-width: 100%;
+		color: $white;
+		background: linear-gradient(to bottom, rgba($black ,0) 0%,rgba($black ,0.65) 100%);
+		p {
+			width: 50%;
+		}
+		.row > & {
+			margin-top: $spacer-y * 1.5;
+		}
+	}
+	&__video {
+		video {
+			@include size(100%);
+			vertical-align: middle;
+		}
+	}
+
+	// Modifiers
+	&--fh {
+		height: calc(100vh - 66px);
+	}
+}
+
+.slide-content {
+	&__header {
+		background-color: $body-bg;
+		border-bottom: $ot-border-width solid $ot-border-color;
+		margin-bottom: $spacer-y * 2;
+	}
+	&__title {
+	    font-size: $font-size-lg;
+	    font-weight: normal;
+	    padding-top: $spacer-y;
+	    padding-bottom: $spacer-y;
+	    margin-bottom: 0;
+	}
+	&__section {
+		overflow: hidden;
+	}
+}
+
+.slide-navigation {
+	position: fixed;
+	top: 50%;
+	right: $grid-gutter-width-base/2;
+	transform: translateY(-50%);
+	z-index: $zindex-slides-navigation;
+	.active {
+		transition: all $ot-transition-timing ease;
+		text-decoration: underline;
+		transform: scale(1.2);
+		transform-origin: right;
+	}
+}

@@ -14,3 +14,15 @@
 .cmb2-id--ot-bv-link-submit-email-honeypot {
 	display: none;
 }
+
+// Mailing List
+// --------------------------------------------------
+.ot_mailling_list_widget {
+	.control-label {
+		align-self: center;
+		margin-bottom: 0;
+		@include media-breakpoint-up(md) {
+			text-align: right;
+		}
+	}
+}

@@ -1,0 +1,19 @@
+// Footnotes
+// --------------------------------------------------
+
+.simple-footnotes {
+	ol {
+		font-size: $font-size-sm;
+		padding-left: 0;
+	}
+}
+.article-footnote-side {
+    position: fixed;
+    top: 50%;
+    right: $grid-gutter-width-base/2;
+    translte: transformY(-50%);
+    transition: $ot-transition-timing ease;
+
+    @include size(50px);
+	background: red;
+}

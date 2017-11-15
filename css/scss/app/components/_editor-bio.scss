@@ -1,0 +1,12 @@
+// Editor Bio
+// --------------------------------------------------
+
+.issue-content__bio {
+	border-top: $ot-border-width solid $ot-border-color;
+	padding-top: $spacer-y * 1.25;
+	font-size: $font-size-sm;
+	color: $gray-light;
+	strong {
+		color: $body-color;
+	}
+}
