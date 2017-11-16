@@ -121,7 +121,10 @@ var timeToWaitForLast = 100;
 			screen_xs: 480,
 		},
 		page = 1,
-		volFade_duration = 1000;
+		volFade_duration = 1000,
+		isSidebarOpen = false,
+		$body = $('body');
+
 
 	// Calculate if screen size is smaller/larger than default breakpoint
 	function screenLessThan( breakpoint ) {
@@ -131,6 +134,19 @@ var timeToWaitForLast = 100;
 
 		// Return true/false if window with is equal or smaller than breakpoint
 		return ( parseInt( windowWidth ) <= parseInt( breakpoint ) );
+	}
+
+	// Toogle scroll
+	function stopScroll( bool, el ) {
+		if ( ! screenLessThan( breakpoints.screen_md ) ) {
+			return;
+		}
+
+		if ( bool === true ) {
+			el.addClass('stop-scrolling');
+		} else {
+			el.removeClass('stop-scrolling');
+		}
 	}
 
 	// Do Lazy Load
@@ -151,8 +167,7 @@ var timeToWaitForLast = 100;
 
 	// SmoothState
 	function ot_smooth_state() {
-        var $body = $('body'),
-            $main = $('#page'),
+        var $main = $('#page'),
             $site = $('html, body'),
             //transition = 'fade',
             smoothState,
@@ -163,11 +178,9 @@ var timeToWaitForLast = 100;
 	            blacklist: '.post-edit-link',
 	            onStart: {
 	                duration: 1000,
-	                //render: function (url, $container) {
 	                render: function () {
 	                    $main.addClass('is-exiting');
 	                    $site.animate({scrollTop: 0});
-	                    //$body.addClass('stop-scrolling');
 	                }
 	            },
 	            onReady: {
@@ -177,7 +190,6 @@ var timeToWaitForLast = 100;
 	                    $container.removeClass('is-exiting');
 	                }
 	            },
-	            //onAfter: function($container, $newContent) {
 	            onAfter: function() {
 	                $body.removeClass('stop-scrolling');
 	                $('#overlay').remove();
@@ -606,8 +618,8 @@ var timeToWaitForLast = 100;
 		    $splashTop = $('.splash-top__link'),
 		    $autoProtocol = $('.auto-protocol'),
 		    //$infinite = $('.infinite'),
-		    $anchorScroll = $('a[href*="#"]:not([href="#"], [data-toggle="collapse"], .ot-social-links a)'),
-			isSidebarOpen = false;
+		    $anchorScroll = $('a[href*="#"]:not([href="#"], [data-toggle="collapse"], .ot-social-links a)');
+			//isSidebarOpen = false;
 
 		// Launch the gradients
 		makeGradients( $gradients, '.gradient-text', 240, 100, 50 );
@@ -870,8 +882,7 @@ var timeToWaitForLast = 100;
             e.preventDefault();
 
             var $this = $(this),
-                $target = $($this.attr('data-target')),
-                $body = $('body');
+                $target = $($this.attr('data-target'));
                 
             isSidebarOpen = !isSidebarOpen;
 
@@ -879,10 +890,10 @@ var timeToWaitForLast = 100;
             $this.toggleClass('active');
 
             if ( isSidebarOpen ) {
-            	$body.addClass('stop-scrolling');
+            	stopScroll( true, $body );
             	$scene.append('<div id="overlay" class="fixed-fs offcanvas__overlay" data-toggle="offcanvas" data-target="#site-navigation"></div>');
             } else {
-                $body.removeClass('stop-scrolling');
+                stopScroll( false, $body );
                 $('#overlay').remove();
             }
 
@@ -897,12 +908,16 @@ var timeToWaitForLast = 100;
 		opening_times_fs_aspect_ratio();
 		ot_search_toggle();
 
-		if ( $('.slide__text--sidebar').length > 0 ) {
+		var $slideSidebar = $('.slide__text--sidebar');
+
+		if ( $slideSidebar.length > 0 ) {
 			if ( screenLessThan( breakpoints.screen_md ) ) {
 				$('.reading__issue-list').removeClass('out');
-				$('.slide__text--sidebar').removeClass('in');
+				$slideSidebar.removeClass('in');
 			}
 		}
+
+		stopScroll( false, $body );
 	}
 
 	$(document).ready(function() {
@@ -912,8 +927,8 @@ var timeToWaitForLast = 100;
 
 		$(window).resize(function () {
 			waitForFinalEvent(function () {
-					ot_resize();
-				}, 
+				ot_resize();
+			}, 
 				timeToWaitForLast, 
 				"screenz resize"
 			);
