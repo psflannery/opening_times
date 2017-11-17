@@ -121,18 +121,31 @@
     width: $flickity-cell-width;
     padding-right: $grid-gutter-width-base/2;
     padding-left: $grid-gutter-width-base/2;
+    @include media-breakpoint-down(sm) {
+        margin-bottom: $spacer * 2;
+        border-bottom: $ot-border-width solid $ot-border-color;
+        padding-bottom: $spacer * 2;
+    }
     @include media-breakpoint-up(md) {
         color: $gray-light;
         width: $flickity-cell-width-md;
+        /*
+        &:nth-of-type(n+3) {
+            display: none;
+            .flickity-enabled & {
+                display: block;
+            }
+        }
+        */
     }
     @include media-breakpoint-up(lg) {
-        width: $flickity-cell-width-lg;   
-    }
-    &:nth-of-type(n+4) {
-        display: none;
-        .flickity-enabled & {
-            display: block;
-        }
+        width: $flickity-cell-width-lg;  
+        &:nth-of-type(n+4) {
+            display: none;
+            .flickity-enabled & {
+                display: block;
+            }
+        } 
     }
     &.is-selected {
         color: $body-color;

@@ -29,9 +29,43 @@
 			content: '\003A \0020';
 		}
 	}
+	.entry-meta & {
+		@include media-breakpoint-down(md) {
+			border-top: $ot-border-width solid $ot-border-color;
+			padding-top: $spacer-y;
+		}
+	}
 }
 .page-title {
 	font-size: $font-size-lg;
 	margin-top: $spacer * 2.25;
 	margin-bottom: $spacer * 1.25;
+}
+.entry-title {
+	font-size: $font-size-entry-title;
+	font-weight: $font-weight-bold;
+	margin-bottom: $spacer-y * 2;
+}
+.entry-content {
+	p {
+		&:last-of-type {
+			.post-type-archive-reading & {
+				padding-bottom: $spacer-y;
+			}
+		}
+	}
+	blockquote {
+		margin-left: 15%;
+	    line-height: 1;
+		font-size: $font-size-blockquote;
+	    margin-top: $spacer-y * 4;
+	    margin-bottom: $spacer-y * 4;
+	    text-transform: uppercase;
+	}
+	> h2 {
+		margin-top: $spacer-y * 3;
+		&:first-of-type {
+			margin-top: 0;
+		}
+	}
 }

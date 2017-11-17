@@ -2,11 +2,6 @@
 // Info dropdown
 // --------------------------------------------------
 
-.site-info__container {
-	.card {
-		border: none;
-	}
-}
 .about-team {
 	@include media-breakpoint-only(md) {
 		order: 2;

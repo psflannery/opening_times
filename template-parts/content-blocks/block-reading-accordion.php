@@ -18,21 +18,23 @@
     </header>
     <div id="<?php opening_times_the_slug(); ?>" class="collapse container-fluid" role="tabpanel" aria-labelledby="heading-<?php opening_times_the_slug(); ?>">
         <div class="card-block row">
+            <div class="col-12">
 
-            <?php opening_times_featured_content(); ?>
+                <?php opening_times_featured_content(); ?>
 
-            <div class="entry-content col-12">
+                <div class="entry-content">
 
-                <?php 
-                    opening_times_featured_links();
+                    <?php 
+                        opening_times_featured_links();
 
-                    the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) );
-                
-                    wp_link_pages( array(
-                        'before' => '<div class="page-links">' . __( 'Pages:', 'opening_times' ),
-                        'after'  => '</div>',
-                    ) );
-                ?>
+                        the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'opening_times' ) );
+                    
+                        wp_link_pages( array(
+                            'before' => '<div class="page-links">' . __( 'Pages:', 'opening_times' ),
+                            'after'  => '</div>',
+                        ) );
+                    ?>
+                </div>
             </div>
         </div>
         <footer class="card-block entry-meta content-divider">

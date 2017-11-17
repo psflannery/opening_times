@@ -75,29 +75,8 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 // Dev use only - comment out for production
 //@import "../dev/dev-tools.scss";
 
-// Pages
-// --------------------------------------------------
-/*
-.entry-links {
-	.card-header,
-	.card-header + div {
-		@include media-breakpoint-down(sm) {
-			padding-left: $grid-gutter-width-base;
-			padding-right: $grid-gutter-width-base;
-		}
-	}
-}
-*/
-
 // Reading Pages
 // --------------------------------------------------
-.reading {
-	&.card {
-		border: none;
-		//border-bottom: $ot-border-width solid $ot-border-color;
-		background-color: transparent;
-	}
-}
 .issue-title {
     margin-top: $spacer * 8;
     margin-bottom: $spacer * 8;
@@ -125,8 +104,12 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 }
 
 // Structure
-.issue__container {
+.page-container {
 	border-bottom: $ot-border-width solid $ot-border-color;
+}
+.page-container--page {
+	padding-top: $spacer * 3;
+	padding-bottom: $spacer * 5;	
 }
 .issue__issue {
 	@include media-breakpoint-up(md) {
@@ -184,34 +167,6 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 		}
 		&.active {
 			background-color: $body-bg;
-		}
-	}
-}
-
-// Entries
-// --------------------------------------------------
-.entry-content {
-	p {
-		&:last-of-type {
-			.post-type-archive-reading & {
-				padding-bottom: $spacer-y;
-			}
-		}
-	}
-	blockquote {
-		margin-left: 15%;
-	    line-height: 1;
-		font-size: $font-size-blockquote;
-	    margin-top: $spacer-y * 4;
-	    margin-bottom: $spacer-y * 4;
-	    text-transform: uppercase;
-	}
-}
-.entry-meta {
-	.dl-inline {
-		@include media-breakpoint-down(md) {
-			border-top: $ot-border-width solid $ot-border-color;
-			padding-top: $spacer-y;
 		}
 	}
 }

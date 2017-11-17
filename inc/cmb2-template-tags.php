@@ -139,13 +139,25 @@ function opening_times_featured_content() {
 	$iframe_src = get_post_meta( get_the_ID(), '_ot_iframe_url', true );
 	$iframe_height = get_post_meta( get_the_ID(), '_ot_iframe_height', true );
 
-	$archive_class = !is_post_type_archive( array ( 'reading' ) ) && !is_singular( array ( 'reading', 'article' ) ) ? '' : 'class="col-sm-12"';
-
 	$featured = '';
     
-    if ( has_post_thumbnail() || $oembed || $iframe_src ) {
-        if ( has_post_thumbnail() ) {
+	if ( has_post_thumbnail() || $oembed || $iframe_src ) {
+		if ( $oembed ) {
+
+			$featured .=  sprintf( 
+				'<figure>%1$s</figure>', 
+				apply_filters( 'the_content', $oembed ) 
+			);
+
+		} elseif ( $iframe_src ) {
 			
+			$featured .=  sprintf( 
+				'<div class="featured-image col-sm-3"><iframe src="about:blank" data-src="%1$s" height="%2$s" frameborder="0"></iframe></div>', 
+				esc_url( $iframe_src ), 
+				esc_attr( $iframe_height ) 
+			);
+
+		} elseif ( has_post_thumbnail() ) {
 			// Define a thumbnail size
 			$thumb_size = 'reading' === get_post_type() ? 'full' : 'accordion-thumb';
 
@@ -153,16 +165,15 @@ function opening_times_featured_content() {
 			$caption = get_post( get_post_thumbnail_id() )->post_excerpt;
 
 			// If we have a caption, mark it up.
-			$fig_caption = !empty( $caption ) ? '<figcaption class="wp-caption-text w-25">' . $caption . '</figcaption>' : '';
+			$fig_caption = ! empty( $caption ) ? '<figcaption class="wp-caption-text w-25">' . $caption . '</figcaption>' : '';
 
 			// Only show featured image caption on the reading post type
             $reading_caption = 'reading' === get_post_type() ? $fig_caption : '';
 
-            if ( '' != $link_url ) {
+            if ( $link_url ) {
 
             	$featured .= sprintf( 
-            		'<figure class="featured-image %1$s"><a href="%2$s" target="_blank" rel="noopener">%3$s</a>%4$s</figure>', 
-					$maybeCol = 'post' !== get_post_type() ? 'col-12' : '',
+            		'<figure class="featured-image"><a href="%1$s" target="_blank" rel="noopener">%2$s</a>%3$s</figure>', 
             		reset( $link_url ), 
             		get_the_post_thumbnail( get_the_ID(), $thumb_size, array( 'alt' => the_title_attribute( 'echo=0' ) ) ), 
             		$reading_caption
@@ -176,38 +187,19 @@ function opening_times_featured_content() {
             		$reading_caption
             	);
             }
+		}
+	} else {
 
-        } elseif ( '' != $iframe_src ) {
+		// We got nothing...
+		// Don't display a fallback in the reading section
+		if ( ! is_post_type_archive( array ( 'reading' ) ) && ! is_singular( array ( 'reading', 'article' ) ) ) {
+			$featured .= sprintf( 
+				'<figure class="featured-image">%1$s</figure>', 
+				opening_times_get_svg_icon( array( 'icon' => 'placeholder' ) ) 
+			);
 
-       		$featured .=  sprintf( 
-       			'<div class="featured-image col-sm-3"><iframe src="about:blank" data-src="%1$s" height="%2$s" frameborder="0"></iframe></div>', 
-       			esc_url( $iframe_src ), 
-       			esc_attr( $iframe_height ) 
-       		);
-
-        
-        } elseif ( '' != $oembed ) {
-
-        	//$featured .=  sprintf( '<figure class="%1$s">%2$s</figure>', $archive_class, wp_oembed_get( $oembed ) );
-        	$featured .=  sprintf( 
-        		'<figure %1$s>%2$s</figure>', 
-        		$archive_class, 
-        		apply_filters( 'the_content', $oembed ) 
-        	);
-        
-        }
-    } else {
-
-        // We got nothing...
-        // Don't display a fallback in the reading section
-        if ( !is_post_type_archive( array ( 'reading' ) ) && !is_singular( array ( 'reading', 'article' ) ) ) {
-        	$featured .= sprintf( 
-        		'<figure class="featured-image">%1$s</figure>', 
-        		opening_times_get_svg_icon( array( 'icon' => 'placeholder' ) ) 
-        	);
-
-        }
-    }
+		}
+	}
     
     echo $featured;
 }

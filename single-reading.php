@@ -7,12 +7,12 @@
 
 get_header(); ?>
 
-	<main id="main" class="site-main container-fluid issue__container" role="main">
+	<main id="main" class="site-main container-fluid page-container" role="main">
 		<div class="row">
             <div class="issue__issue-list col-md-2 px-0">
 
             	<?php
-                    opening_times_do_large_accordion_sidebar('<div class="sticky-top">', '</div>');
+                    opening_times_do_large_accordion_sidebar( '<div class="sticky-top">', '</div>' );
                     
             		get_template_part( 'template-parts/loops/loop', 'reading-issues' );
             	 ?>

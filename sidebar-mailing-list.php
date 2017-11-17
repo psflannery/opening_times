@@ -11,7 +11,7 @@ if ( ! is_active_sidebar( 'sidebar-2' ) ) {
 ?>
 
 <section id="collapse-mailing" class="collapse container-fluid" aria-hidden="true" role="tabpanel">
-    <div class="site-info__container">
+    <div class="site-info__container border-0">
     	
     	<?php dynamic_sidebar( 'sidebar-2' ); ?>
 

@@ -13,8 +13,8 @@
 
 get_header(); ?>
 
-    <main id="main" class="site-main" role="main">
-        <div id="accordion" class="accordion gradient-container infinite" role="tablist" aria-multiselectable="true">
+    <main id="main" class="site-main" role="main" data-transition="fade">
+        <div id="accordion" class="accordion gradient-container infinite sceneElement" role="tablist" aria-multiselectable="true">
 
             <?php 
             if ( have_posts() ) :

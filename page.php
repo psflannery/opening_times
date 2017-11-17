@@ -12,15 +12,17 @@
 
 get_header(); ?>
 
-    <main id="main" class="site-main gradienter container-fluid container-padding" role="main">
+    <main id="main" class="site-main gradienter container-fluid page-container page-container--page" role="main" data-transition="fade">
+    	<div class="row sceneElement">
 
-        <?php 
-        while ( have_posts() ) : the_post();
+	        <?php 
+	        while ( have_posts() ) : the_post();
 
-            get_template_part( 'template-parts/content', 'page' );
+	            get_template_part( 'template-parts/content', 'page' );
 
-        endwhile; ?>
+	        endwhile; ?>
 
+   		</div>
     </main>
 
 <?php get_footer(); ?>

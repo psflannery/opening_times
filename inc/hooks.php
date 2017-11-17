@@ -41,14 +41,18 @@ add_filter( 'body_class', 'opening_times_body_classes' );
 function opening_times_post_classes( $classes, $class, $post_id ) {
  
     if ( is_search() ) {
-    	$classes[] = 'search-result';
+    	$classes[] = 'search-result card border-0';
     }
 
     if ( 'news' !== get_post_type() ) {
     	$classes[] = 'panel';
     }
 
-    $classes[] = 'card';
+    if ( is_page() && 'news' !== get_post_type() ) {
+    	$classes[] = 'col-md-8 col-lg-6 mx-auto bg-transparent';
+    }
+
+    $classes[] = 'card border-0 bg-transparent';
 	
     return $classes;
 }
