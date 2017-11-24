@@ -4,7 +4,7 @@ Opening Times
 The theme for the main Opening Times website.
 http://otdac.org/
 
-Version: 2.0.0
+Version: 2.0.1
 Date: 14/11/17
 
 Contains the main theme files responsible for presentation. All theme agnostic functionality like custom post-types and taxanomies are located in a separate plugin.
