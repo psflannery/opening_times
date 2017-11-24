@@ -454,7 +454,7 @@ function opening_times_do_large_accordion( $before = '', $after = '' ) {
 
 			if( '' == ( $text || $bg_embed ) && '' != $bg_audio ) {
 				$title = sprintf(
-					'<h2 class="slide-content__title media-sample" data-media="%1$s">%2$s</h2>',
+					'<h2 class="slide-content__title media-sample" data-position="bottom" data-media="%1$s">%2$s</h2>',
 					wp_get_attachment_url( $bg_audio ),
 					esc_html( $accordion_panel['slide_title'] )
 				);
