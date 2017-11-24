@@ -58,6 +58,18 @@ $ot-page-transition-suration: 1s;
 //##
 
 $btn-nav-size:				  1.5rem;
+$input-btn-focus-width:       .2rem;
+
+//== Forms
+//
+//##
+// Align with current bootstrap validation
+$form-feedback-margin-top:          $form-text-margin-top;
+$form-feedback-font-size:           $small-font-size;
+$form-feedback-valid-color:         $brand-success;
+$form-feedback-invalid-color:       $brand-danger;
+
+$input-focus-width:                     $input-btn-focus-width;
 
 //== Media Sample Links
 //

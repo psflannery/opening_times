@@ -34,4 +34,6 @@ get_header(); ?>
         </div>
     </main>
 
+    <?php get_template_part( 'template-parts/underscore-templates' ); ?>
+
 <?php get_footer(); ?>

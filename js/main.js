@@ -228,6 +228,35 @@ var timeToWaitForLast = 100;
 		}
 	}
 
+	// Check form values match
+	function matchValues( val, confirm ) {
+		var value1 = val[0].value,
+			value2 = confirm[0].value,
+			$feedback = confirm.next('.invalid-feedback');
+
+		if ( value1 !== value2 ) {
+			$feedback.text( $feedback.data('text-original') );
+		} else {
+			$feedback.data('text-original', $feedback.text());
+			$feedback.text( $feedback.data('text-swap') );
+		}
+	}
+
+	// Validate Forms
+	function formValidation( el ) {
+		var form = el[0];
+
+		form.addEventListener( 'submit', function(e) {
+			if ( form.checkValidity() === false ) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+			el.addClass('was-validated');
+
+			matchValues( $('#field-ot-mail'), $('#field-ot-mail-confirm') );
+		}, false);
+	}
+
  	// Hide popovers
 	function hidePopover( el ) {
 		if( $('.popover').length ) {
@@ -501,7 +530,7 @@ var timeToWaitForLast = 100;
 		$(el).each(function() {
 			var $this = $(this),
 				mediaSrc = $this.data('media'),
-				placementType = $this.closest('.slide__text--sidebar').length > 0 ? 'right' : 'bottom',
+				placementType = $this.data('position'),
 				triggerType = $this.closest('.accordion-header').length > 0 ? 'hover' : 'click',
 				mediaType;
 
@@ -630,6 +659,9 @@ var timeToWaitForLast = 100;
 		// Call aspect ratio
 		opening_times_fs_aspect_ratio();
 		//$window.resize(opening_times_fs_aspect_ratio).trigger('resize');
+		
+		// Form validation
+		formValidation( $('#mailing-list-subscribe') );
 
 		$accordion.on('show.bs.collapse', function () {
 			var $this = $(this);

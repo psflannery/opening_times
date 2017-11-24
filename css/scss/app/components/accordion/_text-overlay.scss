@@ -50,9 +50,11 @@
 }
 .slide__text--center {
 	.card-block {
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		@include media-breakpoint-up(lg) {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
 	}
 }
 .slide__text--sidebar {

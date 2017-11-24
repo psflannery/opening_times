@@ -7,7 +7,7 @@
 		"uuidString": "AE280D63-0A95-44C0-B1EC-9C3ADD3FC45B"
 		}
 	],
-"creatorBuild": "26097",
+"creatorBuild": "26148",
 "files": {
 	"\/404.php": {
 		"cB": 0,
@@ -2940,6 +2940,19 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"\/css\/scss\/app\/base\/_fonts.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/css\/scss\/app\/css\/_fonts.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
 	"\/css\/scss\/app\/base\/_forms.scss": {
 		"aP": 0,
 		"bl": 0,
@@ -4344,6 +4357,20 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"\/fonts\/eldorado-romanitalic.woff": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/fonts\/eldorado-romanitalic.woff",
+		"oF": 0
+		},
+	"\/fonts\/eldorado-romanitalic.woff2": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/fonts\/eldorado-romanitalic.woff2",
+		"oF": 0
+		},
 	"\/footer.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4573,6 +4600,16 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/js\/loop.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/js\/min\/loop-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/js\/main.js": {
 		"ft": 64,
 		"ma": 0,
@@ -4589,6 +4626,16 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "\/js\/min\/main.min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/js\/min\/loop-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/js\/min\/min\/loop-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -4835,6 +4882,13 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/template-parts\/loops\/loop-reading-issues.php",
+		"oF": 0
+		},
+	"\/template-parts\/underscore-templates.php": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/template-parts\/underscore-templates.php",
 		"oF": 0
 		}
 	},

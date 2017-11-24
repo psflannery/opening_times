@@ -17,12 +17,6 @@ function opening_times_custom_queries( $query ) {
 		$query->set('posts_per_page', '-1');
     }
 
-    /*
-    if( $query->is_main_query() && !is_admin() && is_home() ) {
-		$query->set('posts_per_page', '3');
-    }
-    */
-
     if( $query->is_main_query() && !is_admin() && !$query->is_feed() && is_post_type_archive( 'reading' ) ) {
     	$query->set( 'post_parent', 0 );
     }
@@ -36,7 +30,7 @@ add_action('pre_get_posts', 'opening_times_custom_queries');
  * @link http://www.billerickson.net/infinite-scroll-in-wordpress
  *
  * @since Opening Times 1.0.0
- */
+ *
 function opening_times_ajax_load_more() {
 	$args = isset( $_POST['query'] ) ? array_map( 'esc_attr', $_POST['query'] ) : array();
 	$args['post_type'] = isset( $args['post_type'] ) ? esc_attr( $args['post_type'] ) : 'post';
@@ -66,13 +60,14 @@ function opening_times_ajax_load_more() {
 }
 add_action( 'wp_ajax_opening_times_ajax_load_more', 'opening_times_ajax_load_more' );
 add_action( 'wp_ajax_nopriv_opening_times_ajax_load_more', 'opening_times_ajax_load_more' );
+*/
 
 
 /**
  * Enqueue the javascript for Load More
  *
  * @since Opening Times 1.0.0
- */
+ *
 function opening_times_load_more_js() {
 	if ( is_singular() ) 
     	return;
@@ -86,3 +81,50 @@ function opening_times_load_more_js() {
 	wp_localize_script( 'opening-times-main', 'otloadmore', $args );
 }
 add_action( 'wp_enqueue_scripts', 'opening_times_load_more_js' );
+*/
+
+/**
+ * Enqueue the javascript for Load More
+ *
+ * @since Opening Times 1.0.0
+ *
+function opening_times_load_more_js() {
+	if ( is_home() || is_front_page() || is_archive() || is_search() ) {
+		global $wp_rewrite;
+		
+		wp_enqueue_script( 'opening-times-backbone-loop', get_template_directory_uri() . '/js/loop.js', array( 'jquery', 'backbone', 'underscore', 'wp-api'  ), $version, true );
+		
+		$queried_object = get_queried_object();
+		
+		$local = array(
+			'loopType' => 'home',
+			'queriedObject' => $queried_object,
+			'pathInfo' => array(
+				'author_permastruct' => $wp_rewrite->get_author_permastruct(),
+				'host' => preg_replace( '#^http(s)?://#i', '', untrailingslashit( get_option( 'home' ) ) ),
+				'path' => opening_times_get_request_path(),
+				'use_trailing_slashes' => $wp_rewrite->use_trailing_slashes,
+				'parameters' => opening_times_get_request_parameters(),
+			),
+		);
+		
+		if ( is_category() || is_tag() || is_tax() ) {
+			$local['loopType'] = 'archive';
+			$local['taxonomy'] = get_taxonomy( $queried_object->taxonomy );
+		} elseif ( is_search() ) {
+			$local['loopType'] = 'search';
+			$local['searchQuery'] = get_search_query();
+		} elseif ( is_author() ) {
+			$local['loopType'] = 'author';
+		}
+		
+		//set the page we're on so that Backbone can load the proper state
+		if ( is_paged() ) {
+			$local['page'] = absint( get_query_var( 'paged' ) ) + 1;
+		}
+		
+		wp_localize_script( 'opening-times-backbone-loop', 'settings', $local );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'opening_times_load_more_js' );
+*/
