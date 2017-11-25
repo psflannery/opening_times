@@ -611,6 +611,10 @@ Use it to make something cool, have fun, and share what you've learned with othe
 
 The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012-2013 Automattic, Inc.
 */
+@font-face {
+  font-family: 'Eldorado';
+  src: url("fonts/eldorado-romanitalic.woff2") format("woff2"), url("fonts/eldorado-romanitalic.woff") format("woff"); }
+
 /*!
  * Bootstrap v4.0.0-alpha.6 (https://getbootstrap.com)
  * Copyright 2011-2017 The Bootstrap Authors
@@ -7168,10 +7172,6 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
 @media print {
   .hidden-print {
     display: none !important; } }
-
-@font-face {
-  font-family: 'Eldorado';
-  src: url("fonts/eldorado-romanitalic.woff2") format("woff2"), url("fonts/eldorado-romanitalic.woff") format("woff"); }
 
 html {
   font-size: 13px;

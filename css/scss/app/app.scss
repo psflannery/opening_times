@@ -28,6 +28,9 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 // Load core variables and mixins
 // --------------------------------------------------
 
+// *** Fonts ***
+@import "base/_fonts";
+
 // *** Vendor ***
 @import "_custom";
 @import "../bootstrap/bootstrap";
@@ -36,7 +39,6 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 @import "base/_variables";
 
 // *** Base ***
-@import "base/_fonts";
 @import "base/_core";
 @import "base/_typography";
 @import "base/_forms";

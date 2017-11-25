@@ -49,6 +49,14 @@ function opening_times_register_metaboxes() {
             'schema'          => null,
         )
     );
+    register_rest_field( 'post',
+        '_ot_embed_url',
+        array(
+            'get_callback'    => 'opening_times_get_rest_oembed',
+            'update_callback' => null,
+            'schema'          => null,
+        )
+    );
 }
 
 /**
@@ -64,4 +72,21 @@ function opening_times_register_metaboxes() {
  */
 function opening_times_get_rest_post_meta( $object, $field_name, $request ) {
     return get_post_meta( $object[ 'id' ], $field_name, true );
+}
+
+/**
+ * Convert value of oembed field and generate markup.
+ * 
+ * @param  array $object Details of current post.
+ * @param  string $field_name Name of field.
+ * @param  WP_REST_Request $request Current request
+ * 
+ * @return mixed
+ *
+ * @since Opening Times 1.0.0
+ */
+function opening_times_get_rest_oembed( $object, $field_name, $request ) {    
+    $url = esc_url( get_post_meta( $object[ 'id' ], $field_name, true ) );
+    
+    return wp_oembed_get( $url );
 }

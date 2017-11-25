@@ -148,7 +148,7 @@ function opening_times_scripts() {
 	if ( is_home() || is_front_page() || is_archive() || is_search() ) {
 		global $wp_rewrite;
 		
-		//wp_enqueue_script( 'opening-times-backbone-loop', get_template_directory_uri() . '/js/loop.js', array( 'jquery', 'backbone', 'underscore', 'wp-api'  ), $version, true );
+		wp_enqueue_script( 'opening-times-backbone-loop', get_template_directory_uri() . '/js/loop.js', array( 'jquery', 'backbone', 'underscore', 'wp-api'  ), $version, true );
 		
 		$queried_object = get_queried_object();
 		

@@ -206,10 +206,10 @@
 
 				if( 2000 > offset ) {
 					loading = true;
-								console.log(posts);
+					console.log(posts);
+					console.log(options);
 
 					var $setContainer = $( '<div data-page-num="' + posts.state.currentPage + '" class="post-set"></div>' );
-					console.log(posts);
 					posts.each( function( model ) {
 						$setContainer.append( postTemplate( { post: model.attributes, settings: settings } ) );
 					});

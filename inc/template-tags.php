@@ -123,12 +123,12 @@ function opening_times_editor_bio( $before = '', $after = '', $echo=true ) {
 
 	    $bio_classes = count($authors) > 1 && has_term( 'accordion-xl', 'format' ) ? 'col-md-4 vcard' : 'col-md-8 vcard';
 
-	    // TODO - fix what happens if no website/url entered
 		foreach( $authors as $coauthor ) {
-			$url = $coauthor->website ? $coauthor->website : $coauthor->user_url;
+			//$url = $coauthor->website ? $coauthor->website : $coauthor->user_url;
+			$url = $coauthor->website;
 			$desc = wpautop( $coauthor->description );
 
-	    	if ( empty( $url ) ) {
+	    	if ( empty( $url || $desc ) ) {
 	    		return;
 	    	}
 
