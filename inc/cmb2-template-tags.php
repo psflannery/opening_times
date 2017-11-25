@@ -217,10 +217,15 @@ function opening_times_featured_links() {
 	$links = '';
 
 	if ( '' != $link_url ) {
-		foreach ( $link_url as $link ) {			
+		foreach ( $link_url as $link ) {
+			$url_data = parse_external_url($link);
+
 			$links .= sprintf( 
-				'<a href="%1$s" class="featured-link word-wrap" target="_blank" rel="noopener">%1$s</a>', 
-				esc_url( $link ) 
+				'<a href="%1$s" class="featured-link word-wrap" %2$s %3$s>%1$s</a>', 
+				esc_url( $link ),
+				//$url_data['target'],
+				$url_data['target'] != '' ? 'target="' . $url_data['target'] . '"' : '',
+				$url_data['rel'] != '' ? 'rel="' . $url_data['rel'] . '"' : ''
 			);
 		}
 	}

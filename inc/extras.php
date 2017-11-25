@@ -226,3 +226,57 @@ function opening_times_get_request_parameters() {
 
     return $uri;
 }
+
+/**
+ * Determine if a URL is an internal or external
+ * 
+ * @param  string $url            The URL to examine
+ * @param  string $internal_class A class to apply to internal links
+ * @param  string $external_class A class to apply to external links
+ * @return array                  Array of attributes
+ *
+ * @link( https://stackoverflow.com/questions/25090563/php-determine-if-a-url-is-an-internal-or-external-url, source)
+ *
+ * @since opening_times 1.0.0
+ */
+function parse_external_url( $url = '', $internal_class = 'internal-link', $external_class = 'external-link') {
+    // Abort if parameter URL is empty
+    if( empty($url) ) {
+        return false;
+    }
+
+    // Parse home URL and parameter URL
+    $link_url = parse_url( $url );
+    //$home_url = parse_url( $_SERVER['HTTP_HOST'] );     
+    $home_url = parse_url( home_url() );
+
+    // Decide on target
+    if( empty($link_url['host']) ) {
+        // Is an internal link
+        $target = '';
+        $rel = '';
+        $class = $internal_class;
+
+    } elseif( $link_url['host'] == $home_url['host'] ) {
+        // Is an internal link
+        $target = '';
+        $rel = '';
+        $class = $internal_class;
+
+    } else {
+        // Is an external link
+        $target = '_blank';
+        $rel = 'noopener';
+        $class = $external_class;
+    }
+
+    // Return array
+    $output = array(
+        'class'     => $class,
+        'target'    => $target,
+        'rel'       => $rel,
+        'url'       => $url
+    );
+
+    return $output;
+}
