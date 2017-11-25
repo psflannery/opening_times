@@ -41,7 +41,6 @@
 
             <?php 
                 opening_times_collection_meta();
-                echo opening_times_get_social_share();
                 edit_post_link( __( 'Edit', 'opening_times' ), '<span class="edit-link">', '</span>'); 
             ?>
 
