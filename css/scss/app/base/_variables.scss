@@ -41,10 +41,12 @@ $ot-border-color: $black;
 //
 //##
 
-$ot-drop-shadow-large: 0 0 4rem 3px rgba($black, 0.3);
-$ot-drop-shadow-mid: 0 0 1.5rem rgba($black, 0.3);
-$ot-drop-shadow-mid-light: 0 0 1.5rem rgba($black, 0.05);
-//0 0 20px 7px #f1f1f1;
+$ot-drop-shadow-lg: 0 0 4rem 3px rgba($black, 0.3);
+$ot-drop-shadow-lg-light: 0 0 4rem 3px rgba($black, 0.05);
+$ot-drop-shadow-md: 0 0 1.5rem rgba($black, 0.3);
+$ot-drop-shadow-md-light: 0 0 1.5rem rgba($black, 0.05);
+$ot-drop-shadow-sm: 0 0 1rem rgba($black, 0.3);
+$ot-drop-shadow-sm-light: 0 0 1rem rgba($black, 0.05);
 
 //== Transitions
 //

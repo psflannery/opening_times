@@ -1,9 +1,9 @@
 ( function( $, Backbone, _, settings, undefined ) {
 	'use strict';
 
-	var document = window.document;
-
-	var $postContainer = $( '.infinite' ),
+	var document = window.document,
+		$postContainer = $( '.infinite' ),
+		dateTemplate = $( '#date-template' )[0],
 		contentTemplate = $( '#content-template' )[0];
 
 	// Abort completely if we don't have this stuff
@@ -13,18 +13,18 @@
 
 	var postTemplate = _.template( contentTemplate.innerHTML );
 
-	var origURL = window.location.href;
-	var offset = 1;
-	var page = 1;
-	var timer;
+	var origURL = window.location.href,
+		offset = 1,
+		page = 1,
+		timer;
 
-	var posts = new wp.api.collections.Posts();
-	var options = {
-		data: {
-			page: settings.page || 2,
-			_embed: ''
-		}
-	};
+	var posts = new wp.api.collections.Posts(),
+		options = {
+			data: {
+				page: settings.page || 2,
+				_embed: ''
+			}
+		};
 
 	if ( 'archive' === settings.loopType ) {
 		options.data.filter = {};
@@ -66,12 +66,11 @@
 			pageNum = false;
 
 		$postContainer.find( '.post-set' ).each( function() {
-			var $currentSet = $( this );
-
-			var setTop = $currentSet.offset().top;
-			var setHeight = $currentSet.outerHeight( false );
-			var setBottom = setTop + setHeight;
-			var setPageNum = parseInt( $currentSet.attr( 'data-page-num' ) );
+			var $currentSet = $( this ),
+				setTop = $currentSet.offset().top,
+				setHeight = $currentSet.outerHeight( false ),
+				setBottom = setTop + setHeight,
+				setPageNum = parseInt( $currentSet.attr( 'data-page-num' ) );
 
 			if ( 0 === setHeight ) {
 				$( '> *', this ).each( function() {
@@ -79,13 +78,16 @@
 				});
 			}
 
-			if ( setTop < windowTop && setBottom > windowBottom ) { // top of set is above window, bottom is below
+			// top of set is above window, bottom is below
+			if ( setTop < windowTop && setBottom > windowBottom ) {
 				setsInView.push( { 'id': $currentSet.attr( 'id' ), 'top': setTop, 'bottom': setBottom, 'pageNum': setPageNum } );
-			} 
-			else if ( setTop > windowTop && setTop < windowBottom ) { // top of set is between top (gt) and bottom (lt)
+			}
+			// top of set is between top (gt) and bottom (lt)
+			else if ( setTop > windowTop && setTop < windowBottom ) {
 				setsInView.push( { 'id': $currentSet.attr( 'id' ), 'top': setTop, 'bottom': setBottom, 'pageNum': setPageNum } );
-			} 
-			else if ( setBottom > windowTop && setBottom < windowBottom ) { // bottom of set is between top (gt) and bottom (lt)
+			}
+			// bottom of set is between top (gt) and bottom (lt)
+			else if ( setBottom > windowTop && setBottom < windowBottom ) {
 				setsInView.push( { 'id': $currentSet.attr( 'id' ), 'top': setTop, 'bottom': setBottom, 'pageNum': setPageNum } );
 			}
 
@@ -110,9 +112,9 @@
 
 			// Identify the IS set that comprises the majority of the current window and set the URL to it.
 			$.each( setsInView, function( i, setData ) {
-				var topInView = 0;
-				var bottomInView = 0;
-				var percentOfView = 0;
+				var topInView = 0,
+					bottomInView = 0,
+					percentOfView = 0;
 
 				// Figure percentage of view the current set represents
 				if ( setData.top > windowTop && setData.top < windowBottom ) {
@@ -158,8 +160,6 @@
 
 	/**
 	 * Grab more posts if more button is clicked and append them to loop
-	 */
-	/*
 	function setupMoreListener() {
 		$postContainer.on( 'click', '.more-button', function( event ) {
 			event.preventDefault();
@@ -182,6 +182,7 @@
 		});
 	}
 	*/
+
 	function setupMoreListener() {
 		var $loadMore = $('.site-main > div');
 
@@ -206,8 +207,8 @@
 
 				if( 2000 > offset ) {
 					loading = true;
-					console.log(posts);
-					console.log(options);
+					//console.log(posts);
+					//console.log(options);
 
 					var $setContainer = $( '<div data-page-num="' + posts.state.currentPage + '" class="post-set"></div>' );
 					posts.each( function( model ) {

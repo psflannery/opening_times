@@ -29,7 +29,6 @@ function opening_times_the_slug( $echo = true ) {
 	return $slug;
 }
 
-
 /**
  * Get the Post Parent slug
  * 
@@ -252,13 +251,13 @@ function parse_external_url( $url = '', $internal_class = 'internal-link', $exte
 
     // Decide on target
     if( empty($link_url['host']) ) {
-        // Is an internal link
+        // Is a relative internal link
         $target = '';
         $rel = '';
         $class = $internal_class;
 
     } elseif( $link_url['host'] == $home_url['host'] ) {
-        // Is an internal link
+        // Is an absolute internal link
         $target = '';
         $rel = '';
         $class = $internal_class;

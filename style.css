@@ -6637,6 +6637,10 @@ svg {
     border-top: 1px solid #000;
     padding-top: 1rem; } }
 
+hr {
+  margin-top: 3rem;
+  margin-bottom: 3rem; }
+
 .page-title {
   font-size: 1.25rem;
   margin-top: 2.25rem;
@@ -6864,6 +6868,21 @@ svg {
   left: -9999px;
   overflow: hidden; }
 
+.top-1 {
+  top: 0.25rem; }
+
+.top-2 {
+  top: 0.5rem; }
+
+.top-3 {
+  top: 1rem; }
+
+.top-4 {
+  top: 1.5rem; }
+
+.top-5 {
+  top: 1.5rem; }
+
 img.lazyload {
   -webkit-transition: all 0.25s 0.5s;
   transition: all 0.25s 0.5s;
@@ -6892,6 +6911,14 @@ img.lazyload {
   .embed__aspect-ratio iframe {
     width: 100%;
     height: 100%; }
+
+.aspect-ratio,
+.aspect-ratio--js {
+  position: relative; }
+  .aspect-ratio > img,
+  .aspect-ratio--js > img {
+    position: absolute;
+    top: 0; }
 
 .intrinsic-ratio {
   position: relative; }
@@ -7842,11 +7869,20 @@ img.lazyload {
       padding-left: 30px;
       padding-right: 30px; } }
 
-.reading__issue-list .list-group-item {
-  background-color: #fff; }
-  @media (min-width: 768px) {
-    .reading__issue-list .list-group-item {
-      background-color: transparent; } }
-  .reading__issue-list .list-group-item.active {
-    background-color: #fff; }
+.reading__issue-list {
+  overflow-x: hidden; }
+  .reading__issue-list .list-group-item {
+    background-color: #fff;
+    opacity: 0.5;
+    -webkit-transition: opacity .3s ease;
+    transition: opacity .3s ease; }
+    @media (min-width: 768px) {
+      .reading__issue-list .list-group-item {
+        background-color: transparent; } }
+    .reading__issue-list .list-group-item.active {
+      background-color: #fff;
+      border-bottom-color: inherit;
+      -webkit-box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+              box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+      opacity: 1; }
 /*# sourceMappingURL=style.css.map */

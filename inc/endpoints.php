@@ -57,6 +57,14 @@ function opening_times_register_metaboxes() {
             'schema'          => null,
         )
     );
+    register_rest_field( 'post',
+        '_ot_artist_bio',
+        array(
+            'get_callback'    => 'opening_times_get_tax_description',
+            'update_callback' => null,
+            'schema'          => null,
+        )
+    );
 }
 
 /**
@@ -88,5 +96,27 @@ function opening_times_get_rest_post_meta( $object, $field_name, $request ) {
 function opening_times_get_rest_oembed( $object, $field_name, $request ) {    
     $url = esc_url( get_post_meta( $object[ 'id' ], $field_name, true ) );
     
-    return wp_oembed_get( $url );
+    //return wp_oembed_get( $url );
+    return apply_filters( 'the_content', $url );
+}
+
+/**
+ * Get the description for the artist taxonomy
+ * 
+ * @return string taxonomy description
+ *
+ * @since Opening Times 1.0.0
+ */
+function opening_times_get_tax_description() {
+    $tax_description = get_the_terms( get_the_ID(), 'artists' );
+
+    if ( '' == $tax_description ) {
+        return;
+    }
+
+    foreach ( $tax_description as $tax ) {
+        if (  $tax->description ) {
+            return wpautop( wptexturize( $tax->description ) );
+        }
+    };
 }

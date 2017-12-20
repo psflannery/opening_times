@@ -24,7 +24,6 @@
 .screen-reader-text {
 	@extend .sr-only;
 }
-
 .fixed-fs {
     position: fixed;
     top: 0;
@@ -44,6 +43,21 @@
     top: -9999px;
     left: -9999px;
     overflow: hidden;
+}
+.top-1 {
+	top: $spacer * .25;
+}
+.top-2 {
+	top: $spacer * .5;
+}
+.top-3 {
+	top: $spacer;
+}
+.top-4 {
+	top: $spacer * 1.5;
+}
+.top-5 {
+	top: $spacer * 1.5;
 }
 
 // == Image
@@ -76,6 +90,14 @@ img.lazyload {
 	left: 0;
 	iframe {
 		@include size(100%);
+	}
+}
+.aspect-ratio,
+.aspect-ratio--js {
+	position: relative;
+	> img {
+		position: absolute;
+		top: 0;
 	}
 }
 .intrinsic-ratio {

@@ -13,7 +13,6 @@ $args = array(
 
 $reading_issues = new WP_Query( $args );
 
-//$current_issue = $post->post_name;
 $current_issue = opening_times_the_slug( false );
 
 if ( $reading_issues->have_posts() ) :

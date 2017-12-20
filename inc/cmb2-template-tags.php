@@ -223,7 +223,6 @@ function opening_times_featured_links() {
 			$links .= sprintf( 
 				'<a href="%1$s" class="featured-link word-wrap" %2$s %3$s>%1$s</a>', 
 				esc_url( $link ),
-				//$url_data['target'],
 				$url_data['target'] != '' ? 'target="' . $url_data['target'] . '"' : '',
 				$url_data['rel'] != '' ? 'rel="' . $url_data['rel'] . '"' : ''
 			);
@@ -386,109 +385,139 @@ function opening_times_reading_issue_standfirst( $before = '', $after = '', $ech
     	return $standfirst;
 }
 
-
 /**
- * Output the Reading Section Large Accordion
+ * Output the Reading Section Accordion
  * 
  * @param  string $before Optional Markup to prepend to the large accordion. Default empty.
  * @param  string $after  Optional Markup to append to the large accordion. Default empty.
- * @return string         Large Accordion markup
+ * @return string         Reading Section Accordion markup
  *
  * @since Opening Times 1.0.0
  */
-function opening_times_do_large_accordion( $before = '', $after = '' ) {
-    $accordion_panels = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
+function opening_times_accordion_type() {
+	$accordionXl = false;
+	
+	if( has_term( 'accordion-xl', 'format' ) ) {
+		$accordionXl = true;
+	}
+
+	return $accordionXl;
+}
+function opening_times_do_reading_accordion( $before = '', $after = '' ) {
+	$accordion_panels = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
+
+	if ( '' == $accordion_panels ) {
+		return;
+	}
+
+	$accordion_classes = opening_times_accordion_type() ? 'accordion--large' : 'accordion mb-5';
+
+	$accordion = '<div id="accordion-' . opening_times_the_slug(false) . '" class="accordion gradient-container ' . $accordion_classes . '" role="tablist" aria-multiselectable="true">';
     
-    if ( '' == $accordion_panels ) {
-        return;
-    }
-
-    $accordion = '<div id="accordion-xl" class="accordion accordion--large gradient-container" role="tablist" aria-multiselectable="true">';
-
-    $i = 0;
-    foreach ( (array) $accordion_panels as $key => $accordion_panel ) {
-    	$title = $text = $media_atts = $text_position = $lazy_load = $bg_color = $bg_img = $bg_audio = $bg_video = $bg_embed = '';
-
-    	// Set Classes and attributes
+	$i = 0;
+	foreach ( (array) $accordion_panels as $key => $accordion_panel ) {
+		$title = $sub_title = $text = $media_atts = $text_position = $lazy_load = $bg_color = $bg_img = $bg_audio = $bg_video = $bg_embed = $links = '';
+		
+		// Set Classes and attributes
 		$classes = array();
 		$data_attributes = array();
-
+		
 		if ( isset( $accordion_panel['media_atts'] ) && ! empty( $accordion_panel['media_atts'] ) ) {
-			
-			$atts = array();
 
+			$atts = array();
 			foreach( $accordion_panel['media_atts'] as $key => $media_att ) {
 				if ( $media_att === 'auto-play' ) {
 					$atts[] = 'data-autoplay';
 				} 
-
+		
 				if ( $media_att === 'loop' ) {
 					$atts[] = 'loop';
 				}
-
+		
 				if ( $media_att === 'controls' ) {
 					$atts[] = 'controls';
 				}
-
+				
 				if ( $media_att === 'muted' ) {
 					$atts[] = 'muted';
 				}
-
+		
 				if ( $media_att === 'keepplaying' ) {
 					$atts[] = 'data-keepplaying';
 				}
-
+				
 				if ( $media_att === 'playsinline' ) {
 					$atts[] = 'playsinline';
 				}
 			}
-
-        	$atts = array_map( 'esc_attr', $atts );
-        	$media_atts = join( ' ', $atts );
+		
+			$atts = array_map( 'esc_attr', $atts );
+			$media_atts = join( ' ', $atts );
 		}
 
 		// Markup for the title
 		if ( isset( $accordion_panel['slide_title'] ) && ! empty( $accordion_panel['slide_title'] ) ) {
-
 			$text = $accordion_panel['slide_text'];
-			$bg_embed = $accordion_panel['slide_bg_embed'];
 
+			$accordion_title_class = opening_times_accordion_type() ? 'slide-content__title' : '';
+		
 			if ( isset( $accordion_panel['slide_bg_audio_id'] ) && ! empty( $accordion_panel['slide_bg_audio_id'] ) ) {
 				$bg_audio = $accordion_panel['slide_bg_audio_id'];
 			}
-
-			if( '' == ( $text || $bg_embed ) && '' != $bg_audio ) {
+		
+			if( '' == $text && '' != $bg_audio ) {
 				$title = sprintf(
-					'<h2 class="slide-content__title media-sample" data-position="bottom" data-media="%1$s">%2$s</h2>',
+					'<h2 class="%1$s media-sample mb-0" data-position="bottom" data-media="%2$s">%3$s</h2>',
+					$accordion_title_class,
 					wp_get_attachment_url( $bg_audio ),
 					esc_html( $accordion_panel['slide_title'] )
 				);
 			} else {
 				$title = sprintf(
-                    '<h2 class="slide-content__title">%s</h2>',
-                    esc_html( $accordion_panel['slide_title'] )
-                );
+					'<h2 class="%1$s col mb-0 text-truncate">%2$s</h2>',
+					$accordion_title_class,
+					esc_html( $accordion_panel['slide_title'] )
+				);
 			}
-    	}
+		}
+
+		// Markup for the subtitle
+		if ( isset( $accordion_panel['slide_sub-title'] ) && ! empty( $accordion_panel['slide_sub-title'] ) ) {
+			$sub_title = sprintf(
+				'<h2 class="col mb-0 text-right">%1$s</h2>',
+				esc_html( $accordion_panel['slide_sub-title'] )
+			);
+		}
+
+		// Markup for the links
+		if ( isset( $accordion_panel['link_url'] ) && ! empty( $accordion_panel['link_url'] ) ) {
+			foreach ( $accordion_panel['link_url'] as $link ) {
+				$url_data = parse_external_url( $link );
+
+				$links .= sprintf(
+					'<a href="%1$s" class="featured-link word-wrap" %2$s %3$s>%1$s</a>',
+					esc_url( $url_data['url'] ),
+					$url_data['target'] != '' ? 'target="' . $url_data['target'] . '"' : '',
+					$url_data['rel'] != '' ? 'rel="' . $url_data['rel'] . '"' : ''
+				);
+			}
+		}
 
 		// Markup for the text
 		if ( isset( $accordion_panel['slide_text'] ) && ! empty( $accordion_panel['slide_text'] ) ) {
 			global $wp_embed;
-
-			//$text = $accordion_panel['slide_text'];
-
+		
 			$text = sprintf(
-				'<div class="card-block col-lg-6">%1$s</div>',
+				'<div class="%1$s">%2$s</div>',
+				$accordion_text_class = opening_times_accordion_type() ? 'card-block col-lg-6' : 'entry-content mb-3',
 				apply_filters( 'the_content', $accordion_panel['slide_text'] )
-				//edit_post_link( __( 'Edit', 'opening_times' ), '<span class="edit-link">', '</span>'); 
 			);
-
-			$data_attributes[] = 'data-caption="#caption-' . $i . '"';
+			
+			//$data_attributes[] = 'data-caption="#caption-' . $i . '"';
 		}
 
 		// Set the text position
 		if ( isset( $accordion_panel['text_position'] ) && ! empty( $accordion_panel['text_position'] ) ) {
-
 			switch( $accordion_panel['text_position'] ) {
 				case 'sidebar' :
 					$position = 'slide_text--sidebar';
@@ -523,31 +552,48 @@ function opening_times_do_large_accordion( $before = '', $after = '' ) {
 			$classes[] = 'slide__bg-color';
 		}
 
-		// Set the background image
+		// Set the image
 		if ( isset( $accordion_panel['slide_bg_img_id'] ) && ! empty( $accordion_panel['slide_bg_img_id'] ) ) {
 		
-			$img_attributes = wp_get_attachment_image_src( $accordion_panel['slide_bg_img_id'], 'full' );
+			// Get image size
+			$accordion_img_size = opening_times_accordion_type() ? 'full' : 'accordion-thumb'; 
+
+			// Get image attributes
+			$img_attributes = wp_get_attachment_image_src( $accordion_panel['slide_bg_img_id'], $accordion_img_size );
 			
 			// Calculate aspect ratio: h / w * 100%.
-			// $ratio = $img_attributes[2] / $img_attributes[1] * 100;
+			$ratio = $img_attributes[2] / $img_attributes[1] * 100;
 
-			// Calculate the orientation.
+			// Calculate image orientation.
 			$orientation = $img_attributes[1] < $img_attributes[2] ? 'portrait' : 'landscape';
 			
-			$bg_img = sprintf(
-				'<div class="w-100 %1$s"><img class="slide--fh img-cover lazyload" src="%2$s" data-src="%3$s " srcset="%4$s" alt="%5$s"></div>',
-				$orientation,
-				opening_times_placeholder_img( false ),
-				wp_get_attachment_url( $accordion_panel['slide_bg_img_id'] ),
-				wp_get_attachment_image_srcset( $accordion_panel['slide_bg_img_id'], 'full' ),
-				get_post_meta( $accordion_panel['slide_bg_img_id'], '_wp_attachment_image_alt', true )
-			);
+			// Print image ratio
+			$accordion_img_ratio = esc_attr( $ratio ) . '%';
+
+			if ( ! opening_times_accordion_type() ) {
+				$bg_img = sprintf(
+					'<figure class="w-50"><div style="padding-bottom: %1$s;" class="aspect-ratio"><img class="lazyload" src="%2$s" data-src="%3$s" alt="%4$s"></div></figure>',
+					$accordion_img_ratio,
+					opening_times_placeholder_img( false ),
+					wp_get_attachment_image_src( $accordion_panel['slide_bg_img_id'], $accordion_img_size )[0],
+					get_post_meta( $accordion_panel['slide_bg_img_id'], '_wp_attachment_image_alt', true )
+				);
+			} else {
+				$bg_img = sprintf(
+					'<figure class="mb-0"><div class="%1$s"><img class="slide--fh img-cover lazyload" src="%2$s" data-src="%3$s" alt="%4$s"></div></figure>',
+					$orientation,
+					opening_times_placeholder_img( false ),
+					wp_get_attachment_image_src( $accordion_panel['slide_bg_img_id'], $accordion_img_size )[0],
+					get_post_meta( $accordion_panel['slide_bg_img_id'], '_wp_attachment_image_alt', true )
+				);
+			}
 				
 			$classes[] = 'slide__bg-img';
 		}
 
 		// Set the audio
 		if ( isset( $accordion_panel['slide_bg_audio_id'] ) && ! empty( $accordion_panel['slide_bg_audio_id'] ) ) {
+			
 			if ( $accordion_panel['lazy_load'] != true ) {
 				$maybe_lazyLoad = '<audio id="audio-panel-%1$s" src="%2$s" preload="meta" ' . $media_atts . '></audio>';
 			} else {
@@ -566,63 +612,73 @@ function opening_times_do_large_accordion( $before = '', $after = '' ) {
 		
 		// Set the video
 		if ( isset( $accordion_panel['slide_bg_video_id'] ) && ! empty( $accordion_panel['slide_bg_video_id'] ) ) {
+			
 			if ( $accordion_panel['lazy_load'] != true ) {
 				$maybe_lazyLoad = '<div class="w-100 mb-3"><video id="video-panel-%1$s" src="%2$s" preload="meta" ' . $media_atts . '></video></div>';
 			} else {
 				$maybe_lazyLoad = '<div class="w-100 mb-3 lazyload"><video id="video-panel-%1$s" data-src="%2$s" preload="meta" ' . $media_atts . '></video></div>';
 			}
-
+			
 			$bg_video = sprintf(
 				$maybe_lazyLoad,
 				$i,
 				wp_get_attachment_url( $accordion_panel['slide_bg_video_id'] )
 			);
-
+			
 			$data_attributes[] = 'data-media';
 			$classes[] = 'slide__video';
 		}
 
 		// Set the embeds
 		if ( isset( $accordion_panel['slide_bg_embed'] ) && ! empty( $accordion_panel['slide_bg_embed'] ) ) {
-
 			$bg_embed = sprintf(
-				'<div class="embed-responsive embed-responsive-16by9 %1$s">%2$s</div>',
+				'<figure %1$s><div class="embed-responsive embed-responsive-16by9 %2$s">%3$s</div></figure>',
+				$accordion_header_class = opening_times_accordion_type() ? 'class="mb-0"' : '',
 				strpos($media_atts, 'data-autoplay') !== false ? $autoPlay = 'autoplay' : $autoPlay = '',
 				wp_oembed_get( $accordion_panel['slide_bg_embed'] )
 			);
-
+			
 			$data_attributes[] = 'data-media';
 			$classes[] = 'slide__embed';
 		}
 
 		$classes = array_map( 'esc_attr', $classes );
-        $accordion_class = join( ' ', $classes );
-
-        $accordion_attributes = join( ' ', $data_attributes );
-
+		$accordion_class = join( ' ', $classes );
+		$accordion_header_class = opening_times_accordion_type() ? 'accordion-header--large' : '';
+		$accordion_content_class = opening_times_accordion_type() ? 'px-0' : '';
+		$accordion_attributes = join( ' ', $data_attributes );
+    	
     	ob_start(); ?>
     	
     	<?php if( '' != ( $text || $bg_video || $bg_video || $bg_img ) ) : ?>
 
     	<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
-	    	<header class="collapsed accordion-header accordion-header--large container-fluid gradient-text" role="tab" id="header-panel-<?php echo $i ?>" data-toggle="collapse" data-parent="#accordion-xl" data-target="#panel-<?php echo $i ?>" aria-expanded="false" aria-controls="panel-<?php echo $i ?>">
+	    	<header class="collapsed accordion-header container-fluid gradient-text <?php echo $accordion_header_class; ?>" role="tab" id="header-panel-<?php echo $i ?>" data-toggle="collapse" data-parent="#accordion-<?php opening_times_the_slug(); ?>" data-target="#panel-<?php echo $i ?>" aria-expanded="false" aria-controls="panel-<?php echo $i ?>">
+	    		<div class="row">
 
-	    		<?php echo $title; ?>
+	    		<?php 
+	    			echo $title;
+	    			echo $sub_title;
+	    		?>
 
+	    		</div>
 	    	</header>
 	    	<div id="panel-<?php echo $i ?>" class="container-fluid collapse w-100" role="tabpanel" aria-labelledby="header-panel-<?php echo $i ?>" aria-expanded="false">
 	    		<div class="row">
+					<div class="col-12 <?php echo $accordion_content_class; ?>">
 
-	    		<?php
-					echo $bg_img;
-					echo $bg_video;
-					echo $bg_embed;
-					if ( $accordion_panel['text_position'] !== 'sidebar' ) {
-						echo $text;
-					}
-					echo $bg_audio;
-	    		?>
+					<?php
+						echo $bg_img;
+						echo $bg_video;
+						echo $bg_embed;
+						echo $links;
+						//if ( $accordion_panel['text_position'] !== 'sidebar' ) {
+							echo $text;
+						//}
+						echo $bg_audio;
+					?>
 
+					</div>
 	    		</div>
 	    	</div>
     	</div>
@@ -630,18 +686,14 @@ function opening_times_do_large_accordion( $before = '', $after = '' ) {
     	<?php else: ?>
 
     		<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
-				<header id="header-panel-<?php echo $i ?>" class="accordion-header accordion-header--large accordion-header--closed container-fluid gradient-text" role="tab" id="header-panel-<?php echo $i ?>"">
-
+				<header id="header-panel-<?php echo $i ?>" class="accordion-header accordion-header--closed container-fluid gradient-text <?php echo $accordion_header_class; ?>" role="tab" id="header-panel-<?php echo $i ?>"">
 					<?php echo $title; ?>
-
 				</header>
 	    	</div>
-
+    	
     	<?php 
     	endif; 
-
 		$accordion .= ob_get_clean();
-
 		$i ++;
     }
 
@@ -649,6 +701,7 @@ function opening_times_do_large_accordion( $before = '', $after = '' ) {
 
     echo $before . $accordion . $after;
 }
+
 
 /**
  * Output the Sidebar Text for the Large Accordion
@@ -660,10 +713,10 @@ function opening_times_do_large_accordion( $before = '', $after = '' ) {
  * @since Opening Times 1.0.0
  */
 function opening_times_do_large_accordion_sidebar( $before = '', $after = '' ) {
+	/*
 	$accordion_panels = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
 
 	if ( '' == $accordion_panels && ! has_term( array( 'accordion-xl' ), 'format' ) ) {
-	//if ( '' == $accordion_panels ) {
         return;
     }
 
@@ -690,4 +743,5 @@ function opening_times_do_large_accordion_sidebar( $before = '', $after = '' ) {
 	};
 
 	echo $after;
+	*/
 }

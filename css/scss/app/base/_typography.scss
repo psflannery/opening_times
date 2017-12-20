@@ -36,6 +36,17 @@
 		}
 	}
 }
+
+//
+// Horizontal rules
+//
+
+hr {
+  margin-top: $spacer-y * 3;
+  margin-bottom: $spacer-y * 3;
+}
+
+
 .page-title {
 	font-size: $font-size-lg;
 	margin-top: $spacer * 2.25;

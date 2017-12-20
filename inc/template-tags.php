@@ -94,13 +94,13 @@ function opening_times_tax_description( $taxonomy ) {
     }
 
 	// display the tax description if it exists, and don't display it on the reading pages.
-	if ( !is_post_type_archive( 'reading' ) && !is_singular( 'reading' ) ) {	
+	//if ( !is_post_type_archive( 'reading' ) && !is_singular( 'reading' ) ) {	
         foreach ( $tax_description as $tax ) {
             if (  $tax->description ) {
                 echo '<aside class="artist-bio ot-meta ot-bio" role="complementary">' . wpautop( wptexturize( $tax->description ) ) . '</aside>';
             }
         };
-	}
+	//}
 }
 
 /**
@@ -257,7 +257,7 @@ function openining_times_ace_link ( $before = '', $after = '' ) {
 function opening_times_get_social_share() {
 
 	// Get the page fragment
-	$slug = home_url( '/#' . opening_times_the_slug( $echo=false ) );
+	$slug = 'post' === get_post_type() ? home_url( '/#' . opening_times_the_slug( $echo=false ) ) : get_permalink();
 	
 	// Build the sharing URLs.
 	$twitter_url  = 'https://twitter.com/share?text=' . rawurlencode( html_entity_decode( get_the_title() ) ) . '&amp;url=' . rawurlencode( $slug ) . '&via=otdac';

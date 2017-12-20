@@ -32,6 +32,7 @@
                 <?php 
                     do_action( 'before_reading_list' );
 
+                    /*
                     $args = array(
                         'post_parent' => $post->ID,
                         'post_type' => 'reading',
@@ -47,7 +48,7 @@
 
                         while ( $child_query->have_posts() ) : $child_query->the_post();
      
-                            get_template_part( 'template-parts/content-blocks/block-reading-accordion' );
+                            get_template_part( 'template-parts/content-blocks/block-accordion' );
 
                         endwhile;
                         wp_reset_postdata();
@@ -59,6 +60,14 @@
                         echo '</div>';
 
                     endif;
+                    */
+                   echo '<div class="sticky-top">';
+
+                   opening_times_do_reading_accordion();
+
+                   echo '</div>';
+
+                   do_action( 'after_reading_list' ); 
                 ?>
 
             </div>

@@ -15,7 +15,7 @@
         z-index: $zindex-offcanvas;
         &.in {
             transform: translateX(0);
-            box-shadow: $ot-drop-shadow-mid-light;
+            box-shadow: $ot-drop-shadow-md-light;
         }
     }
     .navbar-default.navbar-offcanvas {

@@ -145,6 +145,7 @@ function opening_times_scripts() {
 		wp_enqueue_script( 'comment-reply' );
 	}
 
+	/*
 	if ( is_home() || is_front_page() || is_archive() || is_search() ) {
 		global $wp_rewrite;
 		
@@ -156,7 +157,7 @@ function opening_times_scripts() {
 			'loopType' => 'home',
 			'queriedObject' => $queried_object,
 			'pathInfo' => array(
-				'author_permastruct' => $wp_rewrite->get_author_permastruct(),
+				//'author_permastruct' => $wp_rewrite->get_author_permastruct(),
 				'host' => preg_replace( '#^http(s)?://#i', '', untrailingslashit( get_option( 'home' ) ) ),
 				'path' => opening_times_get_request_path(),
 				'use_trailing_slashes' => $wp_rewrite->use_trailing_slashes,
@@ -183,6 +184,7 @@ function opening_times_scripts() {
 		
 		wp_localize_script( 'opening-times-backbone-loop', 'settings', $local );
 	}
+	*/
 
 }
 add_action( 'wp_enqueue_scripts', 'opening_times_scripts' );
@@ -220,7 +222,7 @@ require get_template_directory() . '/inc/queries.php';
 /**
  * Load custom endpoints.
  */
-require get_template_directory() . '/inc/endpoints.php';
+//require get_template_directory() . '/inc/endpoints.php';
 
 /**
  * Load custom CMB2 features.

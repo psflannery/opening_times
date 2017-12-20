@@ -181,6 +181,7 @@ var timeToWaitForLast = 100;
 	                render: function () {
 	                    $main.addClass('is-exiting');
 	                    $site.animate({scrollTop: 0});
+						//$('.collapse').collapse('hide');
 	                }
 	            },
 	            onReady: {
@@ -414,7 +415,7 @@ var timeToWaitForLast = 100;
 
 	// Aspect Ratio -- full screen, centered images and embeds
 	function opening_times_fs_aspect_ratio() {
-		var $fsmedia = $('.aspect-ratio');
+		var $fsmedia = $('.aspect-ratio--js');
 
 		$fsmedia.each(function() {
 			var imgHeight = $(this).find('img').attr('height') ? $(this).find('img').attr('height') : '9',
@@ -637,7 +638,7 @@ var timeToWaitForLast = 100;
 	function ot_page_load() {
 		// Definitions
 		var eventtype = mobilecheck() ? 'touchstart' : 'click',
-			//$window = $(window),
+			$window = $(window),
 			hash = window.location.hash,
 		    $scene = $('#scene'),
 			$accordion = $('.accordion .collapse'),
@@ -646,7 +647,7 @@ var timeToWaitForLast = 100;
 			$infoClose = $('.site-info .close'),
 		    $splashTop = $('.splash-top__link'),
 		    $autoProtocol = $('.auto-protocol'),
-		    //$infinite = $('.infinite'),
+		    $infinite = $('.infinite'),
 		    $anchorScroll = $('a[href*="#"]:not([href="#"], [data-toggle="collapse"], .ot-social-links a)');
 			//isSidebarOpen = false;
 
@@ -812,7 +813,6 @@ var timeToWaitForLast = 100;
 		});
 
 		// Infinite Scroll
-		/*
 		if( $infinite.length ) {
 			var $loadMore = $('.site-main > div');
 
@@ -866,8 +866,6 @@ var timeToWaitForLast = 100;
 				}
 			});
 		}
-		*/
-
 	
 		// Smooth Scroll to anchor
 		$anchorScroll.on(eventtype, function() {

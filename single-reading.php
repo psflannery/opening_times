@@ -12,7 +12,7 @@ get_header(); ?>
             <div class="issue__issue-list col-md-2 px-0">
 
             	<?php
-                    opening_times_do_large_accordion_sidebar( '<div class="sticky-top">', '</div>' );
+                    //opening_times_do_large_accordion_sidebar( '<div class="sticky-top">', '</div>' );
                     
             		get_template_part( 'template-parts/loops/loop', 'reading-issues' );
             	 ?>
@@ -33,7 +33,19 @@ get_header(); ?>
 			        endwhile; 
 			        ?>
 
-                </div>
+                    <div class="container-fluid w-100">
+                        <div class="card-block row">
+                            <div class="col-12">
+
+                                <?php 
+                                    echo opening_times_get_social_share();
+                                    edit_post_link( __( 'Edit', 'opening_times' ), '<p class="edit-link">', '</p>');
+                                ?>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>                
             </div>
         </div>
 	</main>
