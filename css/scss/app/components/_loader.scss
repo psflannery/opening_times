@@ -1,0 +1,16 @@
+//
+// Loader
+// --------------------------------------------------
+
+.loader {
+    @include size($loader-size);
+    border: $loader-border-width solid $ot-border-color;
+    border-top-color: $loader-border-top-color;
+    animation: anti-clockwise $loader-spin-speed infinite linear;
+    display: none;
+    margin: $spacer auto;
+    border-radius: 50%;
+    &.in {
+    	display: block;
+    }
+}

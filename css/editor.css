@@ -8098,6 +8098,19 @@ img.lazyload {
   height: 2rem;
   cursor: pointer; }
 
+.loader {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #000;
+  border-top-color: transparent;
+  -webkit-animation: anti-clockwise 1s infinite linear;
+          animation: anti-clockwise 1s infinite linear;
+  display: none;
+  margin: 1rem auto;
+  border-radius: 50%; }
+  .loader.in {
+    display: block; }
+
 .search-result.card {
   background-color: transparent;
   border-bottom: 1px solid #000 !important;
@@ -8416,8 +8429,7 @@ img.lazyload {
 
 @media (min-width: 768px) {
   .issue__issue {
-    -webkit-box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.05);
-            box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.05); } }
+    border-left: 1px solid #000; } }
 
 @media (max-width: 767px) {
   .issue__issue-list .list-group {
@@ -8464,19 +8476,13 @@ img.lazyload {
 .reading__issue-list {
   overflow-x: hidden; }
   .reading__issue-list .list-group-item {
-    background-color: #fff;
-    opacity: 0.5;
-    -webkit-transition: opacity .3s ease;
-    transition: opacity .3s ease; }
+    background-color: #fff; }
     @media (min-width: 768px) {
       .reading__issue-list .list-group-item {
         background-color: transparent; } }
     .reading__issue-list .list-group-item.active {
       background-color: #fff;
-      border-bottom-color: inherit;
-      -webkit-box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
-              box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
-      opacity: 1; }
+      border-bottom-color: inherit; }
 
 .mce-content-body {
   padding-left: 30px;

@@ -60,6 +60,7 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 @import "components/_footer";
 @import "components/_images";
 @import "components/_icons";
+@import "components/_loader";
 @import "components/_search-results";
 @import "components/_404";
 
@@ -116,7 +117,8 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 }
 .issue__issue {
 	@include media-breakpoint-up(md) {
-		box-shadow: $ot-drop-shadow-md-light;
+		//box-shadow: $ot-drop-shadow-md-light;
+        border-left: $ot-border-width solid $ot-border-color;
 	}
 }
 .issue__issue-list {
@@ -166,16 +168,16 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
     overflow-x: hidden;
 	.list-group-item {
 		background-color: $body-bg;
-        opacity: 0.5;
-        transition: opacity .3s ease;
+        //opacity: 0.75;
+        //transition: opacity .3s ease;
 		@include media-breakpoint-up(md) {
 			background-color: transparent;
 		}
 		&.active {
 			background-color: $body-bg;
             border-bottom-color: inherit;
-            box-shadow: $ot-drop-shadow-sm-light;
-            opacity: 1;
+            //box-shadow: $ot-drop-shadow-sm-light;
+            //opacity: 1;
 		}
 	}
 }

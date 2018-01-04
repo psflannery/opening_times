@@ -41,6 +41,8 @@ function opening_times_ajax_load_more() {
 	$args['paged'] = esc_attr( $_POST['page'] );
 	$args['post_status'] = 'publish';
 
+	// $default_posts_per_page = get_option( 'posts_per_page' );
+
 	ob_start();
 
 	$loop = new WP_Query( $args );
@@ -67,7 +69,6 @@ function opening_times_ajax_load_more() {
 add_action( 'wp_ajax_opening_times_ajax_load_more', 'opening_times_ajax_load_more' );
 add_action( 'wp_ajax_nopriv_opening_times_ajax_load_more', 'opening_times_ajax_load_more' );
 
-
 /**
  * Enqueue the javascript for Load More
  *
@@ -79,12 +80,25 @@ function opening_times_load_more_js() {
 
 	global $wp_query;
 
-	//$default_posts_per_page = get_option( 'posts_per_page' );
-
+	/*
 	$args = array(
 		'url'   => admin_url( 'admin-ajax.php' ),
 		'query' => $wp_query->query,
 	);
-	wp_localize_script( 'opening-times-main', 'otloadmore', $args );
+	*/
+
+	//wp_localize_script( 'opening-times-main', 'otloadmore', $args );
+	?>
+	<script type="text/javascript">
+		<?php echo "/* <![CDATA[ */\n"; ?>
+			var otloadmore = <?php echo wp_json_encode( array(
+				'url'     => admin_url( 'admin-ajax.php' ),
+				'query'   => $wp_query->query,
+				'maxpage' => $wp_query->max_num_pages,
+			) ); ?>;
+		<?php echo "/* ]]> */\n"; ?>
+	</script>
+	<?php
 }
-add_action( 'wp_enqueue_scripts', 'opening_times_load_more_js' );
+//add_action( 'wp_enqueue_scripts', 'opening_times_load_more_js' );
+add_action( 'opening-times-after-footer', 'opening_times_load_more_js' );

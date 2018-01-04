@@ -126,6 +126,14 @@ $zindex-offcanvas:            1035;
 //$zindex-popover:              1060;
 //$zindex-tooltip:              1070;
 
+//== Loader
+//
+//##
+$loader-size:             1.5rem;
+$loader-border-width:     $ot-border-width * 2;
+$loader-border-top-color: transparent;
+$loader-spin-speed:       1s;
+
 // Flickity
 // 
 // ##

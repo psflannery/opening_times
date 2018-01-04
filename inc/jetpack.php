@@ -7,7 +7,6 @@
  * @package Opening Times
  */
 
-
 /**
  * Filter the list of Post Types available in the WordPress.com REST API.
  *

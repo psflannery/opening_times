@@ -166,7 +166,7 @@ var timeToWaitForLast = 100;
 	}
 
 	// SmoothState
-	function ot_smooth_state() {
+	function ot_smooth_state( $window ) {
         var $main = $('#page'),
             $site = $('html, body'),
             //transition = 'fade',
@@ -198,6 +198,7 @@ var timeToWaitForLast = 100;
 	                // reset the page counter
 	                page = 1;
 	                ot_page_load();
+	                ot_infinite_scroll( $window );
 	            },
             };
 
@@ -625,8 +626,10 @@ var timeToWaitForLast = 100;
 	}
 
 	// Gradient Text
-	function makeGradients( $el, selector, h, s, l ) {
-		$el.gradienter({
+	function makeGradients( selector, h, s, l ) {
+		var $gradient = $('.gradient-container');
+
+		$gradient.gradienter({
 			hueStart: h, 
 			selector: selector, 
 			saturation: s, 
@@ -638,21 +641,18 @@ var timeToWaitForLast = 100;
 	function ot_page_load() {
 		// Definitions
 		var eventtype = mobilecheck() ? 'touchstart' : 'click',
-			$window = $(window),
 			hash = window.location.hash,
 		    $scene = $('#scene'),
 			$accordion = $('.accordion .collapse'),
-			$gradients = $('.gradient-container'),
 			$infoCollapse = $('.site-info .collapse'),
 			$infoClose = $('.site-info .close'),
 		    $splashTop = $('.splash-top__link'),
 		    $autoProtocol = $('.auto-protocol'),
-		    $infinite = $('.infinite'),
 		    $anchorScroll = $('a[href*="#"]:not([href="#"], [data-toggle="collapse"], .ot-social-links a)');
 			//isSidebarOpen = false;
 
 		// Launch the gradients
-		makeGradients( $gradients, '.gradient-text', 240, 100, 50 );
+		makeGradients( '.gradient-text', 240, 100, 50 );
 
 		// Expand the search form on focus
 		ot_search_toggle();
@@ -811,61 +811,6 @@ var timeToWaitForLast = 100;
 				return string;
 			});
 		});
-
-		// Infinite Scroll
-		if( $infinite.length ) {
-			var $loadMore = $('.site-main > div');
-
-			$loadMore.append( '<span class="load-more"></span>' );
-			
-			var button = $('.load-more'),
-				page = 2,
-				loading = false,
-				scrollHandling = {
-					allow: true,
-					reallow: function() {
-						scrollHandling.allow = true;
-					},
-					//(milliseconds) adjust to the highest acceptable value
-					delay: 400
-				};
-
-			$window.scroll(function(){
-				if( ! loading && scrollHandling.allow ) {
-					scrollHandling.allow = false;
-					setTimeout(scrollHandling.reallow, scrollHandling.delay);
-					
-					var offset = $(button).offset().top - $window.scrollTop();
-					
-					if( 2000 > offset ) {
-						loading = true;
-						var data = {
-							action: 'opening_times_ajax_load_more',
-							page: page,
-							query: otloadmore.query,
-						};
-
-						$.post(otloadmore.url, data, function(res) {
-							if( res.success) {
-								$infinite.append( res.data );
-								$infinite.append( button );
-								page = page + 1;
-								loading = false;
-
-								// Callback scripts here
-								makeGradients( $gradients, '.gradient-text', 240, 100, 50 );
-
-							} else {
-								console.log(res);
-							}
-						}).fail(function( jqxhr, textStatus, error ) {
-							var err = textStatus + ', ' + error;
-							console.log(err);
-						});
-					}
-				}
-			});
-		}
 	
 		// Smooth Scroll to anchor
 		$anchorScroll.on(eventtype, function() {
@@ -933,6 +878,75 @@ var timeToWaitForLast = 100;
         });
 	}
 
+	// Infinite Scroll
+	function ot_infinite_scroll( $window ) {
+		var $infinite = $('.infinite');
+
+		if( ! $infinite.length ) {
+			return;
+		}
+
+		var $loadMore = $('.site-main > div');
+
+		$loadMore.append( '<div class="loader"></div>' );
+			
+		var $loader = $('.loader'),
+			page = 2,
+			loading = false,
+			scrollHandling = {
+				allow: true,
+				reallow: function() {
+					scrollHandling.allow = true;
+				},
+				delay: 400
+			},
+			maxpage = otloadmore.maxpage;
+
+		$window.scroll(function(){
+			if( ! loading && scrollHandling.allow ) {
+				scrollHandling.allow = false;
+				setTimeout(scrollHandling.reallow, scrollHandling.delay);
+				
+				var offset = $loader.offset().top - $window.scrollTop();
+				
+				if( 2000 > offset ) {
+					loading = true;
+					
+					var data = {
+						action: 'opening_times_ajax_load_more',
+						page: page,
+						query: otloadmore.query,
+					};
+
+					// show loader
+					if( page <= maxpage && loading === true ) {
+						$loader.addClass('in');
+					}
+
+					$.post(otloadmore.url, data, function(res) {
+						if( res.success) {
+							$infinite.append( res.data );
+							$infinite.append( $loader );
+							page = page + 1;
+							loading = false;
+
+							$loader.removeClass('in');
+
+							// Callback scripts here
+							ot_page_load();
+							
+						} else {
+							console.log(res);
+						}
+					}).fail(function( jqxhr, textStatus, error ) {
+						var err = textStatus + ', ' + error;
+						console.log(err);
+					});
+				}
+			}
+		});
+	}
+
 	// Resize
 	function ot_resize() {
 		opening_times_fs_aspect_ratio();
@@ -951,11 +965,14 @@ var timeToWaitForLast = 100;
 	}
 
 	$(document).ready(function() {
-		// Prepare to launch
-		ot_smooth_state();
-		ot_page_load();
+		var $window = $(window);
 
-		$(window).resize(function () {
+		// Prepare to launch
+		ot_smooth_state( $window );
+		ot_page_load( $window );
+		ot_infinite_scroll( $window );
+
+		$window.resize(function () {
 			waitForFinalEvent(function () {
 				ot_resize();
 			}, 

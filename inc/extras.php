@@ -107,6 +107,7 @@ function opening_times_get_reading_format( $post = null ) {
  */
 function opening_times_oembed_video_check( $url ) {
     $check = false;
+    
     if ( strpos( $url, 'vimeo.com' ) !== false || strpos( $url, 'youtu.be' ) !== false || strpos( $url, 'youtube.com' ) !== false ) {
         $check = true;
     }
@@ -174,7 +175,7 @@ function fixed_img_caption_shortcode($attr, $content = null) {
  * @return string|bool
  *
  * @since Opening Times 1.0.0
- */
+ *
 function opening_times_get_request_path() {
     global $wp_rewrite;
 
@@ -208,6 +209,7 @@ function opening_times_get_request_path() {
     
     return empty( $path ) ? false : $path;
 }
+*/
 
 /**
  * Return query string for current request, prefixed with '?'.
@@ -215,7 +217,7 @@ function opening_times_get_request_path() {
  * @return string
  *
  * @since Opening Times 1.0.0
- */
+ *
 function opening_times_get_request_parameters() {
     $uri = $_SERVER[ 'REQUEST_URI' ];
     $uri = preg_replace( '/^[^?]*(\?.*$)/', '$1', $uri, 1, $count );
@@ -225,6 +227,7 @@ function opening_times_get_request_parameters() {
 
     return $uri;
 }
+*/
 
 /**
  * Determine if a URL is an internal or external

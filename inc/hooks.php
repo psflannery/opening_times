@@ -225,6 +225,23 @@ add_filter( 'embed_oembed_html', 'opening_times_oembed_url' );
 add_filter( 'oembed_result', 'opening_times_oembed_url', 10, 3);
 
 /**
+ * Determine if ajax request has come from the front end.
+ * 
+ * @return bool
+ *
+ * @link( https://wordpress.stackexchange.com/questions/34721/conditional-check-for-front-end-which-includes-ajax, link )
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_frontend_ajax_check() {
+
+	define( 'FRONT_AJAX', true );
+
+}
+add_action( 'wp_ajax_opening_times_ajax_load_more', 'opening_times_frontend_ajax_check' );
+add_action( 'wp_ajax_nopriv_opening_times_ajax_load_more', 'opening_times_frontend_ajax_check' );
+
+/**
  * Filter oembed html - customise markup and query params.
  * Lazy Load the iframe oembeds in the Reading Section and Archives.
  * 
@@ -240,13 +257,16 @@ add_filter( 'oembed_result', 'opening_times_oembed_url', 10, 3);
  * @since Opening Times 1.0.0
  */
 function opening_times_oembed_html( $cache, $url, $attr, $post_id ) {
-    if( ! is_admin() && opening_times_oembed_video_check( $cache ) !== false ) {
+    //if( ! is_admin() && opening_times_oembed_video_check( $cache ) !== false ) {
+    if( opening_times_oembed_video_check( $cache ) !== false ) {
+    //if( ( is_admin() && defined('FRONT_AJAX') ) && opening_times_oembed_video_check( $cache ) !== false ) {
         
         // Give the video a unique id
         $unique_id = 'ot-video-' . rand();
         
         // Add extra attributes to iframe HTML
-		if ( is_home() || is_archive() ) {
+		if ( is_home() || is_archive() || ( is_admin() && defined('FRONT_AJAX') ) ) {
+		//if ( is_home() || is_archive() ) {
 			$attributes = 'id="' . $unique_id . '" width="100%" height="100%" class="lazyload"';
 		} else {
 			$attributes = 'id="' . $unique_id . '" width="100%" height="100%"';
@@ -256,7 +276,8 @@ function opening_times_oembed_html( $cache, $url, $attr, $post_id ) {
 		$cache = str_replace( '<iframe', '<iframe ' . $attributes . '', $cache );
         
         // Return the new oembed markup
-		if ( is_home() || is_archive() ) {
+		if ( is_home() || is_archive() || ( is_admin() && defined('FRONT_AJAX') ) ) {
+		//if ( is_home() || is_archive() ) {
 			return '<div class="embed-responsive embed-responsive-16by9">' . str_replace( 'src="', 'src="about:blank" data-src="', $cache ) . '</div>';
 		} else {
 			return '<div class="embed-responsive embed-responsive-16by9">' . $cache . '</div>';
