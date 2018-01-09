@@ -14,7 +14,7 @@
 
             <?php get_template_part( 'template-parts/content-blocks/block-reading-title' ); ?>
             
-            <div class="entry-content col-md-6 col-lg-5">
+            <div class="entry-content col-12 col-lg-5">
             
                 <?php 
                     the_content( sprintf(
@@ -27,7 +27,7 @@
                 ?>		
     
             </div>
-            <div class="entry-links col-md-6 col-lg-7">
+            <div class="entry-links col-12 col-lg-7">
                 <div class="sticky-top">
 
                     <?php 
