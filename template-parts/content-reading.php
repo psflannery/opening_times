@@ -28,48 +28,17 @@
     
             </div>
             <div class="entry-links col-md-6 col-lg-7">
+                <div class="sticky-top">
 
-                <?php 
-                    do_action( 'before_reading_list' );
+                    <?php 
+                        do_action( 'before_reading_list' );
 
-                    /*
-                    $args = array(
-                        'post_parent' => $post->ID,
-                        'post_type' => 'reading',
-                        'orderby' => 'menu_order',
-                        'posts_per_page' => -1,
-                    );
-
-                    $child_query = new WP_Query( $args );
-
-                    if ( $child_query->have_posts() ) :
-                        echo '<div class="sticky-top accordion-container">';
-                        echo '<div id="accordion-' . opening_times_the_slug(false) . '" class="accordion mb-5" role="tablist" aria-multiselectable="true">';
-
-                        while ( $child_query->have_posts() ) : $child_query->the_post();
-     
-                            get_template_part( 'template-parts/content-blocks/block-accordion' );
-
-                        endwhile;
-                        wp_reset_postdata();
-
-                        echo '</div>';
+                        opening_times_do_reading_accordion();
 
                         do_action( 'after_reading_list' ); 
+                    ?>
 
-                        echo '</div>';
-
-                    endif;
-                    */
-                   echo '<div class="sticky-top">';
-
-                   opening_times_do_reading_accordion();
-
-                   echo '</div>';
-
-                   do_action( 'after_reading_list' ); 
-                ?>
-
+                </div>
             </div>
         </div>
     </div>
