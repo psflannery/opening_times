@@ -23,7 +23,7 @@
 
         </h2>
     </header>
-    <div id="<?php opening_times_the_slug(); ?>" class="collapse container-fluid" role="tabpanel" aria-labelledby="heading-<?php opening_times_the_slug(); ?>">
+    <div id="<?php opening_times_the_slug(); ?>" class="collapse container-fluid w-100" role="tabpanel" aria-labelledby="heading-<?php opening_times_the_slug(); ?>">
         <div class="accordion-content row">
             <div class="col-md-4">
 
