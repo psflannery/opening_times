@@ -65,7 +65,7 @@
 
                         $mailing_list = '<li class="menu-item nav-item"><a href="#collapse-mailing" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="collapse-mailing">' . esc_html ( 'Mailing List', 'opening_times' ) . '</a></li>';
 
-                        $search = '<li class="menu-item nav-item__search expanding-search"><button class="btn btn-link expanding-search__btn nav-link hidden-sm-down" data-toggle="search-expand">' . esc_html( 'Search', 'opening_times' ) . '</button>' . get_search_form( false ) . '</li>';
+                        $search = '<li class="menu-item nav-item__search expanding-search"><button class="btn expanding-search__btn nav-link hidden-sm-down" data-toggle="search-expand">' . esc_html( 'Search', 'opening_times' ) . '</button>' . get_search_form( false ) . '</li>';
                     
                         echo opening_times_get_social_menu( $mailing_list, $search );
                     ?>

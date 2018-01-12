@@ -648,8 +648,9 @@ var timeToWaitForLast = 100;
 			$infoClose = $('.site-info .close'),
 		    $splashTop = $('.splash-top__link'),
 		    $autoProtocol = $('.auto-protocol'),
-		    $anchorScroll = $('a[href*="#"]:not([href="#"], [data-toggle="collapse"], .ot-social-links a)');
+		    $anchorScroll = $('a[href*="#"]:not([href="#"], a[href*="#panel-"], [data-toggle="collapse"], .ot-social-links a)');
 			//isSidebarOpen = false;
+			//div[class^="test"]
 
 		// Launch the gradients
 		makeGradients( '.gradient-text', 240, 100, 50 );
@@ -792,6 +793,16 @@ var timeToWaitForLast = 100;
         if ( hash && $accordionId ) {
         	$accordionId.prev('.collapsed').trigger(eventtype);
         }
+
+        //
+        var $ot = $('a[href*="#panel-"]');
+
+        $ot.on(eventtype, function (e) {
+        	var foo = $(e.target).attr('href');
+        	
+        	$(foo + '.collapse').prev('.collapsed').trigger(eventtype);
+		});
+		//
 
         // Open accodion from new commission splash.
 		$splashTop.on(eventtype, function() {

@@ -7920,6 +7920,8 @@ img.lazyload {
   @media (max-width: 767px) {
     .main-navigation .nav-item {
       border-bottom: 1px solid #000; } }
+  .main-navigation .nav-item a {
+    color: #000; }
 
 .nav-item__search label {
   margin-bottom: 0; }
