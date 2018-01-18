@@ -48,8 +48,13 @@ function opening_times_post_classes( $classes, $class, $post_id ) {
     	$classes[] = 'panel';
     }
 
-    if ( is_page() && 'news' !== get_post_type() ) {
-    	$classes[] = 'col-md-8 col-lg-6 mx-auto bg-transparent';
+    if ( ( is_page() && ! is_page_template( 'page-templates/2-column.php' ) ) && 'news' !== get_post_type() ) {
+    //if ( is_page() && 'news' !== get_post_type() ) {
+    	$classes[] = 'col-md-8 col-lg-6 mx-auto';
+    }
+
+    if ( is_page_template( 'page-templates/2-column.php' ) ) {
+    	$classes[] = 'col columns-2-md';
     }
 
     $classes[] = 'card border-0 bg-transparent';

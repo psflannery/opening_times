@@ -16,18 +16,18 @@ get_header(); ?>
                 <?php
                 if ( have_posts() ) :
 
-                    opening_times_do_large_accordion_sidebar('<div class="sticky-top">', '</div>');
+                    //opening_times_do_large_accordion_sidebar('<div class="sticky-top">', '</div>');
 
                     echo '<div class="gradient-container list-group reading__issue-list sticky-top">';
 
                     while ( have_posts() ) : the_post();
                         if ( 0 === $wp_query->current_post ) :
 
-                            the_title('<a href="#" class="gradient-text list-group-item active">', '</a>' );
+                            the_title('<a href="#" class="gradient-text list-group-item active d-block"><span class="d-block">', '</span>' . opening_times_reading_issue_title('<span class="small d-block">', '</span>', false) . '</a>' );
 
                         else:
 
-                            the_title('<a href="' . esc_url( get_permalink() ) . '" class="gradient-text list-group-item list-group-item-action" rel="bookmark">', '</a>' );
+                            the_title('<a href="' . esc_url( get_permalink() ) . '" class="gradient-text list-group-item list-group-item-action d-block" rel="bookmark"><span class="d-block">', '</span>' . opening_times_reading_issue_title('<span class="small d-block">', '</span>', false) . '</a>' );
 
                         endif;
                     endwhile;

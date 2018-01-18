@@ -12,7 +12,7 @@
 
 get_header(); ?>
 
-    <main id="main" class="site-main gradienter container-fluid page-container page-container--page" role="main" data-transition="fade">
+    <main id="main" class="site-main container-fluid page-container page-container--page" role="main" data-transition="fade">
     	<div class="row sceneElement">
 
 	        <?php 

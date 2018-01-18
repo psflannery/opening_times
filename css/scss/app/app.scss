@@ -58,6 +58,7 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 @import "components/_info-dropdown";
 @import "components/_offcanvas";
 @import "components/_footer";
+@import "components/_headings";
 @import "components/_images";
 @import "components/_icons";
 @import "components/_loader";
@@ -82,19 +83,6 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 // Reading Pages
 // --------------------------------------------------
 .issue-title {
-    margin-top: $spacer * 8;
-    margin-bottom: $spacer * 8;
-    span {
-    	display: block;
-    }
-    &__author {
-		font-size: $font-size-lg; //1.5??
-		color: $gray-light;
-    }
-    &__sub {
-    	font-size: $font-size-headline;
-    	font-weight: bold;
-    }
     &__standfirst {
     	color: $gray-light;
     }
@@ -117,7 +105,6 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 }
 .issue__issue {
 	@include media-breakpoint-up(md) {
-		//box-shadow: $ot-drop-shadow-md-light;
         border-left: $ot-border-width solid $ot-border-color;
 	}
 }
@@ -132,9 +119,7 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
     }
     .active {
     	background-color: inherit;
-    	border-color: $ot-border-color;
-    	font-weight: bold;
-    	text-transform: uppercase;
+        border-top-color: $list-group-border-color;
     }
     a {
     	border-left: 0;
@@ -168,16 +153,27 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
     overflow-x: hidden;
 	.list-group-item {
 		background-color: $body-bg;
-        //opacity: 0.75;
-        //transition: opacity .3s ease;
 		@include media-breakpoint-up(md) {
 			background-color: transparent;
 		}
 		&.active {
 			background-color: $body-bg;
             border-bottom-color: inherit;
-            //box-shadow: $ot-drop-shadow-sm-light;
-            //opacity: 1;
 		}
+        span {
+            &:last-of-type {
+                //color: $body-color;
+                color: $gray-light;
+            }
+        }
 	}
+}
+
+.columns-2-md {
+    > div {
+        @include media-breakpoint-up(md) {
+            column-count: 2;
+            column-gap: $grid-gutter-width-base;
+        }
+    }
 }

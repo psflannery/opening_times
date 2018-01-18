@@ -713,7 +713,6 @@ function opening_times_do_reading_accordion( $before = '', $after = '' ) {
  * @since Opening Times 1.0.0
  */
 function opening_times_do_large_accordion_sidebar( $before = '', $after = '' ) {
-	/*
 	$accordion_panels = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
 
 	if ( '' == $accordion_panels && ! has_term( array( 'accordion-xl' ), 'format' ) ) {
@@ -743,5 +742,4 @@ function opening_times_do_large_accordion_sidebar( $before = '', $after = '' ) {
 	};
 
 	echo $after;
-	*/
 }

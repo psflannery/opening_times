@@ -3663,7 +3663,7 @@ a.badge:focus, a.badge:hover {
   padding: 1rem 1.25rem;
   margin-bottom: -1px;
   background-color: #fff;
-  border: 1px solid #000; }
+  border: 1px solid rgba(0, 0, 0, 0.125); }
   .list-group-item:last-child {
     margin-bottom: 0; }
   .list-group-item:focus, .list-group-item:hover {
@@ -7482,6 +7482,20 @@ img.lazyload {
 .ace-link a {
   margin-left: -0.75rem; }
 
+.entry-title__container {
+  margin-top: 8rem;
+  margin-bottom: 8rem; }
+  .entry-title__container span {
+    display: block; }
+
+.entry-title__author {
+  font-size: 1.25rem;
+  color: #636c72; }
+
+.entry-title--lg {
+  font-size: 4rem;
+  font-weight: bold; }
+
 .wp-caption-text {
   font-size: 0.875rem;
   color: #636c72;
@@ -7810,19 +7824,8 @@ img.lazyload {
   height: 50px;
   background: red; }
 
-.issue-title {
-  margin-top: 8rem;
-  margin-bottom: 8rem; }
-  .issue-title span {
-    display: block; }
-  .issue-title__author {
-    font-size: 1.25rem;
-    color: #636c72; }
-  .issue-title__sub {
-    font-size: 4rem;
-    font-weight: bold; }
-  .issue-title__standfirst {
-    color: #636c72; }
+.issue-title__standfirst {
+  color: #636c72; }
 
 .issue__image--full-width {
   margin-bottom: 2rem; }
@@ -7854,9 +7857,7 @@ img.lazyload {
 
 .issue__issue-list .active {
   background-color: inherit;
-  border-color: #000;
-  font-weight: bold;
-  text-transform: uppercase; }
+  border-top-color: rgba(0, 0, 0, 0.125); }
 
 .issue__issue-list a {
   border-left: 0;
@@ -7893,4 +7894,13 @@ img.lazyload {
     .reading__issue-list .list-group-item.active {
       background-color: #fff;
       border-bottom-color: inherit; }
+    .reading__issue-list .list-group-item span:last-of-type {
+      color: #636c72; }
+
+@media (min-width: 768px) {
+  .columns-2-md > div {
+    -webkit-column-count: 2;
+            column-count: 2;
+    -webkit-column-gap: 30px;
+            column-gap: 30px; } }
 /*# sourceMappingURL=style.css.map */

@@ -3083,6 +3083,19 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"\/css\/scss\/app\/components\/_headings.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/css\/scss\/app\/css\/_headings.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
 	"\/css\/scss\/app\/components\/_icons.scss": {
 		"aP": 0,
 		"bl": 0,
@@ -4707,11 +4720,11 @@
 		"oAP": "\/languages\/readme.txt",
 		"oF": 0
 		},
-	"\/page-templates\/test.php": {
+	"\/page-templates\/2-column.php": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/page-templates\/test.php",
+		"oAP": "\/page-templates\/2-column.php",
 		"oF": 0
 		},
 	"\/page.php": {

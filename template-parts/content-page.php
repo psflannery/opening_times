@@ -7,8 +7,8 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-    <header class="entry-header gradientee strap-header">
-        <h1 class="entry-title"><?php the_title(); ?></h1>
+    <header class="entry-title__container-xx">
+        <h1 class="entry-title--lg"><?php the_title(); ?></h1>
     </header>
 
     <div class="entry-content">

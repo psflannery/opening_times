@@ -1,0 +1,20 @@
+//
+// Headings
+// --------------------------------------------------
+
+.entry-title__container {
+    margin-top: $spacer * 8;
+    margin-bottom: $spacer * 8;
+    span {
+    	display: block;
+    }
+}
+
+.entry-title__author {
+	font-size: $font-size-lg;
+	color: $gray-light;
+}
+.entry-title--lg {
+	font-size: $font-size-headline;
+	font-weight: bold;
+}
