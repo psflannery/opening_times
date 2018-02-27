@@ -12,6 +12,9 @@
  *
  * @link: http://www.tcbarrett.com/2011/09/wordpress-the_slug-get-post-slug-function/#.U0GiBfldWSo
  *
+ * @param  boolean $echo If true, echo the post slug. If false, return it. Default true.
+ * @return string        The post slug.
+ * 
  * @since opening_times 1.0.0
  */
 function opening_times_the_slug( $echo = true ) {
@@ -32,8 +35,8 @@ function opening_times_the_slug( $echo = true ) {
 /**
  * Get the Post Parent slug
  * 
- * @param  boolean $echo If true, echo the post parent slug.
- * @return string        If false, return the post parent slug.
+ * @param  boolean $echo If true, echo the post parent slug. If false, return it. Default true.
+ * @return string        The post parent slug.
  *
  * @since opening_times 1.0.0
  */
@@ -99,48 +102,13 @@ function opening_times_get_reading_format( $post = null ) {
 
 
 /**
- * Checks if the oembed is a Vimeo or YouTube video.
- *
- * @return bool The video check result. 
- *
- * @since Opening Times 1.0.0
- */
-function opening_times_oembed_video_check( $url ) {
-    $check = false;
-    
-    if ( strpos( $url, 'vimeo.com' ) !== false || strpos( $url, 'youtu.be' ) !== false || strpos( $url, 'youtube.com' ) !== false ) {
-        $check = true;
-    }
-    
-    return $check;
-}
-
-
-/**
- * Output a transparent gif placeholder for lazyloading images.
- * 
- * @param  boolean $echo return or echo content
- * @return string        1 x 1px gif placeholder
- *
- * @since Opening Times 1.0.0
- */
-function opening_times_placeholder_img( $echo = true ) {
-    $placeholder = 'data:image/gif;base64,R0lGODdhAQABAPAAAP///wAAACwAAAAAAQABAEACAkQBADs=';
-
-    if ( $echo )
-        echo $placeholder;
-    else
-        return $placeholder;
-}
-
-/**
  * Remove inline style attr fron figure shortcode 
  * 
  * @since Opening Times 1.0.0
  */
 add_shortcode('wp_caption', 'fixed_img_caption_shortcode');
 add_shortcode('caption', 'fixed_img_caption_shortcode');
-function fixed_img_caption_shortcode($attr, $content = null) {
+function fixed_img_caption_shortcode( $attr, $content = null ) {
     
     // New-style shortcode with the caption inside the shortcode with the link and image tags.
     if ( ! isset( $attr['caption'] ) ) {
@@ -169,65 +137,124 @@ function fixed_img_caption_shortcode($attr, $content = null) {
         return '<figure ' . $id . 'class="wp-caption ' . esc_attr($align) . '">' . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $caption . '</figcaption></figure>';
 }
 
-/**
- * Build path data for current request.
- *
- * @return string|bool
- *
- * @since Opening Times 1.0.0
- *
-function opening_times_get_request_path() {
-    global $wp_rewrite;
 
-    if ( $wp_rewrite->using_permalinks() ) {
-        global $wp;
-        
-        // If called too early, bail
-        if ( ! isset( $wp->request ) ) {
-            return false;
-        }
-        
-        // Determine path for paginated version of current request
-        if ( false != preg_match( '#' . $wp_rewrite->pagination_base . '/\d+/?$#i', $wp->request ) ) {
-            $path = preg_replace( '#' . $wp_rewrite->pagination_base . '/\d+$#i', $wp_rewrite->pagination_base . '/%d', $wp->request );
-        } else {
-            $path = $wp->request . '/' . $wp_rewrite->pagination_base . '/%d';
-        }
-        
-        // Slashes everywhere we need them
-        if ( 0 !== strpos( $path, '/' ) )
-            $path = '/' . $path;
-        $path = user_trailingslashit( $path );
+/**
+ * Determine if internal or external link
+ * 
+ * @param  string $url The link to examine.
+ * @return bool        False if internal link, True if external link.
+ *
+ * @link( https://stackoverflow.com/questions/25090563/php-determine-if-a-url-is-an-internal-or-external-url, source)
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_has_external_url( $url ) {
+    // Abort if no URL
+    if( empty( $url ) ) {
+        return false;
+    }
+
+    // Parse home URL and parameter URL
+    $link_url = parse_url( $url );
+
+    //$home_url = parse_url( $_SERVER['HTTP_HOST'] );     
+    $home_url = parse_url( home_url() );
+
+    if( empty( $link_url['host'] ) ) {
+        // Is a relative internal link
+        $external_url = false;
+    } elseif( $link_url['host'] == $home_url['host'] ) {
+        // Is an absolute internal link
+        $external_url = false;
     } else {
-        
-        // Clean up raw $_REQUEST input
-        $path = array_map( 'sanitize_text_field', $_REQUEST );
-        $path = array_filter( $path );
-        $path['paged'] = '%d';
-        $path = add_query_arg( $path, '/' );
+        // Is an external link
+        $external_url = true;
     }
-    
-    return empty( $path ) ? false : $path;
+
+    return $external_url;
 }
-*/
+
 
 /**
- * Return query string for current request, prefixed with '?'.
+ * Markup for featured links
+ * 
+ * @param  string $url    The link url. Required.
+ * @param  array  $args   {
+ *     Array of attributes to apply to the link element. Default empty.
  *
- * @return string
+ *     @type string $anchor The link target. Defaults to URL
+ *     @type string $id     The link ID. Default empty
+ *     @type string $class  The link classes. Default `featured-link word-wrap`
+ *     @type array  $attr   Additional attributes to be applied to the link. Default empty.
+ * }
+ * @param  string $before Optional Markup to prepend the link. Default empty.
+ * @param  string $after  Optional Markup to append the link. Default empty.
+ * @return string         The link HTML.
  *
- * @since Opening Times 1.0.0
- *
-function opening_times_get_request_parameters() {
-    $uri = $_SERVER[ 'REQUEST_URI' ];
-    $uri = preg_replace( '/^[^?]*(\?.*$)/', '$1', $uri, 1, $count );
-    if ( $count != 1 ) {
-        return '';
+ * @since opening_times 1.0.1
+ */
+function opening_times_get_featured_link_html( $url = null, $args = array(), $before = '', $after = '' ) {
+    // Abort if no URL
+    if( empty( $url ) ) {
+        return false;
     }
 
-    return $uri;
+    $url = esc_url( $url );
+
+    $args = wp_parse_args( $args, array(
+        'anchor' => $url,
+        'id'     => '',
+        'class'  => 'featured-link word-wrap',
+        'attr'   => array(),
+    ) );
+    
+    $link = '';
+
+    $args['attr'] = array_map( 'esc_attr', $args['attr'] );
+
+    // Set attributes
+    $attr = '';
+
+    if ( $args['id'] ) {
+        $attr .= ' id="' . esc_attr( $args['id'] ) . '"';
+    }
+
+    if ( $args['class'] ) {
+        $attr .= ' class="' . esc_attr( $args['class'] ) . '"';
+    }
+
+    foreach ( $args['attr'] as $name => $value ) {
+        if ( ! empty( $value ) ) {
+            $attr .= " $name=" . '"' . $value . '"';
+        }
+    }
+
+    $link .= sprintf(
+        '<a href="%1$s" %2$s>%3$s</a>',
+        $url,
+        $attr,
+        $args['anchor']
+    );
+    
+    $featured_link = $before . $link . $after;
+    
+    return $featured_link;
 }
-*/
+
+
+/**
+ * Echo markup for featured links
+ * 
+ * @param  string $url  The link url. Required.
+ * @param  array  $args Array of attributes to apply to the link element. Default empty.
+ * @return string       The link HTML.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_the_featured_link_html( $url, $args = array(), $before = '', $after = '' ) {
+    echo opening_times_get_featured_link_html( $url, $args, $before, $after );
+}
+
 
 /**
  * Determine if a URL is an internal or external
@@ -240,7 +267,7 @@ function opening_times_get_request_parameters() {
  * @link( https://stackoverflow.com/questions/25090563/php-determine-if-a-url-is-an-internal-or-external-url, source)
  *
  * @since opening_times 1.0.0
- */
+ *
 function parse_external_url( $url = '', $internal_class = 'internal-link', $external_class = 'external-link') {
     // Abort if parameter URL is empty
     if( empty($url) ) {
@@ -282,3 +309,4 @@ function parse_external_url( $url = '', $internal_class = 'internal-link', $exte
 
     return $output;
 }
+*/

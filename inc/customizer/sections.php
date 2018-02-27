@@ -64,15 +64,5 @@ function opening_times_customize_sections( $wp_customize ) {
             'panel'       => 'site-options',
         )
     );
-
-    // Add the New Posts Splash Info
-    $wp_customize->add_section(
-        'opening_times_new_posts_splash',
-        array(
-            'title'       => esc_html__( 'Splash', 'opening_times' ),
-            'priority'    => 90,
-            'panel'       => 'site-options',
-        )
-    );
 }
 add_action( 'customize_register', 'opening_times_customize_sections' );

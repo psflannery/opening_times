@@ -8,6 +8,56 @@
  */
 
 /**
+ * Jetpack setup function.
+ *
+ * See: https://jetpack.com/support/featured-content/
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_jetpack_setup() {
+	// Add theme support for Featured Content.
+	add_theme_support( 'featured-content', array(
+		'filter'     => 'opening_times_get_featured_posts',
+		'max_posts'  => 20,
+		'post_types' => array( 'post', 'page', 'reading' ),
+	) );
+}
+add_action( 'after_setup_theme', 'opening_times_jetpack_setup' );
+
+
+/**
+ * Getter function - to assign featured posts to a variable in a template file.
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_get_featured_posts() {
+    return apply_filters( 'opening_times_get_featured_posts', array() );
+}
+
+
+/**
+ * Conditional function - to avoid markup being printed and scripts being enqueued when they are not needed.
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_has_featured_posts( $minimum = 1 ) {
+    if ( is_paged() )
+        return false;
+ 
+    $minimum = absint( $minimum );
+    $featured_posts = apply_filters( 'opening_times_get_featured_posts', array() );
+ 
+    if ( ! is_array( $featured_posts ) )
+        return false;
+ 
+    if ( $minimum > count( $featured_posts ) )
+        return false;
+ 
+    return true;
+}
+
+
+/**
  * Filter the list of Post Types available in the WordPress.com REST API.
  *
  * @param array $allowed_post_types Array of whitelisted Post Types.
@@ -16,7 +66,7 @@
  * @since Opening Times 1.0.0
  */
 function opening_times_allow_post_type_wpcom( $allowed_post_types ) {
-    $allowed_post_types[] = 'reading, articles';
+    $allowed_post_types[] = 'reading, news';
 
     return $allowed_post_types;
 }
@@ -60,4 +110,15 @@ function opening_times_remove_all_jetpack_css() {
 	wp_deregister_style( 'jetpack-widgets' ); // Widgets
 }
 add_filter( 'jetpack_implode_frontend_css', '__return_false' );
-add_action('wp_print_styles', 'opening_times_remove_all_jetpack_css' );
+add_action( 'wp_print_styles', 'opening_times_remove_all_jetpack_css' );
+
+
+/**
+ * Remove Jetpack scripts
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_dequeue_jetpack_script() {
+   wp_dequeue_script( 'jetpack-lazy-images' );
+}
+add_action( 'wp_print_scripts', 'opening_times_dequeue_jetpack_script', 100 );

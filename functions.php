@@ -225,9 +225,14 @@ require get_template_directory() . '/inc/queries.php';
 //require get_template_directory() . '/inc/endpoints.php';
 
 /**
- * Load custom CMB2 features.
+ * Load custom CMB2 template tags.
  */
 require get_template_directory() . '/inc/cmb2-template-tags.php';
+
+/**
+ * Load custom CMB2 features.
+ */
+require get_template_directory() . '/inc/cmb2-content-blocks.php';
 
 /**
  * Load Admin customisations file.
@@ -248,3 +253,8 @@ require get_template_directory() . '/inc/icon-functions.php';
  * Image related functions and filters.
  */
 require get_template_directory() . '/inc/image-functions.php';
+
+/**
+ * Video related functions and filters.
+ */
+require get_template_directory() . '/inc/video-functions.php';

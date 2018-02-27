@@ -12,15 +12,20 @@
 	<div id="<?php opening_times_the_slug(); ?>" class="container-fluid sceneElement">
         <div class="card-block row">
             
-            <?php get_template_part( 'template-parts/content-blocks/block-reading-title' ); ?>
-            
-        	<div class="col-md-12">
-                <div class="issue__image--full-width">
+            <?php 
+                get_template_part( 'template-parts/content-blocks/block-reading-title' );
 
-                    <?php opening_times_featured_content(); ?>
+                opening_times_the_post_thumbnail( array (
+                    'before'   => '<div class="col-md-12"><div class="issue__image--full-width">',
+                    'after'    => '</div></div>',
+                    'size'     => 'full',
+                    'fallback' => false,
+                    'attr'     => array( 
+                        'class' => 'wp-caption featured-image'
+                    ),
+                ) );
+            ?>
 
-                </div>
-            </div>
             <div class="entry-content mx-auto col-md-8 mb-5">
             
                 <?php 

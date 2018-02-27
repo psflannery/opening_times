@@ -216,29 +216,3 @@ function opening_times_menu_dropdowns( $wp_customize ) {
 
 }
 add_action( 'customize_register', 'opening_times_menu_dropdowns' );
-
-/**
- * Register New Posts Splash settings.
- *
- * @since opening_times 1.0.0
- */
-function opening_times_new_posts_splash( $wp_customize ){
-	// Add the Post Splash Setting and Control
-	$wp_customize->add_setting(
-		'opening_times_posts_splash',
-		array(
-			'sanitize_callback' => 'opening_times_sanitize_integer',
-		)
-	);
-
-	$wp_customize->add_control(
-		'opening_times_posts_splash',
-		array(
-			'label' => __( 'New Posts', 'opening_times' ),
-			'description' => esc_html__( 'Set the ammount of time to dsiplay the new posts splash (in days).', 'opening_times' ),
-			'section' => 'opening_times_new_posts_splash',
-			'type' => 'number',
-		)
-	);
-}
-add_action( 'customize_register', 'opening_times_new_posts_splash' );

@@ -119,6 +119,7 @@ function opening_times_menu_atts( $atts, $item, $args ) {
 		'post_type'      =>'news', 
 		'posts_per_page' => 1
 	);
+
 	$posts = get_posts( $args );
 
 	// Get the ID of the first post in the loop
@@ -171,65 +172,6 @@ add_filter( 'get_search_form', 'opening_times_search_form', 10 );
 
 
 /**
- * Filter oembed URL for Vimeo and YouTube videos - add query args.
- *
- * @param  string       $provider The URL to the oEmbed provider.
- * @param  string       $url      The URL to the content that is desired to be embedded.
- * @param  array|string $args     Optional. Arguments, usually passed from a shortcode. Default empty.
- *
- * @return false|object False on failure, otherwise the result in the form of an object.
- *
- * @since Opening Times 1.0.0
- */
-function opening_times_oembed_url( $cache ) {   
-
-    if( ! is_admin() && opening_times_oembed_video_check( $cache ) !== false ) {
-        
-        if( 'reading' === get_post_type() && has_term( array( 'accordion-xl' ), 'format' ) ) {
-
-	        // Get CMB2 field
-	        $query_args = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
-	        
-	        foreach ( (array) $query_args as $key => $query_arg ) {       
-	            if ( isset( $query_arg['media_atts'] ) && ! empty( $query_arg['media_atts'] ) ) {
-					foreach( $query_arg['media_atts'] as $key => $attribute ) {
-						strpos( $attribute, 'auto-play' ) !== false ? $maybe_autoplay = 1 : $maybe_autoplay = 0;
-						strpos( $attribute, 'loop' ) !== false ? $maybe_loop = 1 : $maybe_loop = 0;
-						strpos( $attribute, 'controls' ) !== false ? $maybe_controls = 1 : $maybe_controls = 0;
-						strpos( $attribute, 'muted' ) !== false ? $maybe_mute = 1 : $maybe_mute = 0;
-	                }
-	            }
-	        }
-	       
-			if ( strpos( $cache, 'vimeo.com' ) !== false ) {
-				// Ref: https://vimeo.com/forums/topic:278001			
-				$provider = preg_replace("@src=(['\"])?([^'\">\s]*)@", "src=$1$2?background=1&autoplay=" . $maybe_autoplay . "&loop=" . $maybe_loop . "&mute=" . $maybe_mute . "",  $cache);
-				
-				return  $provider;
-			} else {
-				// Ref: https://developers.google.com/youtube/player_parameters
-				$provider = preg_replace("@src=(['\"])?([^'\">\s]*)@", "src=$1$2&enablejsapi=1&loop=" . $maybe_loop . "&controls=" . $maybe_controls . "&modestbranding='1'",  $cache);
-
-				return  $provider;
-			}
-    	}
-
-    	if( 'post' === get_post_type() ) {
-			if ( strpos( $cache, 'youtu.be' ) !== false || strpos( $cache, 'youtube.com' ) !== false ) {
-				$provider = preg_replace("@src=(['\"])?([^'\">\s]*)@", "src=$1$2&enablejsapi=1",  $cache);
-				
-				return  $provider;
-			}
-    	}
-    }
-        
-    return $cache;
-
-}
-add_filter( 'embed_oembed_html', 'opening_times_oembed_url' );
-add_filter( 'oembed_result', 'opening_times_oembed_url', 10, 3);
-
-/**
  * Determine if ajax request has come from the front end.
  * 
  * @return bool
@@ -237,7 +179,7 @@ add_filter( 'oembed_result', 'opening_times_oembed_url', 10, 3);
  * @link( https://wordpress.stackexchange.com/questions/34721/conditional-check-for-front-end-which-includes-ajax, link )
  *
  * @since Opening Times 1.0.1
- */
+ *
 function opening_times_frontend_ajax_check() {
 
 	define( 'FRONT_AJAX', true );
@@ -245,53 +187,7 @@ function opening_times_frontend_ajax_check() {
 }
 add_action( 'wp_ajax_opening_times_ajax_load_more', 'opening_times_frontend_ajax_check' );
 add_action( 'wp_ajax_nopriv_opening_times_ajax_load_more', 'opening_times_frontend_ajax_check' );
-
-/**
- * Filter oembed html - customise markup and query params.
- * Lazy Load the iframe oembeds in the Reading Section and Archives.
- * 
- * @param  string $cache   The cached HTML result, stored in post meta.
- * @param  string $url     The attempted embed URL.
- * @param  array  $attr    An array of shortcode attributes.
- * @param  int    $post_id Post ID.
- *
- * @return string          The altered markup
- *
- * @link( http://tutorialshares.com/youtube-oembed-urls-remove-showinfo/, link)
- *
- * @since Opening Times 1.0.0
- */
-function opening_times_oembed_html( $cache, $url, $attr, $post_id ) {
-    //if( ! is_admin() && opening_times_oembed_video_check( $cache ) !== false ) {
-    if( opening_times_oembed_video_check( $cache ) !== false ) {
-    //if( ( is_admin() && defined('FRONT_AJAX') ) && opening_times_oembed_video_check( $cache ) !== false ) {
-        
-        // Give the video a unique id
-        $unique_id = 'ot-video-' . rand();
-        
-        // Add extra attributes to iframe HTML
-		if ( is_home() || is_archive() || ( is_admin() && defined('FRONT_AJAX') ) ) {
-		//if ( is_home() || is_archive() ) {
-			$attributes = 'id="' . $unique_id . '" width="100%" height="100%" class="lazyload"';
-		} else {
-			$attributes = 'id="' . $unique_id . '" width="100%" height="100%"';
-		}
-        
-        // Create the new oembed HTML.
-		$cache = str_replace( '<iframe', '<iframe ' . $attributes . '', $cache );
-        
-        // Return the new oembed markup
-		if ( is_home() || is_archive() || ( is_admin() && defined('FRONT_AJAX') ) ) {
-		//if ( is_home() || is_archive() ) {
-			return '<div class="embed-responsive embed-responsive-16by9">' . str_replace( 'src="', 'src="about:blank" data-src="', $cache ) . '</div>';
-		} else {
-			return '<div class="embed-responsive embed-responsive-16by9">' . $cache . '</div>';
-		}
-    } else {
-    	return $cache;
-    } 
-}
-add_filter( 'embed_oembed_html', 'opening_times_oembed_html', 99, 4 );
+*/
 
 
 /**
@@ -322,6 +218,7 @@ add_action( 'template_redirect', 'opening_times_redirect_singular' );
 function opening_times_custom_mime_types( $mimes ) {
 	$mimes['svg'] = 'image/svg+xml';
 	$mimes['svgz'] = 'image/svg+xml';
+	
 	return $mimes;
 }
 add_filter( 'upload_mimes', 'opening_times_custom_mime_types' );
@@ -338,6 +235,21 @@ function opening_times_excerpt_more( $more ) {
 	return '...  <a class="excerpt-read-more" href="'. get_permalink( get_the_ID() ) . '" title="'. __('Read more...', 'opening_times') . get_the_title( get_the_ID() ).'">'. __('Read more...', 'opening_times') .'</a>';
 }
 add_filter('excerpt_more', 'opening_times_excerpt_more');
+
+
+/**
+ * Output a transparent gif placeholder for lazyloading images.
+ * 
+ * @return string        1 x 1px gif placeholder
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_lazy_placeholder_img() {
+    $placeholder = 'data:image/gif;base64,R0lGODdhAQABAPAAAP///wAAACwAAAAAAQABAEACAkQBADs=';
+
+    return $placeholder;
+}
+add_filter( 'lazyload_images_placeholder_image', 'opening_times_lazy_placeholder_img' );
 
 
 /**
@@ -368,7 +280,7 @@ add_action( 'init', 'opening_times_insert_default_reading_format' );
  * @since Opening Times 1.0.0
  *
  * Repeat for each format needed
- */
+ *
 function opening_times_insert_reading_formats() {
 	wp_insert_term(
 		'Text',
@@ -380,6 +292,7 @@ function opening_times_insert_reading_formats() {
 	);
 }
 add_action( 'init', 'opening_times_insert_reading_formats' );
+*/
 
 
 /**

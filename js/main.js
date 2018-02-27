@@ -149,24 +149,130 @@ var timeToWaitForLast = 100;
 		}
 	}
 
+	// Init Lazy Load
+	var images,
+		config = {
+			// If the image gets within 200px in the Y axis, start the download.
+			rootMargin: '200px 0px',
+			threshold: 0.01
+		},
+		imageCount = 0,
+		observer,
+		image,
+		i;
+
+	function lazy_load_init() {
+		images = document.querySelectorAll( 'img[data-lazy-src]' );
+		imageCount = images.length;
+
+		// If initialized, then disconnect the observer
+		if ( observer ) {
+			observer.disconnect();
+		}
+
+		// If we don't have support for intersection observer, load the images immediately
+		if ( ! ( 'IntersectionObserver' in window ) ) {
+			loadImagesImmediately( images );
+		} else {
+			// It is supported, load the images
+			observer = new IntersectionObserver( onIntersection, config );
+
+			// foreach() is not supported in IE
+			for ( i = 0; i < images.length; i++ ) {
+				image = images[ i ];
+				if ( image.getAttribute( 'data-lazy-loaded' ) ) {
+					continue;
+				}
+
+				observer.observe( image );
+			}
+		}
+	}
+
+	/**
+	 * Load all of the images immediately
+	 * @param {NodeListOf<Element>} immediateImages List of lazy-loaded images to load immediately.
+	 */
+	function loadImagesImmediately( immediateImages ) {
+		var i;
+
+		// foreach() is not supported in IE
+		for ( i = 0; i < immediateImages.length; i++ ) {
+			var image = immediateImages[ i ];
+			lazy_load_media( image );
+		}
+	}
+
+	/**
+	 * On intersection
+	 * @param {array} entries List of elements being observed.
+	 */
+	function onIntersection( entries ) {
+		var i;
+
+		// Disconnect if we've already loaded all of the images
+		if ( imageCount === 0 ) {
+			observer.disconnect();
+		}
+
+		// Loop through the entries
+		for ( i = 0; i < entries.length; i++ ) {
+			var entry = entries[ i ];
+
+			// Are we in viewport?
+			if ( entry.intersectionRatio > 0 ) {
+				imageCount--;
+
+				// Stop watching and load the image
+				observer.unobserve( entry.target );
+				lazy_load_media( entry.target );
+			}
+		}
+	}
+
 	// Do Lazy Load
 	function lazy_load_media( el ) {
 		var $el = $(el);
 
 		$el.each(function() {
-			var $src = $el.data('src');
+			var $src = el.getAttribute( 'data-lazy-src' ),
+				$srcset = el.getAttribute( 'data-lazy-srcset' ),
+				$sizes = el.getAttribute( 'data-lazy-sizes' );
+
+			// Bail if we don't have a data src
+			if ( ! $src ) {
+				return;
+			}
 
 			// Bail if we have already performed a lazy load.
 			if ( $el.is('[data-lazy-loaded]') ) {
 				return;
 			}
+			
+			// Prevent this from being lazy loaded a second time.
+			if ( el.classList ) {
+				el.classList.add( 'lazy-loaded' );
+			}
 
-			$el.attr('src', $src).attr('data-lazy-loaded', 'true').addClass('lazy-loaded');
+			el.setAttribute( 'data-lazy-loaded', '1' );
+
+			el.setAttribute( 'src', $src );
+			el.removeAttribute( 'data-lazy-src' );
+
+			if ( $srcset ) {
+				el.setAttribute( 'srcset', $srcset );
+				el.removeAttribute( 'data-lazy-srcset' );
+			}
+
+			if ( $sizes ) {
+				el.setAttribute( 'sizes', $sizes );
+				el.removeAttribute( 'data-lazy-sizes' );
+			}
 		});
 	}
 
 	// SmoothState
-	function ot_smooth_state( $window ) {
+	function ot_smooth_state() {
         var $main = $('#page'),
             $site = $('html, body'),
             //transition = 'fade',
@@ -198,7 +304,6 @@ var timeToWaitForLast = 100;
 	                // reset the page counter
 	                page = 1;
 	                ot_page_load();
-	                ot_infinite_scroll( $window );
 	            },
             };
 
@@ -216,7 +321,7 @@ var timeToWaitForLast = 100;
 	function mobile_url_params( el ) {
 		if( mobilecheck() ) {
 			var $iframe = $(el).find('iframe'),
-				vid = $iframe .is(['data-src']) ? $iframe .data('src') : $iframe .attr('src');
+				vid = $iframe .is(['data-lazy-src']) ? $iframe .data('lazy-src') : $iframe .attr('src');
 
 			$iframe.each(function () {
 				var src = $(this).attr('src');
@@ -270,7 +375,7 @@ var timeToWaitForLast = 100;
 	function playMedia( panel, vol ) {
 		var media = panel.find('video, audio'),
 			iframe = panel.find('iframe'),
-			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+			vid = $(iframe).is(['data-lazy-src']) ? iframe.data('lazy-src') : iframe.attr('src');
 
 		// play HTML5 media elements
 		if( $(media).length > 0 ) {
@@ -319,7 +424,7 @@ var timeToWaitForLast = 100;
 			iframe = panel.find('iframe'),
 			// This works, but maybe better to determine if src is set,
 			// as performing these actions on a data attr is silly.
-			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+			vid = $(iframe).is(['data-lazy-src']) ? iframe.data('lazy-src') : iframe.attr('src');
 
 		// pause HTML5 media elements
 		if( $(media).length > 0 ) {
@@ -358,7 +463,7 @@ var timeToWaitForLast = 100;
 	function lowerVolume( panel, vol ) {
 		var media = panel.find('video, audio'),
 			iframe = panel.find('iframe'),
-			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+			vid = $(iframe).is(['data-lazy-src']) ? iframe.data('lazy-src') : iframe.attr('src');
 
 		// lower volume of HTML5 media elements
 		if( $(media).length > 0 ) {
@@ -388,7 +493,7 @@ var timeToWaitForLast = 100;
 	function raiseVolume( panel, vol ) {
 		var media = panel.find('video, audio'),
 			iframe = panel.find('iframe'),
-			vid = $(iframe).is(['data-src']) ? iframe.data('src') : iframe.attr('src');
+			vid = $(iframe).is(['data-lazy-src']) ? iframe.data('lazy-src') : iframe.attr('src');
 
 		// raise volume of HTML5 media elements
 		if( $(media).length > 0 ) {
@@ -415,7 +520,7 @@ var timeToWaitForLast = 100;
 	}
 
 	// Aspect Ratio -- full screen, centered images and embeds
-	function opening_times_fs_aspect_ratio() {
+	function ot_fs_aspect_ratio() {
 		var $fsmedia = $('.aspect-ratio--js');
 
 		$fsmedia.each(function() {
@@ -637,34 +742,43 @@ var timeToWaitForLast = 100;
 		});
 	}
 
-	// Actions that happen on page load, or via ajax callback
-	function ot_page_load() {
-		// Definitions
-		var eventtype = mobilecheck() ? 'touchstart' : 'click',
-			hash = window.location.hash,
-		    $scene = $('#scene'),
-			$accordion = $('.accordion .collapse'),
-			$infoCollapse = $('.site-info .collapse'),
-			$infoClose = $('.site-info .close'),
-		    $splashTop = $('.splash-top__link'),
-		    $autoProtocol = $('.auto-protocol'),
-		    $anchorScroll = $('a[href*="#"]:not([href="#"], a[href*="#panel-"], [data-toggle="collapse"], .ot-social-links a)');
-			//isSidebarOpen = false;
-			//div[class^="test"]
+	// Play media on accordion opened
+	function ot_accordion_play_media( $accordion ) {
+		$accordion.on('shown.bs.collapse', function () {
+			var $this = $(this);
 
-		// Launch the gradients
-		makeGradients( '.gradient-text', 240, 100, 50 );
+			// Load media when accordion opened
+			if( $this.has('[data-lazy-src]').length ) {
+				var $el = $($this.find('[data-lazy-src]'));
 
-		// Expand the search form on focus
-		ot_search_toggle();
+				$el.each(function() {
+					lazy_load_media( this );
+				});
+			}
 
-		// Call aspect ratio
-		opening_times_fs_aspect_ratio();
-		//$window.resize(opening_times_fs_aspect_ratio).trigger('resize');
-		
-		// Form validation
-		formValidation( $('#mailing-list-subscribe') );
+			// Play media when accordion opened
+			playMedia( $this, 0.2 );
+			mobile_url_params( $this );
+		});
+	}
 
+	// Stop media on accodion closed
+	function ot_accordion_stop_media( $accordion ) {
+		$accordion.on('hidden.bs.collapse', function () {
+			var $this = $(this);
+
+			// Pause media on accordion close
+			stopMedia( $this );
+		});
+	}
+
+	// Accordion functions
+	function ot_accordion( $accordion ) {
+		if( ! $accordion.length ) {
+			return;
+		}
+
+		// Accordion open
 		$accordion.on('show.bs.collapse', function () {
 			var $this = $(this);
 
@@ -682,23 +796,10 @@ var timeToWaitForLast = 100;
 			}
 		});
 
-		$accordion.on('shown.bs.collapse', function () {
-			var $this = $(this);
+		// Accordion opened
+		ot_accordion_play_media( $accordion );
 
-			// Load media when accordion opened
-			if( $this.has('.lazyload').length ) {
-				var $el = $($this.find('.lazyload'));
-
-				$el.each(function() {
-					lazy_load_media( this );
-				});
-			}
-
-			// Play media when accordion opened
-			playMedia( $this, 0.2 );
-			mobile_url_params( $this );
-		});
-
+		// Accordion close
 		$accordion.on('hide.bs.collapse', function () {
 			var $this = $(this),
 				$issueList = $('.reading__issue-list');
@@ -725,12 +826,76 @@ var timeToWaitForLast = 100;
 			}
 		});
 
-		$accordion.on('hidden.bs.collapse', function () {
-			var $this = $(this);
+		// Accordion closed
+		ot_accordion_stop_media( $accordion );
+	}
 
-			// Pause media on accordion close
-			stopMedia( $this );
+	// Infinite Scroll
+	function ot_infinite_scroll( options, $container ) {
+		if( ! $container.length ) {
+			return;
+		}
+
+		$container.infiniteScroll(options);
+	}
+
+	// Actions that happen on page load, or via ajax callback
+	function ot_page_load() {
+		// Definitions
+		var eventtype = mobilecheck() ? 'touchstart' : 'click',
+			hash = window.location.hash,
+		    $scene = $('#scene'),
+			$accordion = $('.accordion .collapse'),
+			$infoCollapse = $('.site-info .collapse'),
+			$infoClose = $('.site-info .close'),
+		    $autoProtocol = $('.auto-protocol'),
+		    $anchorScroll = $('a[href*="#"]:not([href="#"], a[href*="#panel-"], [data-toggle="collapse"], .ot-social-links a)');
+			//isSidebarOpen = false;
+			//div[class^="test"]
+		
+		// Infinite Scroll options
+		var $infiniteContainer = $('.infinite'),
+			infiniteOptions = {
+				path: '.nav-previous a',
+				append: '.post',
+				prefill: true,
+				hideNav: '.nav-links',
+				history: false
+			};
+
+		// Infinite Scroll
+		ot_infinite_scroll( infiniteOptions, $infiniteContainer );
+
+		// Call back scripts after infinite load.
+		$infiniteContainer.on('append.infiniteScroll', function() {
+			makeGradients( '.gradient-text', 240, 100, 50 );
+			lazy_load_init();
+
+			// Reinit the accordion variable
+			var $accordionInfinite = $('.accordion .collapse');
+			
+			// Accordion closed
+			ot_accordion_stop_media( $accordionInfinite );
 		});
+
+		// Launch the gradients
+		makeGradients( '.gradient-text', 240, 100, 50 );
+
+		// Expand the search form on focus
+		ot_search_toggle();
+
+		// Call aspect ratio
+		ot_fs_aspect_ratio();
+		//$window.resize(ot_fs_aspect_ratio).trigger('resize');
+		
+		// Form validation
+		formValidation( $('#mailing-list-subscribe') );
+
+		// Lazy Load images
+		lazy_load_init();
+
+		// Accordion
+		ot_accordion( $accordion );
 
 		// Site info toggle
 		$infoCollapse.on('show.bs.collapse', function () {
@@ -803,13 +968,6 @@ var timeToWaitForLast = 100;
         	$(foo + '.collapse').prev('.collapsed').trigger(eventtype);
 		});
 		//
-
-        // Open accodion from new commission splash.
-		$splashTop.on(eventtype, function() {
-			var $splashPanel = $($(this).data('open'));
-
-			$splashPanel.prev('.collapsed').trigger(eventtype);
-		});
 
 		// Auto add protocol to url form validation
 		$autoProtocol.blur(function() {
@@ -889,78 +1047,9 @@ var timeToWaitForLast = 100;
         });
 	}
 
-	// Infinite Scroll
-	function ot_infinite_scroll( $window ) {
-		var $infinite = $('.infinite');
-
-		if( ! $infinite.length ) {
-			return;
-		}
-
-		var $loadMore = $('.site-main > div');
-
-		$loadMore.append( '<div class="loader"></div>' );
-			
-		var $loader = $('.loader'),
-			page = 2,
-			loading = false,
-			scrollHandling = {
-				allow: true,
-				reallow: function() {
-					scrollHandling.allow = true;
-				},
-				delay: 400
-			},
-			maxpage = otloadmore.maxpage;
-
-		$window.scroll(function(){
-			if( ! loading && scrollHandling.allow ) {
-				scrollHandling.allow = false;
-				setTimeout(scrollHandling.reallow, scrollHandling.delay);
-				
-				var offset = $loader.offset().top - $window.scrollTop();
-				
-				if( 2000 > offset ) {
-					loading = true;
-					
-					var data = {
-						action: 'opening_times_ajax_load_more',
-						page: page,
-						query: otloadmore.query,
-					};
-
-					// show loader
-					if( page <= maxpage && loading === true ) {
-						$loader.addClass('in');
-					}
-
-					$.post(otloadmore.url, data, function(res) {
-						if( res.success) {
-							$infinite.append( res.data );
-							$infinite.append( $loader );
-							page = page + 1;
-							loading = false;
-
-							$loader.removeClass('in');
-
-							// Callback scripts here
-							ot_page_load();
-							
-						} else {
-							console.log(res);
-						}
-					}).fail(function( jqxhr, textStatus, error ) {
-						var err = textStatus + ', ' + error;
-						console.log(err);
-					});
-				}
-			}
-		});
-	}
-
 	// Resize
 	function ot_resize() {
-		opening_times_fs_aspect_ratio();
+		ot_fs_aspect_ratio();
 		ot_search_toggle();
 
 		var $slideSidebar = $('.slide__text--sidebar');
@@ -981,7 +1070,6 @@ var timeToWaitForLast = 100;
 		// Prepare to launch
 		ot_smooth_state( $window );
 		ot_page_load( $window );
-		ot_infinite_scroll( $window );
 
 		$window.resize(function () {
 			waitForFinalEvent(function () {

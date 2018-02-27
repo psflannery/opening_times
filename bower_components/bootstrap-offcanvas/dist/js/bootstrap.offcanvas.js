@@ -1,12 +1,12 @@
 (function() {
-  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   (function($, window) {
-    var Offcanvas, OffcanvasDropdown, OffcanvasTouch, transformCheck;
+    var Offcanvas, OffcanvasDropdown, OffcanvasTouch;
     OffcanvasDropdown = (function() {
       function OffcanvasDropdown(element) {
         this.element = element;
-        this._clickEvent = bind(this._clickEvent, this);
+        this._clickEvent = __bind(this._clickEvent, this);
         this.element = $(this.element);
         this.nav = this.element.closest(".nav");
         this.dropdown = this.element.parent().find(".dropdown-menu");
@@ -14,7 +14,7 @@
         this.nav.closest('.navbar-offcanvas').on('click', (function(_this) {
           return function() {
             if (_this.dropdown.is('.shown')) {
-              return _this.dropdown.removeClass('shown').closest('.active').removeClass('active');
+              return _this.dropdown.removeClass('shown').closest('.open').removeClass('open');
             }
           };
         })(this));
@@ -25,9 +25,9 @@
           e.preventDefault();
         }
         e.stopPropagation();
-        $('.dropdown-toggle').not(this.element).closest('.active').removeClass('active').find('.dropdown-menu').removeClass('shown');
+        $('.dropdown-toggle').not(this.element).closest('.open').removeClass('open').find('.dropdown-menu').removeClass('shown');
         this.dropdown.toggleClass("shown");
-        return this.element.parent().toggleClass('active');
+        return this.element.parent().toggleClass('open');
       };
 
       return OffcanvasDropdown;
@@ -39,11 +39,11 @@
         this.element = element;
         this.location = location;
         this.offcanvas = offcanvas;
-        this._getFade = bind(this._getFade, this);
-        this._getCss = bind(this._getCss, this);
-        this._touchEnd = bind(this._touchEnd, this);
-        this._touchMove = bind(this._touchMove, this);
-        this._touchStart = bind(this._touchStart, this);
+        this._getFade = __bind(this._getFade, this);
+        this._getCss = __bind(this._getCss, this);
+        this._touchEnd = __bind(this._touchEnd, this);
+        this._touchMove = __bind(this._touchMove, this);
+        this._touchStart = __bind(this._touchStart, this);
         this.endThreshold = 130;
         this.startThreshold = this.element.hasClass('navbar-offcanvas-right') ? $("body").outerWidth() - 60 : 20;
         this.maxStartThreshold = this.element.hasClass('navbar-offcanvas-right') ? $("body").outerWidth() - 20 : 60;
@@ -157,21 +157,21 @@
       function Offcanvas(element) {
         var t, target;
         this.element = element;
-        this.bodyOverflow = bind(this.bodyOverflow, this);
-        this._sendEventsAfter = bind(this._sendEventsAfter, this);
-        this._sendEventsBefore = bind(this._sendEventsBefore, this);
-        this._documentClicked = bind(this._documentClicked, this);
-        this._close = bind(this._close, this);
-        this._open = bind(this._open, this);
-        this._clicked = bind(this._clicked, this);
-        this._navbarHeight = bind(this._navbarHeight, this);
+        this.bodyOverflow = __bind(this.bodyOverflow, this);
+        this._sendEventsAfter = __bind(this._sendEventsAfter, this);
+        this._sendEventsBefore = __bind(this._sendEventsBefore, this);
+        this._documentClicked = __bind(this._documentClicked, this);
+        this._close = __bind(this._close, this);
+        this._open = __bind(this._open, this);
+        this._clicked = __bind(this._clicked, this);
+        this._navbarHeight = __bind(this._navbarHeight, this);
         target = this.element.attr('data-target') ? this.element.attr('data-target') : false;
         if (target) {
           this.target = $(target);
           if (this.target.length && !this.target.hasClass('js-offcanvas-done')) {
             this.element.addClass('js-offcanvas-has-events');
             this.location = this.target.hasClass("navbar-offcanvas-right") ? "right" : "left";
-            this.target.addClass(transform ? "offcanvas-transform js-offcanvas-done" : "offcanvas-position js-offcanvas-done");
+            this.target.addClass(this._transformSupported() ? "offcanvas-transform js-offcanvas-done" : "offcanvas-position js-offcanvas-done");
             this.target.data('offcanvas', this);
             this.element.on("click", this._clicked);
             this.target.on('transitionend', (function(_this) {
@@ -295,31 +295,34 @@
         }
       };
 
-      return Offcanvas;
-
-    })();
-    transformCheck = (function(_this) {
-      return function() {
+      Offcanvas.prototype._transformSupported = function() {
         var asSupport, el, regex, translate3D;
         el = document.createElement('div');
         translate3D = "translate3d(0px, 0px, 0px)";
         regex = /translate3d\(0px, 0px, 0px\)/g;
         el.style.cssText = "-webkit-transform: " + translate3D + "; -moz-transform: " + translate3D + "; -o-transform: " + translate3D + "; transform: " + translate3D;
         asSupport = el.style.cssText.match(regex);
-        return _this.transform = asSupport.length != null;
+        return asSupport.length != null;
       };
-    })(this);
+
+      return Offcanvas;
+
+    })();
+    $.fn.bsOffcanvas = function() {
+      return this.each(function() {
+        return new Offcanvas($(this));
+      });
+    };
     return $(function() {
-      transformCheck();
       $('[data-toggle="offcanvas"]').each(function() {
-        var oc;
-        return oc = new Offcanvas($(this));
+        return $(this).bsOffcanvas();
       });
       $(window).on('resize', function() {
         $('.navbar-offcanvas.in').each(function() {
           return $(this).height('').removeClass('in');
         });
-        return $('.offcanvas-toggle').removeClass('is-open');
+        $('.offcanvas-toggle').removeClass('is-open');
+        return $('body').removeClass('offcanvas-stop-scrolling');
       });
       return $('.offcanvas-toggle').each(function() {
         return $(this).on('click', function(e) {

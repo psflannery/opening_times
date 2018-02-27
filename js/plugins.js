@@ -105,5 +105,6 @@
 
 //@codekit-append "../bower_components/smoothstate/src/jquery.smoothState.js"
 //@codekit-append "../bower_components/flickity/dist/flickity.pkgd.js"
+//@codekit-append "../bower_components/infinite-scroll/dist/infinite-scroll.pkgd.js"
 //@codekit-append "../bower_components/tether/dist/js/tether.js"
 //@codekit-append "dist/js/bootstrap.js"

@@ -45,11 +45,21 @@ foreach ( $sections as $section ) {
 	}
 
 	if ( isset( $section['slide_bg_img_id'] ) && ! empty( $section['slide_bg_img_id'] ) ) {
+		$img_note_attachment = wp_get_attachment_image( 
+			$section['slide_bg_img_id'], 
+			'medium',
+			'',
+			array( 
+				'class' => 'lazyload w-100',
+				'alt'   => the_title_attribute( 'echo=0' ),
+			) 
+		);
+
 		$img_note = sprintf(
-			'<img src="%1$s" srcset="%2$s" alt="%3$s" class="pb-4">',
-			wp_get_attachment_url( $section['slide_bg_img_id'], 'medium' ),
-			wp_get_attachment_image_srcset( $section['slide_bg_img_id'], 'full' ),
-			get_post_meta( $section['slide_bg_img_id'], '_wp_attachment_image_alt', true )
+			'<figure><div class="aspect-ratio" style="padding-bottom: %1$s">%2$s</div>%3$s</figure>',
+			opening_times_image_ratio( $section['slide_bg_img_id'], 'accordion-thumb' ),
+			$img_note_attachment,
+			opening_times_maybe_caption( $section['slide_bg_img_id'], false )
 		);
 	}
 
@@ -62,7 +72,7 @@ foreach ( $sections as $section ) {
 
 	if ( isset( $section['slide_text_note'] ) || isset( $section['slide_bg_img_id'] ) ) {
 		$aside = sprintf(
-			'<aside class="col-md-6 col-lg-4 small"><div class="sticky-top top-3">%1$s %2$s %3$s</div></aside>',
+			'<aside class="col-md-6 col-lg-4 pb-4"><div class="sticky-top top-3">%1$s %2$s %3$s</div></aside>',
 			$text_note,
 			$img_note,
 			$embed_note

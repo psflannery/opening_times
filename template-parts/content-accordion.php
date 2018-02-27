@@ -27,13 +27,17 @@
         <div class="accordion-content row">
             <div class="col-md-4">
 
-                <?php opening_times_featured_content(); ?>
+                <?php opening_times_featured_content( array (
+                    'fig_attr' => array( 
+                        'class' => 'wp-caption featured-image',
+                    ),
+                ) ); ?>
 
             </div>
             <div class="entry-content col-md-8 col-lg-4">
 
-                <?php                 
-                    opening_times_featured_links();
+                <?php
+                    opening_times_do_featured_link();
 
                     the_content( sprintf(
                         /* translators: %s: Name of current post. */

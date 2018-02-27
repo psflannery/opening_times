@@ -7,7 +7,7 @@
 		"uuidString": "AE280D63-0A95-44C0-B1EC-9C3ADD3FC45B"
 		}
 	],
-"creatorBuild": "26148",
+"creatorBuild": "26261",
 "files": {
 	"\/404.php": {
 		"cB": 0,
@@ -585,6 +585,130 @@
 		"ft": 4096,
 		"oA": 2,
 		"oAP": "\/bower_components\/get-size\/README.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/infinite-scroll\/.bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/.bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/infinite-scroll\/bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/infinite-scroll\/dist\/infinite-scroll.pkgd.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/bower_components\/infinite-scroll\/dist\/infinite-scroll.pkgd.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/dist\/infinite-scroll.pkgd.min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/dist\/infinite-scroll.pkgd.min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/js\/button.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/js\/button.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/js\/core.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/js\/core.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/js\/history.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/js\/history.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/js\/index.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/js\/index.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/js\/page-load.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/js\/page-load.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/js\/scroll-watch.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/js\/scroll-watch.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/js\/status.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/js\/status.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/infinite-scroll\/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/infinite-scroll\/README.md",
 		"oF": 0,
 		"oFM": 0,
 		"oS": 0,
@@ -4507,6 +4631,13 @@
 		"oAP": "\/inc\/admin.php",
 		"oF": 0
 		},
+	"\/inc\/cmb2-content-blocks.php": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/inc\/cmb2-content-blocks.php",
+		"oF": 0
+		},
 	"\/inc\/cmb2-template-tags.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -4617,6 +4748,13 @@
 		"ft": 8192,
 		"oA": 0,
 		"oAP": "\/inc\/tidy.php",
+		"oF": 0
+		},
+	"\/inc\/video-functions.php": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/inc\/video-functions.php",
 		"oF": 0
 		},
 	"\/index.php": {
@@ -5535,6 +5673,10 @@
 		"id-match": {
 			"active": 0,
 			"optionString": "'^[a-z]+([A-Z][a-z]+)*$', {'properties': false, 'onlyDeclarations': true}"
+			},
+		"implicit-arrow-linebreak": {
+			"active": 0,
+			"optionString": "'beside'"
 			},
 		"indent": {
 			"active": 0,
