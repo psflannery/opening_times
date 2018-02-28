@@ -198,12 +198,8 @@ add_filter( 'embed_handler_html', 'opening_times_responsive_videos_maybe_wrap_oe
  * @since Opening Times 1.0.1
  */
 function opening_times_oembed_url( $html, $url ) {
-	if ( is_admin() ) {
-		return;
-	}
-
-	// Bail if we are don't have a Vimeo or YouTube url.
-	if ( ! opening_times_oembed_video_check( $url ) ) {
+	// Bail if we are in admin or don't have a Vimeo or YouTube url.
+	if ( is_admin() || ! opening_times_oembed_video_check( $url ) ) {
 		return;
 	}
 

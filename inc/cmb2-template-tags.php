@@ -400,50 +400,39 @@ function opening_times_reading_issue_standfirst( $before = '', $after = '', $ech
     	return $standfirst;
 }
 
-/**
- * Output the Reading Section Accordion
- * 
- * @param  string $before Optional Markup to prepend to the large accordion. Default empty.
- * @param  string $after  Optional Markup to append to the large accordion. Default empty.
- * @return string         Reading Section Accordion markup
- *
- * @since Opening Times 1.0.0
- */
-function opening_times_accordion_type() {
-	$accordionXl = false;
-	
-	if( has_term( 'accordion-xl', 'format' ) ) {
-		$accordionXl = true;
-	}
-
-	return $accordionXl;
-}
-
 
 /**
  * Output the reading section accordion
- * 
- * @param  string $before Markup before the accordion element. Default empty. Optional.
- * @param  string $after  Markup after the aaccordion element. Default empty. Optional.
- * @return string         The accordion content and HTML.
+ *
+ * @param  string|array $attr   Query string of attributes.
+ * @param  string       $before Markup before the accordion element. Default empty. Optional.
+ * @param  string       $after  Markup after the aaccordion element. Default empty. Optional.
+ * @return string               The accordion content and HTML.
  *
  * @since Opening Times 1.0.0
  */
-function opening_times_do_reading_accordion( $before = '', $after = '' ) {
+function opening_times_do_reading_accordion( $attr = '', $before = '', $after = '' ) {
 	$accordion_panels = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
 
 	if ( '' == $accordion_panels ) {
 		return;
 	}
 
-	$accordion_classes = opening_times_accordion_type() ? 'accordion--large' : 'accordion mb-5';
+	$default_atts = array(
+		'container_id'    => 'accordion-' . opening_times_the_slug(false),
+		'container_class' => 'accordion gradient-container mb-5',
+		'header_class'    => 'collapsed accordion-header container-fluid gradient-text',
+		'content_class'   => 'container-fluid collapse w-100'
+	);
 
-	$accordion = '<div id="accordion-' . opening_times_the_slug(false) . '" class="accordion gradient-container ' . $accordion_classes . '" role="tablist" aria-multiselectable="true">';
+	$atts = wp_parse_args( $attr, $default_atts );
+
+	$accordion = '<div id="' . esc_attr( $atts['container_id'] ) . '" class="' . esc_attr( $atts['container_class'] ) . '" role="tablist" aria-multiselectable="true">';
     
 	$i = 0;
 	foreach ( (array) $accordion_panels as $key => $accordion_panel ) {
 		// Set default values.
-		$title = $sub_title = $text = $text_position = $lazy_load = $bg_img = $bg_audio = $bg_video = $bg_embed = $links = '';
+		$title = $sub_title = $text = $bg_img = $bg_audio = $bg_video = $bg_embed = $links = '';
 		
 		// Set Classes and attributes
 		$classes = array();
@@ -491,11 +480,11 @@ function opening_times_do_reading_accordion( $before = '', $after = '' ) {
 				$links .= opening_times_get_featured_link_html(
 					$link,
 					array (
-	                    'atts' => array (
-	                        'target' => opening_times_has_external_url( $link ) !== false ? '_blank' : '',
-	                        'rel'    => opening_times_has_external_url( $link ) !== false ? 'noopener' : '',
-	                    )
-	                )
+						'atts' => array (
+							'target' => opening_times_has_external_url( $link ) !== false ? '_blank' : '',
+							'rel'    => opening_times_has_external_url( $link ) !== false ? 'noopener' : '',
+						) 
+					) 
 				);
 			}
 		}
@@ -650,28 +639,27 @@ function opening_times_do_reading_accordion( $before = '', $after = '' ) {
 
 		$classes = array_map( 'esc_attr', $classes );
 		$accordion_class = join( ' ', $classes );
-		$accordion_header_class = opening_times_accordion_type() ? 'accordion-header--large' : '';
-		$accordion_content_class = opening_times_accordion_type() ? 'px-0' : '';
+		
 		$accordion_attributes = join( ' ', $data_attributes );
     	
-    	ob_start(); ?>
-    	
-    	<?php if( '' != ( $text || $bg_video || $bg_video || $bg_img ) ) : ?>
+		ob_start(); ?>
 
-    	<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
-	    	<header class="collapsed accordion-header container-fluid gradient-text <?php echo $accordion_header_class; ?>" role="tab" id="header-panel-<?php echo $i ?>" data-toggle="collapse" data-parent="#accordion-<?php opening_times_the_slug(); ?>" data-target="#panel-<?php echo $i ?>" aria-expanded="false" aria-controls="panel-<?php echo $i ?>">
-	    		<div class="row">
+		<?php if( '' != ( $text || $bg_video || $bg_video || $bg_img ) ) : ?>
 
-	    		<?php 
-	    			echo $title;
-	    			echo $sub_title;
-	    		?>
+		<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
+			<header class="<?php echo esc_attr( $atts['header_class'] ) ?>" role="tab" id="header-panel-<?php echo $i ?>" data-toggle="collapse" data-parent="#<?php echo esc_attr( $atts['container_id'] ) ?>" data-target="#panel-<?php echo $i ?>" aria-expanded="false" aria-controls="panel-<?php echo $i ?>">
+				<div class="row">
 
-	    		</div>
-	    	</header>
-	    	<div id="panel-<?php echo $i ?>" class="container-fluid collapse w-100" role="tabpanel" aria-labelledby="header-panel-<?php echo $i ?>" aria-expanded="false">
-	    		<div class="row">
-					<div class="col-12 <?php echo $accordion_content_class; ?>">
+				<?php 
+					echo $title;
+					echo $sub_title;
+				?>
+
+				</div>
+			</header>
+			<div id="panel-<?php echo $i ?>" class="<?php echo esc_attr( $atts['content_class'] ) ?>" role="tabpanel" aria-labelledby="header-panel-<?php echo $i ?>" aria-expanded="false">
+				<div class="row">
+					<div class="col-12">
 
 					<?php
 						echo $bg_img;
@@ -683,25 +671,27 @@ function opening_times_do_reading_accordion( $before = '', $after = '' ) {
 					?>
 
 					</div>
-	    		</div>
-	    	</div>
-    	</div>
+				</div>
+			</div>
+		</div>
 
-    	<?php else: ?>
+		<?php else: ?>
 
-    		<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
-				<header id="header-panel-<?php echo $i ?>" class="accordion-header accordion-header--closed container-fluid gradient-text <?php echo $accordion_header_class; ?>" role="tab" id="header-panel-<?php echo $i ?>"">
-					<?php echo $title; ?>
-				</header>
-	    	</div>
-    	
-    	<?php 
-    	endif; 
+		<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
+			<header id="header-panel-<?php echo $i ?>" class="accordion-header accordion-header--closed container-fluid gradient-text <?php echo $accordion_header_class; ?>" role="tab" id="header-panel-<?php echo $i ?>">
+
+				<?php echo $title; ?>
+
+			</header>
+		</div>
+
+		<?php 
+		endif; 
 		$accordion .= ob_get_clean();
 		$i ++;
-    }
+		}
 
-    $accordion .= '</div>';
+		$accordion .= '</div>';
 
-    echo $before . $accordion . $after;
+		echo $before . $accordion . $after;
 }

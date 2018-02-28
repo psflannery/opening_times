@@ -23,7 +23,13 @@
                         the_title( '<span class="screen-reader-text">"', '"</span>', false )
                     ) );
 
-                    opening_times_do_reading_accordion();
+                    opening_times_do_reading_accordion(
+                        array (
+                            'container_class' => 'accordion gradient-container accordion--large',
+                            'header_class'    => 'collapsed accordion-header accordion-header--large container-fluid gradient-text',
+                            'content_class'   => 'container-fluid collapse w-100 px-0',
+                        )
+                    );
 
                     opening_times_editor_bio( '<aside class="issue-content__bio"><div class="row">', '</div></aside>' );
                 ?>	
