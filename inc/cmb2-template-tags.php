@@ -739,7 +739,7 @@ function opening_times_do_reading_annotation( $attr = '', $before = '', $after =
 		if ( isset( $section['slide_text'] ) && ! empty( $section['slide_text'] ) ) {
 			global $wp_embed;
 
-			$text = '<div class="col-md-6 col-lg-5">' . apply_filters( 'the_content', $section['slide_text'] ) . '</div>';
+			$text = '<div class="col-md-6">' . apply_filters( 'the_content', $section['slide_text'] ) . '</div>';
 		}
 
 		// Markup for the note
@@ -749,8 +749,8 @@ function opening_times_do_reading_annotation( $attr = '', $before = '', $after =
 			/**
 			 * Filter the annotation text note
 			 *
-			 * @param string $output          The annotation text note HTML.
-			 * @param array  $accordion_panel The section attributes.
+			 * @param string $output  The annotation text note HTML.
+			 * @param array  $section The section attributes.
 			 *
 			 * @since opening_times 1.0.1
 			 */
@@ -758,33 +758,23 @@ function opening_times_do_reading_annotation( $attr = '', $before = '', $after =
 		}
 
 		if ( isset( $section['slide_bg_img_id'] ) && ! empty( $section['slide_bg_img_id'] ) ) {
-		
-			$img_note = opening_times_get_the_attached_image( 
+			$output = opening_times_get_the_attached_image( 
 				$section['slide_bg_img_id'], 
 				'accordion-thumb',
 				array (
 					'class' => '',
 				)
-			);	
-			
-			/*
-			$img_note_attachment = wp_get_attachment_image( 
-				$section['slide_bg_img_id'], 
-				'medium',
-				'',
-				array( 
-					'class' => 'lazyload w-100',
-					'alt'   => the_title_attribute( 'echo=0' ),
-				) 
 			);
 
-			$img_note = sprintf(
-				'<figure><div class="aspect-ratio" style="padding-bottom: %1$s">%2$s</div>%3$s</figure>',
-				opening_times_image_ratio( $section['slide_bg_img_id'], 'accordion-thumb' ),
-				$img_note_attachment,
-				opening_times_maybe_caption( $section['slide_bg_img_id'], false )
-			);
-			*/
+			/**
+			 * Filter the annotation image note
+			 *
+			 * @param string $output  The annotation image note HTML.
+			 * @param array  $section The section attributes.
+			 *
+			 * @since opening_times 1.0.1
+			 */
+			$img_note = apply_filters( 'ot_annotation_img_note', $output, $section );
 		}
 
 		if ( isset( $section['slide_bg_embed'] ) && ! empty( $section['slide_bg_embed'] ) ) {
@@ -810,7 +800,7 @@ function opening_times_do_reading_annotation( $attr = '', $before = '', $after =
 
 		if ( isset( $section['slide_text_note'] ) || isset( $section['slide_bg_img_id'] ) ) {
 			$aside = sprintf(
-				'<aside class="col-md-6 col-lg-4 pb-4"><div class="sticky-top top-3">%1$s %2$s %3$s</div></aside>',
+				'<aside class="col-md-6 col-lg-5 pb-4"><div class="sticky-top top-3">%1$s %2$s %3$s</div></aside>',
 				$text_note,
 				$img_note,
 				$embed_note
