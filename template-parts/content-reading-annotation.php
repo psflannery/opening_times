@@ -17,24 +17,24 @@
 			<div class="entry-content col-md-12">
 
 				<?php 
-                    the_content( sprintf(
-                        /* translators: %s: Name of current post. */
-                        wp_kses( __( 'Continue reading %s <span class="meta-nav">&rarr;</span>', 'opening_times' ), array( 'span' => array( 'class' => array() ) ) ),
-                        the_title( '<span class="screen-reader-text">"', '"</span>', false )
-                    ) );
-                ?>
+					the_content( sprintf(
+						/* translators: %s: Name of current post. */
+						wp_kses( __( 'Continue reading %s <span class="meta-nav">&rarr;</span>', 'opening_times' ), array( 'span' => array( 'class' => array() ) ) ),
+						the_title( '<span class="screen-reader-text">"', '"</span>', false )
+					) );
+				?>
 
 				<div class="row">
 					<div class="col-12">
 						<div class="row">
 
-                    		<?php get_template_part( 'template-parts/content-blocks/block-annotation' ); ?>
-                    		
+							<?php opening_times_do_reading_annotation(); ?>
+
 						</div>
 					</div>
 				</div>
 
-                <?php opening_times_editor_bio( '<aside class="issue-content__bio"><div class="row">', '</div></aside>' ); ?>	
+				<?php opening_times_editor_bio( '<aside class="issue-content__bio"><div class="row">', '</div></aside>' ); ?>
 
 			</div>
 		</div>

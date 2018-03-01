@@ -184,7 +184,7 @@ function opening_times_featured_content( $args = array() ) {
 			'after'    => $args['after'],
 			'size'     => $args['size'],
 			'fallback' => $args['fallback'],
-            'attr'     => $args['fig_attr'],
+			'attr'     => $args['fig_attr'],
 		) );
 
 		if ( $link_url ) {
@@ -694,4 +694,132 @@ function opening_times_do_reading_accordion( $attr = '', $before = '', $after = 
 		$accordion .= '</div>';
 
 		echo $before . $accordion . $after;
+}
+
+
+/**
+ * [opening_times_do_reading_annotation description]
+ * 
+ * @param  string $attr   [description]
+ * @param  string $before [description]
+ * @param  string $after  [description]
+ * @return [type]         [description]
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_do_reading_annotation( $attr = '', $before = '', $after = '' ) {
+	// Get the Anontation post meta
+	$sections = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
+
+	// Bail if we don't have any
+	if ( '' == $sections ) {
+		get_template_part( 'template-parts/content', 'none' );
+	}
+
+	// Loop through the sections
+	foreach ( $sections as $section ) {
+		$heading = $text = $text_note = $img_note = $embed_note = $aside = '';
+
+		// Markup for the title
+		if ( isset( $section['slide_title'] ) && ! empty( $section['slide_title'] ) ) {
+			$output = '<h2 class="col-12">' . esc_html( $section['slide_title'] ) . '</h2>';
+
+			/**
+			 * Filter the annotation title
+			 *
+			 * @param string $output          The annotation title HTML.
+			 * @param array  $accordion_panel The section attributes.
+			 *
+			 * @since opening_times 1.0.1
+			 */
+			$heading = apply_filters( 'ot_annotation_title', $output, $section );
+		}
+
+		// Markup for the text
+		if ( isset( $section['slide_text'] ) && ! empty( $section['slide_text'] ) ) {
+			global $wp_embed;
+
+			$text = '<div class="col-md-6 col-lg-5">' . apply_filters( 'the_content', $section['slide_text'] ) . '</div>';
+		}
+
+		// Markup for the note
+		if ( isset( $section['slide_text_note'] ) && ! empty( $section['slide_text_note'] ) ) {
+			$output = '<div class="pb-4">' . esc_html( $section['slide_text_note'] ) . '</div>';
+
+			/**
+			 * Filter the annotation text note
+			 *
+			 * @param string $output          The annotation text note HTML.
+			 * @param array  $accordion_panel The section attributes.
+			 *
+			 * @since opening_times 1.0.1
+			 */
+			$text_note = apply_filters( 'ot_annotation_text_note', $output, $section );
+		}
+
+		if ( isset( $section['slide_bg_img_id'] ) && ! empty( $section['slide_bg_img_id'] ) ) {
+		
+			$img_note = opening_times_get_the_attached_image( 
+				$section['slide_bg_img_id'], 
+				'accordion-thumb',
+				array (
+					'class' => '',
+				)
+			);	
+			
+			/*
+			$img_note_attachment = wp_get_attachment_image( 
+				$section['slide_bg_img_id'], 
+				'medium',
+				'',
+				array( 
+					'class' => 'lazyload w-100',
+					'alt'   => the_title_attribute( 'echo=0' ),
+				) 
+			);
+
+			$img_note = sprintf(
+				'<figure><div class="aspect-ratio" style="padding-bottom: %1$s">%2$s</div>%3$s</figure>',
+				opening_times_image_ratio( $section['slide_bg_img_id'], 'accordion-thumb' ),
+				$img_note_attachment,
+				opening_times_maybe_caption( $section['slide_bg_img_id'], false )
+			);
+			*/
+		}
+
+		if ( isset( $section['slide_bg_embed'] ) && ! empty( $section['slide_bg_embed'] ) ) {
+			
+			$output = opening_times_get_section_oembed(
+				$section['slide_bg_embed'],
+				null,
+				false,
+				'<figure>',
+				'</figure>'
+			);
+
+			/**
+			 * Filter the annotation oembed note
+			 *
+			 * @param string $output          The annotation oembed note HTML.
+			 * @param array  $accordion_panel The section attributes.
+			 *
+			 * @since opening_times 1.0.1
+			 */
+			$embed_note = apply_filters( 'ot_annotation_oembed_note', $output, $section );
+		}
+
+		if ( isset( $section['slide_text_note'] ) || isset( $section['slide_bg_img_id'] ) ) {
+			$aside = sprintf(
+				'<aside class="col-md-6 col-lg-4 pb-4"><div class="sticky-top top-3">%1$s %2$s %3$s</div></aside>',
+				$text_note,
+				$img_note,
+				$embed_note
+			);
+		}
+
+		// Output the content
+		echo $heading;
+		echo $text;
+		echo $aside;
+	};
 }

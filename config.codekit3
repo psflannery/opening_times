@@ -4981,27 +4981,6 @@
 		"oAP": "\/template-parts\/content-accordion.php",
 		"oF": 0
 		},
-	"\/template-parts\/content-blocks\/block-accordion--xxx.php": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/template-parts\/content-blocks\/block-accordion--xxx.php",
-		"oF": 0
-		},
-	"\/template-parts\/content-blocks\/block-accordion-xl--xxx.php": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/template-parts\/content-blocks\/block-accordion-xl--xxx.php",
-		"oF": 0
-		},
-	"\/template-parts\/content-blocks\/block-annotation.php": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/template-parts\/content-blocks\/block-annotation.php",
-		"oF": 0
-		},
 	"\/template-parts\/content-blocks\/block-prev-next-nav.php": {
 		"cB": 0,
 		"ft": 8192,

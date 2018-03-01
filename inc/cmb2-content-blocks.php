@@ -434,3 +434,29 @@ function opening_times_filter_section_image( $output, $section ) {
 	return $output;
 }
 add_filter( 'ot_section_image', 'opening_times_filter_section_image', 10, 4 );
+
+
+/**
+ * Filter the attached image html
+ * 
+ * @param  string $html          The attachment image HTML.
+ * @param  string $attachment_id The attachment ID.
+ * @param  string $size          The attachment image size.
+ * @return string                The filtered attachment image HTML.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_filter_attached_image_html( $html, $attachment_id, $size ) {
+	if( has_term( 'annotation', 'format' ) ) {
+		$html = opening_times_attached_image_html( 
+			$attachment_id, 
+			$size,
+			array(
+				'class' => 'lazyload w-100'
+			)
+		);
+	}
+
+	return $html;
+}
+add_filter( 'ot_attached_image', 'opening_times_filter_attached_image_html', 10, 3 );

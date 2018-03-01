@@ -229,8 +229,18 @@ function opening_times_get_the_attached_image( $attachment_id = null, $size = 't
 
 	$html = opening_times_attached_image_html( $attachment_id, $size );
 
+	/**
+	 * Filter the annotation title
+	 *
+	 * @param string $output          The annotation title HTML.
+	 * @param array  $accordion_panel The section attributes.
+	 *
+	 * @since opening_times 1.0.1
+	 */
+	$html = apply_filters( 'ot_attached_image', $html, $attachment_id, $size );
+
 	// Optionally add a caption.
-	$fig_caption = opening_times_maybe_caption( get_post_thumbnail_id(), false );
+	$fig_caption = opening_times_maybe_caption( $attachment_id, false );
 	$html .= $fig_caption;
 
 	// Add attributes to the figure element.
