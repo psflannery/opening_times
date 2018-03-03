@@ -225,10 +225,11 @@ function opening_times_do_reading_accordion( $attr = '', $before = '', $after = 
 
 			$oembed = opening_times_get_section_oembed(
 				$accordion_panel['slide_bg_embed'],
-				null,
-				false,
-				'<figure>',
-				'</figure>'
+				array (
+					'before' => '<figure>',
+					'after'  => '</figure>'
+				),
+				false
 			);
 
 			/**
@@ -296,11 +297,11 @@ function opening_times_do_reading_accordion( $attr = '', $before = '', $after = 
 		endif; 
 		$accordion .= ob_get_clean();
 		$i ++;
-		}
+	}
 
-		$accordion .= '</div>';
+	$accordion .= '</div>';
 
-		echo $before . $accordion . $after;
+	echo $before . $accordion . $after;
 }
 
 
@@ -388,10 +389,11 @@ function opening_times_do_reading_annotation( $attr = '', $before = '', $after =
 			
 			$output = opening_times_get_section_oembed(
 				$section['slide_bg_embed'],
-				null,
-				false,
-				'<figure>',
-				'</figure>'
+				array (
+					'before' => '<figure>',
+					'after'  => '</figure>'
+				),
+				false
 			);
 
 			/**

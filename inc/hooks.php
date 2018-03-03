@@ -356,11 +356,11 @@ function opening_times_filter_section_embed( $output, $section ) {
 			array (
 				'attr'  => array (
 					'data-autoplay' => '',
-				)
+				),
+				'before' => '<figure class="mb-0">',
+				'after'  => '</figure>'
 			),
-			true,
-			'<figure class="mb-0">',
-			'</figure>'
+			true
 		);
 	}
 
@@ -472,6 +472,7 @@ add_filter( 'ot_section_image', 'opening_times_filter_section_image', 10, 4 );
  */
 function opening_times_filter_attached_image_html( $html, $attachment_id, $size ) {
 	if( has_term( 'annotation', 'format' ) ) {
+		
 		$html = opening_times_attached_image_html( 
 			$attachment_id, 
 			$size,
@@ -479,6 +480,7 @@ function opening_times_filter_attached_image_html( $html, $attachment_id, $size 
 				'class' => 'lazyload w-100'
 			)
 		);
+
 	}
 
 	return $html;
@@ -494,7 +496,7 @@ add_filter( 'ot_attached_image', 'opening_times_filter_attached_image_html', 10,
  *
  * Attatched to `after_reading_list` action hook.
  *
- * @since Opening Times 1.4.4
+ * @since Opening Times 1.0.0
  */
 function opening_times_after_reading_list() {
 
@@ -505,16 +507,12 @@ function opening_times_after_reading_list() {
 	if ( '' == ( $footnote && $article_submit ) )
 		return;
 
-	$output = '';
-
-	$output .= '<div class="issue__epilogue">';
+	$output = '<div class="issue__epilogue">';
 
 	if ( '' != $footnote ) {
-		$output .= sprintf( 
-			'<div>%1$s</div>', 
-			$footnote 
-		);
+		$output .= '<div>' . $footnote . '</div>';
 	}
+
 	if ( '' != $article_submit ) {
 		$output .= ot_do_frontend_form_submission_shortcode();
 	}

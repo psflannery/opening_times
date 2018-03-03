@@ -163,10 +163,11 @@ function opening_times_featured_content( $args = array() ) {
 
 		$featured .= opening_times_get_section_oembed(
 			$oembed,
-			null,
-			false,
-			'<figure>',
-			'</figure>'
+			array (
+				'before' => '<figure>',
+				'after'  => '</figure>'
+			),
+			false
 		);
 
 	} elseif ( $iframe_src ) {
@@ -312,7 +313,7 @@ function opening_times_partner_name( $before = '', $after = '', $echo=true ) {
  *
  * @since Opening Times 1.0.0
  */
-function opening_times_reading_issue_title( $before = '', $after = '', $echo=true ) {
+function opening_times_reading_issue_title( $before = '', $after = '', $echo = true ) {
 	$issue_title = get_post_meta( get_the_ID(), '_ot_editor_title', true );
 
 	if ( '' == $issue_title ) {
@@ -337,7 +338,7 @@ function opening_times_reading_issue_title( $before = '', $after = '', $echo=tru
  *
  * @since Opening Times 1.0.0
  */
-function opening_times_reading_issue_standfirst( $before = '', $after = '', $echo=true ) {
+function opening_times_reading_issue_standfirst( $before = '', $after = '', $echo = true ) {
 	$text = get_post_meta( get_the_ID(), '_ot_standfirst', true );
 	$type = get_post_meta( get_the_ID(), '_ot_standfirst_type', true );
 	$cite = get_post_meta( get_the_ID(), '_ot_standfirst_cite', true );
@@ -590,20 +591,22 @@ function opening_times_get_section_video( $video = '', $attr = '', $before = '',
  *
  * @since opening_times 1.0.1
  */
-function opening_times_get_section_oembed( $oembed = '', $attr = '', $api = true, $before = '', $after = '' ) {
+function opening_times_get_section_oembed( $oembed = '', $args = '', $api = true ) {
 	// Abort if no oembed path provided.
 	if ( '' == $oembed ) {
 		return false;
 	}
 
 	$default_atts = array(
-		'src'   => $oembed,
-		'id'    => '',
-		'class' => '',
-		'attr'  => array(),
+		'src'    => $oembed,
+		'id'     => '',
+		'class'  => '',
+		'attr'   => array(),
+		'before' => '',
+		'after'  => '',
 	);
 
-	$atts = wp_parse_args( $attr, $default_atts );
+	$atts = wp_parse_args( $args, $default_atts );
 
 	$oembed_html = wp_oembed_get( $atts['src'] );
 	$oembed_video = opening_times_responsive_videos_maybe_wrap_oembed( $oembed_html, $atts['src'] );
@@ -611,7 +614,7 @@ function opening_times_get_section_oembed( $oembed = '', $attr = '', $api = true
 	// Stop here if we don't need the provider api.
 	// Or if the oembed is not from youtube or vimeo.
 	if( ! $api || ! opening_times_oembed_video_check( $atts['src'] ) ) {
-		return $before . $oembed_video . $after;
+		return $atts['before'] . $oembed_video . $atts['after'];
 	}
 
 	// Set iframe atts
@@ -637,7 +640,7 @@ function opening_times_get_section_oembed( $oembed = '', $attr = '', $api = true
 
 	$oembed_iframe = str_replace( '<iframe', '<iframe' . $attr . '', $oembed_video );
 
-	$output = $before . $oembed_iframe . $after;
+	$output = $atts['before'] . $oembed_iframe . $atts['after'];
 
 	return $output;
 }
