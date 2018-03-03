@@ -402,414 +402,254 @@ function opening_times_reading_issue_standfirst( $before = '', $after = '', $ech
 
 
 /**
- * Output the reading section accordion
- *
+ * Section audio file and attributes
+ * 
+ * @param  string       $audio  Audio URL. Required.
  * @param  string|array $attr   Query string of attributes.
- * @param  string       $before Markup before the accordion element. Default empty. Optional.
- * @param  string       $after  Markup after the aaccordion element. Default empty. Optional.
- * @return string               The accordion content and HTML.
+ * @param  string       $before Markup before the audio element. Default empty. Optional.
+ * @param  string       $after  Markup after the audio element. Default empty. Optional.
+ * @return string               Audio element HMTL.
  *
- * @since Opening Times 1.0.0
+ * @since opening_times 1.0.1
  */
-function opening_times_do_reading_accordion( $attr = '', $before = '', $after = '' ) {
-	$accordion_panels = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
+function opening_times_get_section_audio( $audio = '', $attr = '', $before = '', $after = '' ) {
+	// Abort if no file path provided.
+	if ( '' == $audio ) {
+		return false;
+	}
 
-	if ( '' == $accordion_panels ) {
+	$default_types = wp_get_audio_extensions();
+	$default_atts = array(
+		'id'            => '',
+		'class'         => '',
+		'src'           => $audio,
+		'data-lazy-src' => '',
+		'preload'       => 'meta',
+		'autoplay'      => '',
+		'attr'          => array(),
+	);
+	foreach ( $default_types as $type ) {
+		$default_atts[$type] = '';
+	}
+
+	$atts = wp_parse_args( $attr, $default_atts );
+	
+	$maybe_lazy_src = empty( $attr['data-lazy-src'] ) ? $attr['src'] : $attr['data-lazy-src'];
+	$type = wp_check_filetype( $maybe_lazy_src, wp_get_mime_types() );
+
+	// Bail if the file provided isn't an audio file.
+	if ( ! in_array( strtolower( $type['ext'] ), $default_types ) ) {
 		return;
 	}
 
-	$default_atts = array(
-		'container_id'    => 'accordion-' . opening_times_the_slug(false),
-		'container_class' => 'accordion gradient-container mb-5',
-		'header_class'    => 'collapsed accordion-header container-fluid gradient-text',
-		'content_class'   => 'container-fluid collapse w-100'
-	);
+	// Define attributes
+	$attr = '';
 
-	$atts = wp_parse_args( $attr, $default_atts );
+	if ( $atts['id'] ) {
+		$attr .= ' id="' . esc_attr( $atts['id'] ) . '"';
+	}
 
-	$accordion = '<div id="' . esc_attr( $atts['container_id'] ) . '" class="' . esc_attr( $atts['container_class'] ) . '" role="tablist" aria-multiselectable="true">';
-    
-	$i = 0;
-	foreach ( (array) $accordion_panels as $key => $accordion_panel ) {
-		// Set default values.
-		$title = $sub_title = $text = $bg_img = $bg_audio = $bg_video = $bg_embed = $links = '';
-		
-		// Set Classes and attributes
-		$classes = array();
-		$data_attributes = array();
+	if ( $atts['class'] ) {
+		$attr .= ' class="' . esc_attr( $atts['class'] ) . '"';
+	}
 
-		// Markup for the title
-		if ( isset( $accordion_panel['slide_title'] ) && ! empty( $accordion_panel['slide_title'] ) ) {
-			
-			$output = opening_times_get_section_title( esc_html( $accordion_panel['slide_title'] ), array(
-				'class' => 'col mb-0 text-truncate'
-			) );
+	if ( $atts['src'] ) {
+		$attr .= ' src="' . esc_url( $atts['src'] ) . '"';
+	}
 
-			/**
-			 * Filter the section title
-			 *
-			 * @param string $output          The section title HTML.
-			 * @param array  $accordion_panel The accordion panel attributes.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$title = apply_filters( 'ot_section_title', $output, $accordion_panel );
+	if ( $atts['data-lazy-src'] ) {
+		$attr .= ' data-lazy-src="' . esc_url( $atts['data-lazy-src'] ) . '"';
+	}
+
+	if ( $atts['preload'] ) {
+		$attr .= ' preload="' . esc_attr( $atts['preload'] ) . '"';
+	}
+
+	if ( $atts['autoplay'] ) {
+		$attr .= ' autoplay="' . esc_attr( $atts['autoplay'] ) . '"';
+	}
+
+	foreach ( (array) $atts['attr'] as $name => $value ) {
+		if ( ! empty( $value ) ) {
+			$attr .= ' ' . esc_attr( $value );
 		}
+	}
 
-		// Markup for the subtitle
-		if ( isset( $accordion_panel['slide_sub-title'] ) && ! empty( $accordion_panel['slide_sub-title'] ) ) {
-			
-			$output = opening_times_get_section_title( esc_html( $accordion_panel['slide_sub-title'] ), array(
-				'class' => 'col mb-0 text-right'
-			) );
+	$html = $before . '<audio' . $attr . '></audio>' . $after;
 
-			/**
-			 * Filter the section subtitle
-			 *
-			 * @param string $output          The section subtitle HTML.
-			 * @param array  $accordion_panel The accordion panel.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$sub_title = apply_filters( 'ot_section_sub-title', $output, $accordion_panel );
-		}
-
-		// Markup for the links
-		if ( isset( $accordion_panel['link_url'] ) && ! empty( $accordion_panel['link_url'] ) ) {
-			foreach ( $accordion_panel['link_url'] as $link ) {
-				$links .= opening_times_get_featured_link_html(
-					$link,
-					array (
-						'atts' => array (
-							'target' => opening_times_has_external_url( $link ) !== false ? '_blank' : '',
-							'rel'    => opening_times_has_external_url( $link ) !== false ? 'noopener' : '',
-						) 
-					) 
-				);
-			}
-		}
-
-		// Markup for the text
-		if ( isset( $accordion_panel['slide_text'] ) && ! empty( $accordion_panel['slide_text'] ) ) {
-
-			$output = opening_times_get_section_text( $accordion_panel['slide_text'], '<div class="entry-content mb-3">', '</div>' );
-			
-			/**
-			 * Filter the section text
-			 * 
-			 * @param string $output          The section text HTML.
-			 * @param array  $accordion_panel The accordion panel.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$text = apply_filters( 'ot_section_text', $output, $accordion_panel ) ;
-		}
-
-		// Set the text position
-		if ( isset( $accordion_panel['text_position'] ) && ! empty( $accordion_panel['text_position'] ) ) {
-		
-			$classes[] = $accordion_panel['text_position'];
-
-		}
-
-		// Set the image
-		if ( isset( $accordion_panel['slide_bg_img_id'] ) && ! empty( $accordion_panel['slide_bg_img_id'] ) ) {
-		
-			$image = opening_times_get_the_attached_image( $accordion_panel['slide_bg_img_id'], 'accordion-thumb' );
-
-			if ( isset( $accordion_panel['link_url'] ) && ! empty( $accordion_panel['link_url'] ) ) {
-				$link = reset( $accordion_panel['link_url'] );
-
-				$image_link = opening_times_get_featured_link_html( 
-					esc_url( $link ),
-					array (
-						'anchor' => $image,
-						'class'  => '',
-						'attr'   => array (
-							'target' => opening_times_has_external_url( $link ) !== false ? '_blank' : '',
-							'rel'    => opening_times_has_external_url( $link ) !== false ? 'noopener' : '',
-						)
-					) 
-				);
-
-				$output = $image_link;
-
-			} else {
-
-				$output = $image;
-
-			}
-
-			/**
-			 * Filter the section image
-			 * 
-			 * @param string $output          The section image HTML.
-			 * @param array  $accordion_panel The accordion panel.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$bg_img = apply_filters( 'ot_section_image', $output, $accordion_panel ) ;
-				
-			$classes[] = 'slide__bg-img';
-		}
-
-		// Set the audio
-		if ( isset( $accordion_panel['slide_bg_audio_id'] ) && ! empty( $accordion_panel['slide_bg_audio_id'] ) ) {
-			
-			$is_lazy = $accordion_panel['lazy_load'];
-			$audio_src = wp_get_attachment_url( $accordion_panel['slide_bg_audio_id'] );
-		
-			$audio = opening_times_get_section_audio( 
-				$audio_src,
-				array (
-					'id'            => 'audio-panel-' . $i,
-					'class'         => $is_lazy === 'on' ? 'lazyload' : '',
-					'attr'          => $accordion_panel['media_atts'],
-					'src'           => $is_lazy !== 'on' ? $audio_src : '', 
-					'data-lazy-src' => $is_lazy === 'on' ? $audio_src : '',
-				)
-			);
-
-			/**
-			 * Filter the section audio
-			 * @param array  $audio           The section audio content.
-			 * @param array  $accordion_panel The accordion panel.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$bg_audio = apply_filters( 'ot_section_audio', $audio, $accordion_panel ) ;
-
-			$data_attributes[] = 'data-media';
-			$classes[] = 'slide__audio';
-		}
-		
-		// Set the video
-		if ( isset( $accordion_panel['slide_bg_video_id'] ) && ! empty( $accordion_panel['slide_bg_video_id'] ) ) {
-			
-			$is_lazy = $accordion_panel['lazy_load'];
-			$video_src = wp_get_attachment_url( $accordion_panel['slide_bg_video_id'] );
-
-			$video = opening_times_get_section_video(
-				$video_src,
-				array (
-					'id'            => 'video-panel-' . $i,
-					'class'         => $is_lazy === 'on' ? 'lazyload' : '',
-					'attr'          => $accordion_panel['media_atts'],
-					'src'           => $is_lazy !== 'on' ? $video_src : '', 
-					'data-lazy-src' => $is_lazy === 'on' ? $video_src : '',
-				)
-			);
-
-			/**
-			 * Filter the section video
-			 * @param array  $video           The section video content.
-			 * @param array  $accordion_panel The accordion panel.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$bg_video = apply_filters( 'ot_section_video', $video, $accordion_panel ) ;
-			
-			$data_attributes[] = 'data-media';
-			$classes[] = 'slide__video';
-		}
-
-		// Set the embeds
-		if ( isset( $accordion_panel['slide_bg_embed'] ) && ! empty( $accordion_panel['slide_bg_embed'] ) ) {
-
-			$oembed = opening_times_get_section_oembed(
-				$accordion_panel['slide_bg_embed'],
-				null,
-				false,
-				'<figure>',
-				'</figure>'
-			);
-
-			/**
-			 * Filter the section video oembed
-			 * @param array  $oembed          The section video oembed content.
-			 * @param array  $accordion_panel The accordion panel.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$bg_embed = apply_filters( 'ot_section_oembed', $oembed, $accordion_panel ) ;
-			
-			$data_attributes[] = 'data-media';
-			$classes[] = 'slide__embed';
-		}
-
-		$classes = array_map( 'esc_attr', $classes );
-		$accordion_class = join( ' ', $classes );
-		
-		$accordion_attributes = join( ' ', $data_attributes );
-    	
-		ob_start(); ?>
-
-		<?php if( '' != ( $text || $bg_video || $bg_video || $bg_img ) ) : ?>
-
-		<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
-			<header class="<?php echo esc_attr( $atts['header_class'] ) ?>" role="tab" id="header-panel-<?php echo $i ?>" data-toggle="collapse" data-parent="#<?php echo esc_attr( $atts['container_id'] ) ?>" data-target="#panel-<?php echo $i ?>" aria-expanded="false" aria-controls="panel-<?php echo $i ?>">
-				<div class="row">
-
-				<?php 
-					echo $title;
-					echo $sub_title;
-				?>
-
-				</div>
-			</header>
-			<div id="panel-<?php echo $i ?>" class="<?php echo esc_attr( $atts['content_class'] ) ?>" role="tabpanel" aria-labelledby="header-panel-<?php echo $i ?>" aria-expanded="false">
-				<div class="row">
-					<div class="col-12">
-
-					<?php
-						echo $bg_img;
-						echo $bg_video;
-						echo $bg_embed;
-						echo $links;
-						echo $text;
-						echo $bg_audio;
-					?>
-
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<?php else: ?>
-
-		<div class="card panel <?php echo $accordion_class; ?>" <?php echo $accordion_attributes; ?>>
-			<header id="header-panel-<?php echo $i ?>" class="accordion-header accordion-header--closed container-fluid gradient-text <?php echo $accordion_header_class; ?>" role="tab" id="header-panel-<?php echo $i ?>">
-
-				<?php echo $title; ?>
-
-			</header>
-		</div>
-
-		<?php 
-		endif; 
-		$accordion .= ob_get_clean();
-		$i ++;
-		}
-
-		$accordion .= '</div>';
-
-		echo $before . $accordion . $after;
+	return $html;
 }
 
 
 /**
- * [opening_times_do_reading_annotation description]
+ * Section video file and attributes
  * 
- * @param  string $attr   [description]
- * @param  string $before [description]
- * @param  string $after  [description]
- * @return [type]         [description]
+ * @param  string       $video  Video URL. Required.
+ * @param  string|array $attr   Query string of attributes.
+ * @param  string       $before Markup before the video element. Default empty. Optional.
+ * @param  string       $after  Markup after the video element. Default empty. Optional.
+ * @return string               Video element HMTL.
  *
- * @since Opening Times 1.0.1
+ * @since opening_times 1.0.1
  */
-function opening_times_do_reading_annotation( $attr = '', $before = '', $after = '' ) {
-	// Get the Anontation post meta
-	$sections = get_post_meta( get_the_ID(), '_ot_panel_slide', true );
-
-	// Bail if we don't have any
-	if ( '' == $sections ) {
-		get_template_part( 'template-parts/content', 'none' );
+function opening_times_get_section_video( $video = '', $attr = '', $before = '', $after = '' ) {
+	// Abort if no file path provided.
+	if ( '' == $video ) {
+		return false;
 	}
 
-	// Loop through the sections
-	foreach ( $sections as $section ) {
-		$heading = $text = $text_note = $img_note = $embed_note = $aside = '';
+	$default_types = wp_get_video_extensions();
+	$default_atts = array(
+		'id'            => '',
+		'class'         => '',
+		'src'           => $video,
+		'data-lazy-src' => '',
+		'preload'       => 'meta',
+		'poster'        => '',
+		'autoplay'      => '',
+		'attr'          => array(),
+	);
+	foreach ( $default_types as $type ) {
+		$default_atts[$type] = '';
+	}
 
-		// Markup for the title
-		if ( isset( $section['slide_title'] ) && ! empty( $section['slide_title'] ) ) {
-			$output = '<h2 class="col-12">' . esc_html( $section['slide_title'] ) . '</h2>';
+	$atts = wp_parse_args( $attr, $default_atts );
 
-			/**
-			 * Filter the annotation title
-			 *
-			 * @param string $output          The annotation title HTML.
-			 * @param array  $accordion_panel The section attributes.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$heading = apply_filters( 'ot_annotation_title', $output, $section );
+	$maybe_lazy_src = empty( $attr['data-lazy-src'] ) ? $attr['src'] : $attr['data-lazy-src'];
+	$type = wp_check_filetype( $maybe_lazy_src, wp_get_mime_types() );
+
+	// Bail if the file provided isn't an video file.
+	if ( ! in_array( strtolower( $type['ext'] ), $default_types ) ) {
+		return;
+	}
+
+	// Define attributes
+	$attr = '';	
+
+	if ( $atts['id'] ) {
+		$attr .= ' id="' . esc_attr( $atts['id'] ) . '"';
+	}
+
+	if ( $atts['class'] ) {
+		$attr .= ' class="' . esc_attr( $atts['class'] ) . '"';
+	}
+
+	if ( $atts['src'] ) {
+		$attr .= ' src="' . esc_url( $atts['src'] ) . '"';
+	}
+
+	if ( $atts['data-lazy-src'] ) {
+		$attr .= ' data-lazy-src="' . esc_url( $atts['data-lazy-src'] ) . '"';
+	}
+
+	if ( $atts['preload'] ) {
+		$attr .= ' preload="' . esc_attr( $atts['preload'] ) . '"';
+	}
+
+	if ( $atts['autoplay'] ) {
+		$attr .= ' autoplay="' . esc_attr( $atts['autoplay'] ) . '"';
+	}
+
+	if ( $atts['poster'] ) {
+		$attr .= ' poster="' . esc_url( $atts['poster'] ) . '"';
+	}
+
+	foreach ( (array) $atts['attr'] as $name => $value ) {
+		if ( ! empty( $value ) ) {
+			$attr .= ' ' . esc_attr( $value );
 		}
+	}
 
-		// Markup for the text
-		if ( isset( $section['slide_text'] ) && ! empty( $section['slide_text'] ) ) {
-			global $wp_embed;
+	$html = $before . '<video' . $attr . '></video>' . $after;
 
-			$text = '<div class="col-md-6">' . apply_filters( 'the_content', $section['slide_text'] ) . '</div>';
+	return $html;
+}
+
+
+/**
+ * Add attributes to oembed iframe.
+ * 
+ * @param  string       $oembed The oembed URL
+ * @param  string|array $attr   Query string of attributes.
+ * @param  boolean      $api    [description]
+ * @param  string       $before Markup before the oembed element. Default empty. Optional.
+ * @param  string       $after  Markup after the oembed element. Default empty. Optional.
+ * @return string               The iframe HTML 
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_get_section_oembed( $oembed = '', $attr = '', $api = true, $before = '', $after = '' ) {
+	// Abort if no oembed path provided.
+	if ( '' == $oembed ) {
+		return false;
+	}
+
+	$default_atts = array(
+		'src'   => $oembed,
+		'id'    => '',
+		'class' => '',
+		'attr'  => array(),
+	);
+
+	$atts = wp_parse_args( $attr, $default_atts );
+
+	$oembed_html = wp_oembed_get( $atts['src'] );
+	$oembed_video = opening_times_responsive_videos_maybe_wrap_oembed( $oembed_html, $atts['src'] );
+
+	// Stop here if we don't need the provider api.
+	// Or if the oembed is not from youtube or vimeo.
+	if( ! $api || ! opening_times_oembed_video_check( $atts['src'] ) ) {
+		return $before . $oembed_video . $after;
+	}
+
+	// Set iframe atts
+	$attr = '';
+
+	if ( $atts['id'] ) {
+		$attr .= ' id="' . esc_attr( $atts['id'] ) . '"';
+	}
+
+	if ( $atts['class'] ) {
+		$attr .= ' class="' . esc_attr( $atts['class'] ) . '"';
+	}
+
+	if ( $atts['attr'] ) {
+		foreach ( (array) $atts['attr'] as $name => $value ) {
+			if ( ! empty( $value ) ) {
+				$attr .= " $name=" . '"' . esc_attr( $value ) . '"';
+			} else {
+				$attr .= ' ' . esc_attr( $name );
+			}
 		}
+	}
 
-		// Markup for the note
-		if ( isset( $section['slide_text_note'] ) && ! empty( $section['slide_text_note'] ) ) {
-			$output = '<div class="pb-4">' . esc_html( $section['slide_text_note'] ) . '</div>';
+	$oembed_iframe = str_replace( '<iframe', '<iframe' . $attr . '', $oembed_video );
 
-			/**
-			 * Filter the annotation text note
-			 *
-			 * @param string $output  The annotation text note HTML.
-			 * @param array  $section The section attributes.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$text_note = apply_filters( 'ot_annotation_text_note', $output, $section );
-		}
+	$output = $before . $oembed_iframe . $after;
 
-		if ( isset( $section['slide_bg_img_id'] ) && ! empty( $section['slide_bg_img_id'] ) ) {
-			$output = opening_times_get_the_attached_image( 
-				$section['slide_bg_img_id'], 
-				'accordion-thumb',
-				array (
-					'class' => '',
-				)
-			);
+	return $output;
+}
 
-			/**
-			 * Filter the annotation image note
-			 *
-			 * @param string $output  The annotation image note HTML.
-			 * @param array  $section The section attributes.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$img_note = apply_filters( 'ot_annotation_img_note', $output, $section );
-		}
 
-		if ( isset( $section['slide_bg_embed'] ) && ! empty( $section['slide_bg_embed'] ) ) {
-			
-			$output = opening_times_get_section_oembed(
-				$section['slide_bg_embed'],
-				null,
-				false,
-				'<figure>',
-				'</figure>'
-			);
+/**
+ * Panel section text
+ * 
+ * @param  string $text   Panel text. Required.
+ * @param  string $before Optional markup before the section text. Default empty. Optional.
+ * @param  string $after  Optional markup after the section text. Default empty. Optional.
+ * @return string         Panel title markup.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_get_section_text( $text = '', $before = '', $after = '' ) {
+    // Abort if no text
+    if ( '' == $text ) {
+        return false;
+    }
 
-			/**
-			 * Filter the annotation oembed note
-			 *
-			 * @param string $output          The annotation oembed note HTML.
-			 * @param array  $accordion_panel The section attributes.
-			 *
-			 * @since opening_times 1.0.1
-			 */
-			$embed_note = apply_filters( 'ot_annotation_oembed_note', $output, $section );
-		}
+    global $wp_embed;
 
-		if ( isset( $section['slide_text_note'] ) || isset( $section['slide_bg_img_id'] ) ) {
-			$aside = sprintf(
-				'<aside class="col-md-6 col-lg-5 pb-4"><div class="sticky-top top-3">%1$s %2$s %3$s</div></aside>',
-				$text_note,
-				$img_note,
-				$embed_note
-			);
-		}
+    $output = $before . apply_filters( 'the_content', $text ) . $after;
 
-		// Output the content
-		echo $heading;
-		echo $text;
-		echo $aside;
-	};
+    return $output;
 }

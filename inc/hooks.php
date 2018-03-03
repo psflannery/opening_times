@@ -172,25 +172,6 @@ add_filter( 'get_search_form', 'opening_times_search_form', 10 );
 
 
 /**
- * Determine if ajax request has come from the front end.
- * 
- * @return bool
- *
- * @link( https://wordpress.stackexchange.com/questions/34721/conditional-check-for-front-end-which-includes-ajax, link )
- *
- * @since Opening Times 1.0.1
- *
-function opening_times_frontend_ajax_check() {
-
-	define( 'FRONT_AJAX', true );
-
-}
-add_action( 'wp_ajax_opening_times_ajax_load_more', 'opening_times_frontend_ajax_check' );
-add_action( 'wp_ajax_nopriv_opening_times_ajax_load_more', 'opening_times_frontend_ajax_check' );
-*/
-
-
-/**
  * Redirect Single posts
  * 
  * @since Opening Times 1.3.0
@@ -355,3 +336,151 @@ function opening_times_term_radio_checklist( $args ) {
     return $args;
 }
 add_filter( 'wp_terms_checklist_args', 'opening_times_term_radio_checklist' );
+// END TEMP
+
+
+/**
+ * Filters the section oembed iframe.
+ * 
+ * @param  string $output  The section oembed.
+ * @param  array  $section Array of sections elements.
+ * @return string          The filtered section oembed.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_filter_section_embed( $output, $section ) {
+	if( ! empty( $section['slide_bg_embed'] ) && has_term( 'accordion-xl', 'format' ) ) {
+		
+		$output = opening_times_get_section_oembed(
+			$section['slide_bg_embed'],
+			array (
+				'attr'  => array (
+					'data-autoplay' => '',
+				)
+			),
+			true,
+			'<figure class="mb-0">',
+			'</figure>'
+		);
+	}
+
+	return $output;
+}
+add_filter( 'ot_section_oembed', 'opening_times_filter_section_embed', 10, 2 );
+
+
+/**
+ * Filters the section text HTML
+ * 
+ * @param  string $output  The section text HTML.
+ * @param  array  $section The section elements.
+ * @return string          The filtered section text HTML.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_filter_section_text( $output, $section ) {
+	if( ! empty( $section['slide_text'] ) && has_term( 'accordion-xl', 'format' ) ) {
+		
+		$output = opening_times_get_section_text( $section['slide_text'], '<div class="card-block col-lg-6">', '</div>' );
+
+	}
+
+	return $output;
+}
+add_filter( 'ot_section_text', 'opening_times_filter_section_text', 10, 2 );
+
+
+/**
+ * Filters the section title HTML
+ *
+ * @param  string $output  The section title HTML.
+ * @param  array  $section The section elements.
+ * @return string          The filtered section title HTML.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_filter_section_title( $output, $section ) {
+	// Check for text and audio
+	// The interlude sections in SiNB trigger an audio popover
+	// Establish if required, and markup accordingly...
+	$bg_audio = $text = '';
+
+	if ( isset( $section['slide_text'] ) && ! empty( $section['slide_text'] ) ) {	
+		$text = $section['slide_text'];
+	}
+	
+	if ( isset( $section['slide_bg_audio_id'] ) && ! empty( $section['slide_bg_audio_id'] ) ) {
+		$bg_audio = $section['slide_bg_audio_id'];
+	}
+
+	if( ! empty( $section['slide_title'] ) && has_term( 'accordion-xl', 'format' ) ) {
+		if( '' == $text && '' != $bg_audio ) {
+
+			$output = opening_times_get_section_title( esc_html( $section['slide_title'] ), array(
+				'class' => 'slide-content__title media-sample mb-0',
+				'attr' => array (
+					'data-position' => 'bottom',
+					'data-media'    => wp_get_attachment_url( $bg_audio ),
+				)
+			) );
+
+		} else {
+
+			$output = opening_times_get_section_title( esc_html( $section['slide_title'] ), array(
+				'class' => 'slide-content__title col mb-0',
+			) );
+		}
+	}
+
+	return $output;
+}
+add_filter( 'ot_section_title', 'opening_times_filter_section_title', 10, 2 );
+
+
+/**
+ * Filters the section image HTML
+ * 
+ * @param  string $output  The section image HTML.
+ * @param  array  $section The section elements.
+ * @return string          The filtered section image HTML.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_filter_section_image( $output, $section ) {
+	if( ! empty( $section['slide_bg_img_id'] ) && has_term( 'accordion-xl', 'format' ) ) {
+	
+		$output = opening_times_get_the_attached_image( $section['slide_bg_img_id'], 'full', array(
+			'class' => 'mb-0'
+		) );
+
+	}
+
+	return $output;
+}
+add_filter( 'ot_section_image', 'opening_times_filter_section_image', 10, 4 );
+
+
+/**
+ * Filter the attached image html
+ * 
+ * @param  string $html          The attachment image HTML.
+ * @param  string $attachment_id The attachment ID.
+ * @param  string $size          The attachment image size.
+ * @return string                The filtered attachment image HTML.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_filter_attached_image_html( $html, $attachment_id, $size ) {
+	if( has_term( 'annotation', 'format' ) ) {
+		$html = opening_times_attached_image_html( 
+			$attachment_id, 
+			$size,
+			array(
+				'class' => 'lazyload w-100'
+			)
+		);
+	}
+
+	return $html;
+}
+add_filter( 'ot_attached_image', 'opening_times_filter_attached_image_html', 10, 3 );
