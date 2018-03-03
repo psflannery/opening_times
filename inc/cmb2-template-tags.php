@@ -262,48 +262,6 @@ function opening_times_do_featured_link( $echo = true ) {
 
 
 /**
- * Output the After Reading List content
- *
- * Postscript/Footnote
- * Submission Form
- *
- * Attatched to `after_reading_list` action hook.
- *
- * @since Opening Times 1.4.4
- */
-function opening_times_after_reading_list() {
-
-	$footnote = wpautop( get_post_meta( get_the_ID(), '_ot_after_reading_footnote', true ) );
-	$article_submit = get_post_meta( get_the_ID(), '_ot_after_reading_post_submit', true );
-
-	// Bail, if there's nothing to do.
-	if ( '' == ( $footnote && $article_submit ) )
-		return;
-
-	$output = '';
-
-	$output .= '<div class="issue__epilogue">';
-
-	if ( '' != $footnote ) {
-		$output .= sprintf( 
-			'<div>%1$s</div>', 
-			$footnote 
-		);
-	}
-	if ( '' != $article_submit ) {
-		$output .= ot_do_frontend_form_submission_shortcode();
-	}
-
-	$output .= '</div>';
-
-	$output = apply_filters( 'ot_after_reading_list', $output );
-
-	echo $output;
-}
-add_action( 'after_reading_list', 'opening_times_after_reading_list', 1 );
-
-
-/**
  * Return a statement of responsibilty.
  *
  * @param  string  $before Optional Markup to prepend to the name. Default empty.
@@ -398,6 +356,60 @@ function opening_times_reading_issue_standfirst( $before = '', $after = '', $ech
     	echo $standfirst;
     else
     	return $standfirst;
+}
+
+
+/**
+ * Panel section title
+ * 
+ * @param  string $title  Panel title. Required.
+ * @param  array  $args   Array of attributes to apply to title the element. Default empty. Required.
+ * @param  string $before Optional markup before the title element. Default empty. Optional.
+ * @param  string $after  Optional markup after the title element. Default empty. Optional.
+ * @return string         Panel title markup.
+ *
+ * @since opening_times 1.0.1
+ */
+function opening_times_get_section_title( $title = '', $args = array(), $before = '', $after = '' ) {
+    // Abort if no title
+    if ( '' == $title ) {
+        return false;
+    }
+
+    $args = wp_parse_args( $args, array(
+        'id'     => '',
+        'class'  => 'col mb-0',
+        'attr'   => array(),
+    ) );
+
+    $args['attr'] = array_map( 'esc_attr', $args['attr'] );
+
+    // Set attributes
+    $attr = '';
+
+    if ( $args['id'] ) {
+        $attr .= ' id="' . esc_attr( $args['id'] ) . '"';
+    }
+
+    if ( $args['class'] ) {
+        $attr .= ' class="' . esc_attr( $args['class'] ) . '"';
+    }
+
+    foreach ( $args['attr'] as $name => $value ) {
+        if ( ! empty( $value ) ) {
+            $attr .= " $name=" . '"' . $value . '"';
+        }
+    }
+
+    $section_title = sprintf(
+        '<h2 %1$s>%2$s</h2>',
+        $attr,
+        $title
+    );
+
+    $output = $before . $section_title . $after;
+
+    return $output;
 }
 
 

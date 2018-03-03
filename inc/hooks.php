@@ -484,3 +484,45 @@ function opening_times_filter_attached_image_html( $html, $attachment_id, $size 
 	return $html;
 }
 add_filter( 'ot_attached_image', 'opening_times_filter_attached_image_html', 10, 3 );
+
+
+/**
+ * Output the After Reading List content
+ *
+ * Postscript/Footnote
+ * Submission Form
+ *
+ * Attatched to `after_reading_list` action hook.
+ *
+ * @since Opening Times 1.4.4
+ */
+function opening_times_after_reading_list() {
+
+	$footnote = wpautop( get_post_meta( get_the_ID(), '_ot_after_reading_footnote', true ) );
+	$article_submit = get_post_meta( get_the_ID(), '_ot_after_reading_post_submit', true );
+
+	// Bail, if there's nothing to do.
+	if ( '' == ( $footnote && $article_submit ) )
+		return;
+
+	$output = '';
+
+	$output .= '<div class="issue__epilogue">';
+
+	if ( '' != $footnote ) {
+		$output .= sprintf( 
+			'<div>%1$s</div>', 
+			$footnote 
+		);
+	}
+	if ( '' != $article_submit ) {
+		$output .= ot_do_frontend_form_submission_shortcode();
+	}
+
+	$output .= '</div>';
+
+	$output = apply_filters( 'ot_after_reading_list', $output );
+
+	echo $output;
+}
+add_action( 'after_reading_list', 'opening_times_after_reading_list', 1 );
