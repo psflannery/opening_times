@@ -23,11 +23,15 @@ if ( $reading_issues->have_posts() ) :
 
 		if ( opening_times_the_slug( false ) === $current_issue ) {
 
-			the_title( '<a href="#" class="gradient-text list-group-item active d-block"><span class="d-block">', '</span>' . opening_times_reading_issue_title('<span class="small d-block">', '</span>', false) . '</a>' );
+			//the_title( '<a href="#" class="gradient-text list-group-item active d-block"><span class="d-block">', '</span>' . opening_times_reading_issue_title('<span class="small d-block">', '</span>', false) . '</a>' );
+			
+			the_title( '<a href="#" class="gradient-text list-group-item active d-block">' . opening_times_reading_issue_title('<span class="d-block">', '</span>', false) . '<span class="small d-block">', '</span></a>' );
 
 		} else {
 
-			the_title( '<a href="' . esc_url( get_permalink() ) . '" class="gradient-text list-group-item list-group-item-action d-block" rel="bookmark"><span class="d-block">', '</span>' . opening_times_reading_issue_title('<span class="small d-block">', '</span>', false) . '</a>' );
+			//the_title( '<a href="' . esc_url( get_permalink() ) . '" class="gradient-text list-group-item list-group-item-action d-block" rel="bookmark"><span class="d-block">', '</span>' . opening_times_reading_issue_title('<span class="small d-block">', '</span>', false) . '</a>' );
+			
+			the_title( '<a href="' . esc_url( get_permalink() ) . '" class="gradient-text list-group-item list-group-item-action d-block" rel="bookmark">' . opening_times_reading_issue_title('<span class="d-block">', '</span>', false) . '<span class="small d-block">', '</span></a>' );
 		}
 
 	endwhile;

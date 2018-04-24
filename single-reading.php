@@ -11,11 +11,7 @@ get_header(); ?>
 		<div class="row">
             <div class="issue__issue-list col-md-2 px-0">
 
-            	<?php
-                    //opening_times_do_large_accordion_sidebar( '<div class="sticky-top">', '</div>' );
-                    
-            		get_template_part( 'template-parts/loops/loop', 'reading-issues' );
-            	 ?>
+            	<?php get_template_part( 'template-parts/loops/loop', 'reading-issues' ); ?>
 
             </div>
             <div class="issue__issue col-md-10">
