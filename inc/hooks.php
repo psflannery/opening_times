@@ -524,3 +524,23 @@ function opening_times_after_reading_list() {
 	echo $output;
 }
 add_action( 'after_reading_list', 'opening_times_after_reading_list', 1 );
+
+
+/**
+ * Output the Speed Reader
+ * 
+ * @return string Speed reader markup
+ *
+ * @since Opening Times 1.0.1
+ */
+function opening_times_do_speed_read() {
+
+	$speed_read = get_post_meta( get_the_ID(), '_ot_speed_read', true );
+
+	// Bail, if there's nothing to do.
+	if ( '' == ( $speed_read ) )
+		return;
+
+	get_template_part( 'template-parts/speed-reader' );
+}
+add_action( 'opening-times-after-reading-issue', 'opening_times_do_speed_read' );

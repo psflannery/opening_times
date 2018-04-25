@@ -5882,6 +5882,13 @@
 		"oAP": "\/template-parts\/loops\/loop-reading-issues.php",
 		"oF": 0
 		},
+	"\/template-parts\/speed-reader.php": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/template-parts\/speed-reader.php",
+		"oF": 0
+		},
 	"\/template-parts\/underscore-templates.php": {
 		"cB": 0,
 		"ft": 8192,

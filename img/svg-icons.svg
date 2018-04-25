@@ -22,5 +22,13 @@
 			<path d="M0 0h24v24H0z" fill="none"/>
 			<path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
 		</symbol>
+		<symbol id="icon-play" viewbox="0 0 24 24">
+			<path d="M8 5v14l11-7z"/>
+			<path d="M0 0h24v24H0z" fill="none"/>
+		</symbol>
+		<symbol id="icon-pause" viewbox="0 0 24 24">
+			<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+			<path d="M0 0h24v24H0z" fill="none"/>
+		</symbol>
 	</defs>
 </svg>

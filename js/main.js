@@ -1,3 +1,5 @@
+/* globals IntersectionObserver, jQuery */
+
 // Definitions
 var type;
 
@@ -1045,6 +1047,25 @@ var timeToWaitForLast = 100;
                 return attr === 'true' ? 'false' : 'true';
             });
         });
+
+        // Call fullpage slide
+        // Init speed reader           
+        speedReader.init();
+
+        // Init the reader controls
+        readerControls.init();
+
+        // Init theme toggler
+        themeToggle.init();
+
+        // Init text split
+        splitText.init();
+
+        // Init text animations
+        // animateIn.init();
+        
+        // Init fullpage scroll
+        fullPage.init(); 
 	}
 
 	// Resize
@@ -1063,6 +1084,565 @@ var timeToWaitForLast = 100;
 
 		stopScroll( false, $body );
 	}
+
+	// Fullpage slides
+	var $wpm = $('#spritz_wpm');
+	var interval = 60000/$wpm.val();  
+	var paused = false;
+	var i = 0;
+	var zoom = 1;
+	var autosave = false;
+	var isSpeedRead = false;
+	var isAnimated = true;
+	
+    var splitter = function( el ) {
+        var splitWord = el.trim()
+        	.replace(/([-—])(\w)/g, '$1 $2')
+			.replace(/[\r\n]/g, ' {linebreak} ')
+			.replace(/[ \t]{2,}/g, ' ')
+			.split(' ');
+
+		return splitWord;
+    };
+    
+    var stopScroll = function( bool, el ) {
+		var $el = $(el);
+
+		if ( bool ) {
+			$el.addClass('stop-scroll');
+		} else {
+			$el.removeClass('stop-scroll');
+		}
+	};
+    
+    var fullPage = {
+        config: {
+            page: $('#spritz_words'),
+            section: 'h2, p',
+        },
+        
+        init: function( config ) {
+            // merge config defaults with init config
+			$.extend( fullPage.config, config );
+                        
+            //this.setAnchor();
+            
+            fullPage.config.page.fullpage({
+                sectionSelector: fullPage.config.section,
+                scrollBar: true,
+            });
+        },
+        
+        setAnchor: function() {
+            $(fullPage.config.section).each(function(i, page){
+                var $page = $(page);
+                
+                $page.attr('data-anchor', 'page-' + i);
+            });
+        }
+    };
+	
+	var splitText = {
+		words: '',
+		config: {
+			$words: $('#spritz_words p'),
+			paragraphSm: 16,
+			paragraphMd: 32,
+		},
+
+		init: function( config ) {
+			// merge config defaults with init config
+			$.extend( splitText.config, config );
+
+			this.split(' ');
+		},
+
+		// Text parseing
+		split: function( after ) {     
+			splitText.config.$words.each(function(i, paragraph) {
+				var $paragraph = $(paragraph),
+					$text = $paragraph.text(),
+					wrappedWords = ''; 
+                    
+                splitText.words = splitter( $text );
+
+                splitText.count($paragraph, splitText.config.paragraphSm, splitText.config.paragraphMd, i);
+
+				$(splitText.words).each(function(i, word) {
+					wrappedWords += '<span class="word-' + i + '" aria-hidden="true">' + word + '</span>' + after;
+				});
+
+                splitText.populate( $paragraph, $text, wrappedWords );
+			});
+		},
+		count: function( $paragraph, sm, md, i ) {
+			if ( splitText.words.length < parseInt(sm) ) {
+				$paragraph.addClass('section-sm section-' + i).attr('data-anchor', 'page-' + i);
+			} else if ( splitText.words.length < parseInt(md) ) {
+				$paragraph.addClass('section-md section-' + i).attr('data-anchor', 'page-' + i);
+			} else {
+				$paragraph.addClass('section-lg section-' + i).attr('data-anchor', 'page-' + i);
+			}
+		},
+		populate: function( $paragraph, $text, wrappedWords ) {
+			$paragraph.attr('aria-label', $text).empty().append(wrappedWords);
+		}
+	};
+ 
+	var speedReader = {
+        spritz:    '',
+        words:     '',
+        local:     {},
+        wpmOutput: $wpm.next()[0],
+		config: {
+            container:       $('body'),
+			readingProgress: $('#spritz_progress'),
+			reader:          $('#spritz'),
+			alert:           $('#alert'),
+			save:            $('#spritz_save'),
+			autosave:        $('#autosave_checkbox'),
+			space:           $('#spritz_word'),
+			$words:          $('#spritz_words'),
+		},
+
+		init: function( config ) {
+			// merge config defaults with init config
+			$.extend( speedReader.config, config );
+
+			if ( ! localStorage.jqspritz ) {
+				speedReader.wordsSet();
+				speedReader.wordShow(0);
+				speedReader.wordUpdate();
+				speedReader.pause(true);
+			} else {
+				speedReader.local = JSON.parse(localStorage.jqspritz);
+				speedReader.config.$words.val(speedReader.local.words);
+				i = speedReader.local.word;
+				if ( speedReader.local.autosave ) {
+					autosave = true;
+					speedReader.config.container.addClass('autosave');
+					speedReader.config.autosave.prop('checked', true);
+				}
+				$wpm.val(speedReader.local.wpm);
+				interval = 60000/speedReader.local.wpm;
+				speedReader.zoom(0);
+				speedReader.wordsSet();
+				speedReader.wordShow(i);
+				speedReader.wordUpdate();
+				speedReader.pause(true);
+				speedReader.alert('loaded');
+			}
+		},
+
+		save: function() {
+            speedReader.local = {
+				word: i,
+				words: speedReader.config.$words.val(),
+				wpm: $wpm.val(),
+				autosave: autosave,
+				zoom: zoom
+			};
+            localStorage.jqspritz = JSON.stringify(speedReader.local);
+			if (!autosave) {
+				speedReader.alert('saved');
+			} else {
+				//button_flash('save', 500);
+			}			
+		},
+		
+		// Text parseing
+		wordsSet: function() {
+            var $paragraph = speedReader.config.$words,
+                $text = $paragraph.text();
+            
+            speedReader.words = splitter( $text );
+
+            for (var i = 1; i < speedReader.words.length; i++) {
+                speedReader.words[i] = speedReader.words[i].replace(/{linebreak}/g, '   ');
+            }
+		},
+
+		// On each word
+		wordShow: function(i) {
+			speedReader.config.readingProgress.width(100*i/speedReader.words.length+'%');
+
+			var word = speedReader.words[i];
+            
+            speedReader.config.space.html('<span>' + word + '</span>');
+		},
+		wordNext: function() {
+			i++;
+			speedReader.wordShow(i);
+		},
+		wordPrev: function() {
+			i--;
+			speedReader.wordShow(i);
+		},
+
+		// Iteration function
+		wordUpdate: function() {
+			speedReader.spritz = setInterval(function() {
+				speedReader.wordNext();
+				if ( i+1 === speedReader.words.length ) {
+					setTimeout(function() {
+						speedReader.config.space.html('');
+						speedReader.pause(true);
+						i = 0;
+						speedReader.wordShow(0);
+					}, interval);
+					clearInterval(speedReader.spritz);
+				}
+			}, interval);
+		},
+
+		// Control functions
+		pause: function( ns ) {
+			if ( ! paused ) {
+				clearInterval(speedReader.spritz);
+				paused = true;
+
+				speedReader.config.container.addClass('paused');
+				if ( autosave && ! ns ) {
+					speedReader.save();
+				}
+			}
+		},
+		play: function() {
+			speedReader.wordUpdate();
+			paused = false;
+  			speedReader.config.container.removeClass('paused');
+		},
+		toggle: function() {
+			if (paused) {
+				speedReader.play();
+			} else {
+				speedReader.pause();
+			}
+		},
+
+		// Speed functions
+		speed: function() {
+			interval = 60000/$wpm.val();
+			if ( !paused ) {
+				clearInterval(speedReader.spritz);
+				speedReader.wordUpdate();
+			}
+			speedReader.config.save.removeClass('saved loaded');
+		},
+		slider: function() {
+			$wpm.attr('value', $wpm.val());
+			speedReader.output();
+			speedReader.speed();
+		},
+		output: function() {
+			speedReader.wpmOutput.value = $wpm.val() + ' words per minute.';
+		},
+		faster: function() {
+			$wpm.val(parseInt($wpm.val())+50);
+			speedReader.output();
+			speedReader.speed();
+		},
+		slower: function() {
+			if ( $wpm.val() >= 100 ) {
+				$wpm.val(parseInt($wpm.val())-50);
+				speedReader.output();
+			}
+			speedReader.speed();
+		},
+
+		// Jog functions
+		back: function() {
+			speedReader.pause();
+			if (i >= 1) {
+				speedReader.wordPrev();
+			}
+		},
+		forward: function() {
+			speedReader.pause();
+			if (i < speedReader.words.length) {
+				speedReader.wordNext();
+			}
+		},
+
+		// Words functions
+		zoom: function(c) {
+			zoom = zoom+c;
+			speedReader.config.reader.css('font-size', zoom+'em');
+		},
+		refresh: function() {
+			clearInterval(speedReader.spritz);
+			speedReader.wordsSet();
+			i = 0;
+			speedReader.pause();
+			speedReader.wordShow(0);
+		},
+		select: function() {
+			speedReader.config.$words.select();
+		},
+		expand: function() {
+			speedReader.config.container.toggleClass('fullscreen');
+		},
+
+		// Autosave functions
+		autosave: function() {
+			speedReader.config.container.toggleClass('autosave');
+
+			autosave = !autosave;
+
+			if (autosave) {
+				speedReader.config.autosave.prop('checked', true);
+			} else {
+				speedReader.config.autosave.prop('checked', false);
+			}
+		},
+
+		// Alert functions
+		alert: function(type) {
+			var msg = '';
+			
+			switch (type) {
+				case 'loaded':
+					msg = 'Data loaded from local storage';
+					break;
+				case 'saved':
+					msg = 'Words, Position and Settings have been saved in local storage for the next time you visit';
+					break;
+			}
+
+			speedReader.config.alert.text(msg).fadeIn().delay(2000).fadeOut();
+		}
+	};
+   
+	var readerControls = {
+		config: {
+			controls:   $('.controls'),
+			collapse:   $('.toggle'),
+			jogBack:    '',
+			jogForward: '',
+		},
+
+		init: function( config ) {
+			// merge config defaults with init config
+			$.extend( readerControls.config, config );
+
+			this.bindUIActions();
+		},
+
+		bindUIActions: function() {
+			readerControls.config.controls.on('click', 'a, label', function(event) {
+				event.preventDefault();
+				readerControls.doClick(event, this);
+			});
+
+			readerControls.config.controls.on('input', 'input[type=range]', function(event) {
+				readerControls.doInputChange(event, this);
+			});
+
+			readerControls.config.controls.on('mousedown', 'a', function(event) {
+				event.preventDefault();
+				readerControls.doMouseDown(event, this);
+			});
+
+			readerControls.config.controls.on('mouseup', 'a', function(event) {
+				event.preventDefault();
+				readerControls.doMouseUp(event, this);
+			});
+            
+            $(document).on('keyup', function(event) {
+                if (event.target.tagName.toLowerCase() !== 'body') {
+                    return;
+                }
+                readerControls.doKeyUp(event, this);
+            });
+            
+            $(document).on('keydown', function(event) {
+                if (event.target.tagName.toLowerCase() !== 'body') {
+                    return;
+                }
+                readerControls.doKeyDown(event, this);
+            });
+		},
+        
+		doClick: function(event, target) {
+			switch (target.id) {
+			case 'spritz_slower':
+				speedReader.slower(); 
+				break;
+			case 'spritz_faster':
+				speedReader.faster(); 
+				break;
+			case 'spritz_save':
+				speedReader.save(); 
+				break;
+			case 'spritz_pause':
+				speedReader.toggle(); 
+				break;
+			case 'spritz_smaller':
+				speedReader.zoom(-0.1); 
+				break;
+			case 'spritz_bigger':
+				speedReader.zoom(0.1); 
+				break;
+			case 'spritz_autosave':
+				speedReader.autosave(); 
+				break;
+			case 'spritz_refresh':
+				speedReader.refresh(); 
+				break;
+			case 'spritz_select':
+				speedReader.select(); 
+				break;
+			case 'spritz_expand':
+				speedReader.expand(); 
+				break;
+			}
+
+			return false;
+		},
+
+		doInputChange: function(event, target) {
+			switch (target.id) {
+			case 'spritz_wpm':
+				speedReader.slider();
+				break;
+			}
+		},
+
+		doMouseDown: function(event, target) {
+			switch (target.id) {
+			case 'spritz_back':
+				readerControls.config.jogBack = setInterval(function() {
+					speedReader.back();
+				}, 100);
+				break;
+			case 'spritz_forward':
+				readerControls.config.jogForward = setInterval(function() {
+					speedReader.forward();
+				}, 100);
+				break;
+			}
+		},
+
+		doMouseUp: function(event, target) {
+			switch (target.id) {
+			case 'spritz_back':
+				clearInterval(readerControls.config.jogBack); 
+				break;
+			case 'spritz_forward':
+				clearInterval(readerControls.config.jogForward); 
+				break;
+			}
+		},
+        
+        doKeyUp: function(event) {
+            switch (event.keyCode) {
+            case 32:
+                speedReader.toggle(); 
+                //speedReader.buttonFlash('pause'); 
+                break;
+            case 37:
+                speedReader.back(); 
+                //button_flash('back');
+                break;
+            case 38:
+                speedReader.faster(); 
+                //button_flash('faster'); 
+                break;
+            case 39:
+                speedReader.forward(); 
+                //button_flash('forward'); 
+                break;
+            case 40:
+                speedReader.slower(); 
+                //button_flash('slower'); 
+                break;
+            }
+        },
+        
+        doKeyDown: function(event) {
+            switch (event.keyCode) {
+            case 37:
+                speedReader.back(); 
+                //button_flash('back'); 
+                break;
+            case 39:
+                speedReader.forward(); 
+                //button_flash('forward'); 
+                break;    
+            }
+        },
+	};
+
+	var themeToggle = {
+		config: {
+			container: $('body'),
+			view:      $('[data-theme]'),
+		},
+
+		init: function( config ) {
+            // merge config defaults with init config
+			$.extend( themeToggle.config, config );
+            
+			this.bindUIActions();
+		},
+
+		bindUIActions: function() {
+			themeToggle.config.view.on('click', function(e) {
+				themeToggle.readerType(e, this);
+			});
+		},
+
+		speedReader: function( bool ) {
+			if ( bool ) {
+				speedReader.config.reader.addClass('in');
+				speedReader.play();
+				speedReader.wpmOutput.value = $wpm.val() + ' words per minute.';
+			} else {
+				speedReader.config.reader.removeClass('in');
+				speedReader.pause();
+			}
+
+			isSpeedRead = bool;
+			stopScroll( bool, 'body' );
+		},
+
+		animate: function( bool ) {
+			if ( bool ) {
+				themeToggle.config.container.addClass('animated');
+                fullPage.init();
+			} else {
+				themeToggle.config.container.removeClass('animated');
+                $.fn.fullpage.destroy('all');
+			}
+
+			isAnimated = bool;
+		},
+
+		readerType: function(event, target) {
+			switch (target.dataset.theme) {
+				case 'speed':
+					themeToggle.speedReader( true );
+					themeToggle.animate( false );
+					themeToggle.btnSelected(target);
+					break;
+				case 'normal':
+					themeToggle.speedReader( false );
+					themeToggle.animate( false );
+					themeToggle.btnSelected(target);
+					break;
+				case 'animated':
+					themeToggle.speedReader( false );
+					themeToggle.animate( true );
+					themeToggle.btnSelected(target);
+					break;
+			}
+		},
+
+		btnSelected: function(target) {
+			$(themeToggle.config.view).attr('disabled', false).removeClass('active');
+			$(target).attr('disabled', true).addClass('active');
+		},
+	};
 
 	$(document).ready(function() {
 		var $window = $(window);
