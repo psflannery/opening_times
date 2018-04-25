@@ -1,4 +1,4 @@
-/*! @vimeo/player v2.2.1 | (c) 2017 Vimeo | MIT License | https://github.com/vimeo/player.js */
+/*! @vimeo/player v2.6.1 | (c) 2018 Vimeo | MIT License | https://github.com/vimeo/player.js */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
@@ -815,7 +815,7 @@ function swapCallbacks(oldElement, newElement) {
  * @module lib/embed
  */
 
-var oEmbedParameters = ['id', 'url', 'width', 'maxwidth', 'height', 'maxheight', 'portrait', 'title', 'byline', 'color', 'autoplay', 'autopause', 'loop', 'responsive', 'speed', 'background', 'transparent'];
+var oEmbedParameters = ['autopause', 'autoplay', 'background', 'byline', 'color', 'height', 'id', 'loop', 'maxheight', 'maxwidth', 'muted', 'playsinline', 'portrait', 'responsive', 'speed', 'title', 'transparent', 'url', 'width'];
 
 /**
  * Get the 'data-vimeo'-prefixed attributes from an element as an object.
@@ -969,6 +969,7 @@ function resizeEmbeds() {
             return;
         }
 
+        // 'spacechange' is fired only on embeds with cards
         if (!event.data || event.data.event !== 'spacechange') {
             return;
         }
@@ -980,11 +981,10 @@ function resizeEmbeds() {
                 continue;
             }
 
+            // Change padding-bottom of the enclosing div to accommodate
+            // card carousel without distorting aspect ratio
             var space = iframes[i].parentElement;
-
-            if (space && space.className.indexOf('vimeo-space') !== -1) {
-                space.style.paddingBottom = event.data.data[0].bottom + 'px';
-            }
+            space.style.paddingBottom = event.data.data[0].bottom + 'px';
 
             break;
         }
@@ -1128,7 +1128,7 @@ var Player = function () {
         }
 
         // Find an element by ID
-        if (typeof element === 'string') {
+        if (typeof document !== 'undefined' && typeof element === 'string') {
             element = document.getElementById(element);
         }
 
@@ -1194,7 +1194,10 @@ var Player = function () {
 
                 getOEmbedData(url, params).then(function (data) {
                     var iframe = createEmbed(data, element);
+                    // Overwrite element with the new iframe,
+                    // but store reference to the original element
                     _this.element = iframe;
+                    _this._originalElement = element;
 
                     swapCallbacks(element, iframe);
                     playerMap.set(_this.element, _this);
@@ -1246,6 +1249,8 @@ var Player = function () {
                     });
 
                     postMessage(_this2, name, args);
+                }).catch(function (error) {
+                    reject(error);
                 });
             });
         }
@@ -1420,7 +1425,9 @@ var Player = function () {
     }, {
         key: 'ready',
         value: function ready() {
-            var readyPromise = readyMap.get(this);
+            var readyPromise = readyMap.get(this) || new npo_src(function (resolve, reject) {
+                reject('Unknown player. Probably unloaded.');
+            });
             return npo_src.resolve(readyPromise);
         }
 
@@ -1589,6 +1596,34 @@ var Player = function () {
         key: 'unload',
         value: function unload() {
             return this.callMethod('unload');
+        }
+
+        /**
+         * Cleanup the player and remove it from the DOM
+         *
+         * It won't be usable and a new one should be constructed
+         *  in order to do any operations.
+         *
+         * @return {Promise}
+         */
+
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            var _this5 = this;
+
+            return new npo_src(function (resolve) {
+                readyMap.delete(_this5);
+                playerMap.delete(_this5.element);
+                if (_this5._originalElement) {
+                    playerMap.delete(_this5._originalElement);
+                    _this5._originalElement.removeAttribute('data-vimeo-initialized');
+                }
+                if (_this5.element && _this5.element.nodeName === 'IFRAME') {
+                    _this5.element.remove();
+                }
+                resolve();
+            });
         }
 
         /**
@@ -2068,7 +2103,11 @@ var Player = function () {
     return Player;
 }();
 
-if (!isNode) {
+// Setup embed only if this is not a node environment
+// and if there is no existing Vimeo Player object
+
+
+if (!isNode && window.Vimeo && !window.Vimeo.Player) {
     initializeEmbeds();
     resizeEmbeds();
 }

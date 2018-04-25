@@ -11,7 +11,7 @@
     "fizzy-ui-utils": "^2.0.0",
     "get-size": "^2.0.0",
     "tap-listener": "^2.0.0",
-    "unidragger": "^2.2.3"
+    "unidragger": "^2.3.0"
   },
   "devDependencies": {
     "flickity-imagesloaded": "^2.0.0",
@@ -24,7 +24,7 @@
     "carousel",
     "touch"
   ],
-  "homepage": "http://flickity.metafizzy.co",
+  "homepage": "https://flickity.metafizzy.co",
   "authors": [
     "Metafizzy"
   ],
@@ -40,12 +40,12 @@
     "gulpfile.js",
     "notes.md"
   ],
-  "version": "2.0.10",
-  "_release": "2.0.10",
+  "version": "2.1.1",
+  "_release": "2.1.1",
   "_resolution": {
     "type": "version",
-    "tag": "v2.0.10",
-    "commit": "362c726b43d1f407f2d25c638494fee49957f7eb"
+    "tag": "v2.1.1",
+    "commit": "bdc8f50e2853ee5b9061309ec841ef62b75f25e2"
   },
   "_source": "https://github.com/metafizzy/flickity.git",
   "_target": "^2.0.10",

@@ -103,6 +103,10 @@ proto.destroyHistory = function() {
 // ----- append history ----- //
 
 proto.onAppendHistory = function( response, path, items ) {
+  // do not proceed if no items. #779
+  if ( !items || !items.length ) {
+    return;
+  }
   var firstItem = items[0];
   var elemScrollY = this.getElementScrollY( firstItem );
   // resolve path
@@ -179,7 +183,7 @@ proto.setHistory = function( title, path ) {
 };
 
 // scroll to top to prevent initial scroll-reset after page refresh
-// http://stackoverflow.com/a/18633915/182183
+// https://stackoverflow.com/a/18633915/182183
 proto.onUnload = function() {
   var pageIndex = this.scrollPageIndex;
   if ( pageIndex === 0 ) {

@@ -38,6 +38,7 @@
     "tether": "^1.4.0",
     "vimeo-player-js": "^2.0.1",
     "flickity": "^2.0.10",
-    "infinite-scroll": "jquery-infinite-scroll#^3.0.3"
+    "infinite-scroll": "jquery-infinite-scroll#^3.0.3",
+    "fullpage.js": "^2.9.7"
   }
 }

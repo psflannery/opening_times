@@ -166,6 +166,7 @@ it will also import the Player constructor directly:
     + [pause](#pause-promisevoid-passworderrorprivacyerrorerror)
     + [play](#play-promisevoid-passworderrorprivacyerrorerror)
     + [unload](#unload-promisevoid-error)
+    + [destroy](#destroy-promisevoid-error)
     + [getAutopause](#getautopause-promiseboolean-unsupportederrorerror)
     + [setAutopause](#setautopauseautopause-boolean-promiseboolean-unsupportederrorerror)
     + [getColor](#getcolor-promisestring-error)
@@ -191,7 +192,7 @@ it will also import the Player constructor directly:
     + [getVideoUrl](#getvideourl-promisestring-privacyerrorerror)
     + [getVolume](#getvolume-promisenumber-error)
     + [setVolume](#setvolumevolume-number-promisenumber-rangeerrorerror)
-- [Events](#events)
+* [Events](#events)
     + [play](#play)
     + [pause](#pause)
     + [ended](#ended)
@@ -202,6 +203,9 @@ it will also import the Player constructor directly:
     + [cuechange](#cuechange)
     + [cuepoint](#cuepoint)
     + [volumechange](#volumechange)
+    + [playbackratechange](#playbackratechange)
+    + [bufferstart](#bufferstart)
+    + [bufferend](#bufferend)
     + [error](#error)
     + [loaded](#loaded)
 * [Embed Options](#embed-options)
@@ -499,11 +503,25 @@ player.play().then(function() {
 
 ### unload(): Promise&lt;void, Error&gt;
 
-Return the player to its initial state.
+Return the internal player (iframe) to its initial state.
 
 ```js
 player.unload().then(function() {
     // the video was unloaded
+}).catch(function(error) {
+    // an error occurred
+});
+```
+### destroy(): Promise&lt;void, Error&gt;
+
+Cleanup the player and remove it from the DOM.
+
+It won't be usable and a new one should be constructed
+ in order to do any operations.
+
+```js
+player.destroy().then(function() {
+    // the player was destroyed
 }).catch(function(error) {
     // an error occurred
 });
@@ -1141,6 +1159,27 @@ event will never fire on those devices.
 }
 ```
 
+### playbackratechange
+
+Triggered when the playback rate of the video in the player changes. The ability to change rate can be disabled by the creator
+and the event will not fire for those videos. The new playback rate is returned with the event.
+
+```js
+{
+    playbackRate: 1.5
+}
+```
+
+### bufferstart
+
+Triggered when buffering starts in the player. This is also triggered during preload and while seeking. There is no associated data with this event.
+
+
+### bufferend
+
+Triggered when buffering ends in the player. This is also triggered at the end of preload and seeking. There is no associated data with this event.
+
+
 ### error
 
 Triggered when some kind of error is generated in the player. In general if you
@@ -1178,13 +1217,15 @@ option      | default  | description
 id _or_ url |          | **Required.** Either the id or the url of the video.
 autopause   | `true`   | Pause this video automatically when another one plays.
 autoplay    | `false`  | Automatically start playback of the video. Note that this won’t work on some devices.
-background  | `false`  | Enable the player's background mode which hides the controls and autoplays the video.
+background  | `false`  | Enable the player's background mode which hides the controls, autoplays and loops the video.
 byline      | `true`   | Show the byline on the video.
 color       | `00adef` | Specify the color of the video controls. Colors may be overridden by the embed settings of the video.
 height      |          | The exact height of the video. Defaults to the height of the largest available version of the video.
 loop        | `false`  | Play the video again when it reaches the end.
 maxheight   |          | Same as height, but video will not exceed the native size of the video.
 maxwidth    |          | Same as width, but video will not exceed the native size of the video.
+muted       | `false`  | Mute this video on load. Required to autoplay in certain browsers.
+playsinline | `true`   | Play video inline on mobile devices, to automatically go fullscreen on playback set this parameter to `false`.
 portrait    | `true`   | Show the portrait on the video.
 speed       | `false`  | Show the speed controls in the preferences menu and enable playback rate API.
 title       | `true`   | Show the title on the video.

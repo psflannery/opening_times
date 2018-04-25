@@ -34,15 +34,14 @@
     "package.json",
     "gulpfile.js"
   ],
-  "version": "3.0.3",
-  "_release": "3.0.3",
+  "version": "3.0.4",
+  "_release": "3.0.4",
   "_resolution": {
     "type": "version",
-    "tag": "v3.0.3",
-    "commit": "c7de672a6f49264b3b6a140cb91d70a00d6ff644"
+    "tag": "v3.0.4",
+    "commit": "c99edd4412c1e59dc8cfea56c3a8332fcb4c565b"
   },
   "_source": "https://github.com/paulirish/infinite-scroll.git",
   "_target": "^3.0.3",
-  "_originalSource": "jquery-infinite-scroll",
-  "_direct": true
+  "_originalSource": "jquery-infinite-scroll"
 }
