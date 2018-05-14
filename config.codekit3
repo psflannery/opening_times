@@ -589,7 +589,7 @@
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
-		"oA": 1,
+		"oA": 2,
 		"oAP": "\/bower_components\/fullpage.js\/dist\/jquery.fullpage.js",
 		"oF": 0,
 		"sC": 1,
@@ -2390,6 +2390,73 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/bower_components\/Scrollify\/.bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/Scrollify\/.bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/Scrollify\/bower.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/Scrollify\/bower.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/Scrollify\/jquery.scrollify.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/bower_components\/Scrollify\/jquery.scrollify.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/bower_components\/Scrollify\/LICENSE": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/bower_components\/Scrollify\/LICENSE",
+		"oF": 0
+		},
+	"\/bower_components\/Scrollify\/package.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/Scrollify\/package.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
+	"\/bower_components\/Scrollify\/README.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 2,
+		"oAP": "\/bower_components\/Scrollify\/README.md",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/bower_components\/Scrollify\/scrollify.jquery.json": {
+		"ft": 524288,
+		"oA": 2,
+		"oAP": "\/bower_components\/Scrollify\/scrollify.jquery.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/bower_components\/smoothstate\/.bower.json": {
 		"ft": 524288,
 		"oA": 2,
@@ -4115,6 +4182,19 @@
 		"oS": 0,
 		"uL": 1
 		},
+	"\/css\/scss\/app\/components\/_poster-text.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/css\/scss\/app\/css\/_poster-text.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
 	"\/css\/scss\/app\/components\/_search-results.scss": {
 		"aP": 0,
 		"bl": 0,
@@ -4124,6 +4204,32 @@
 		"ma": 0,
 		"oA": 1,
 		"oAP": "\/css\/scss\/app\/css\/_search-results.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
+	"\/css\/scss\/app\/components\/_slides.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/css\/scss\/app\/css\/_slides.css",
+		"oF": 0,
+		"oS": 0,
+		"uL": 1
+		},
+	"\/css\/scss\/app\/components\/_speed-reader.scss": {
+		"aP": 0,
+		"bl": 0,
+		"dP": 10,
+		"dS": 0,
+		"ft": 4,
+		"ma": 0,
+		"oA": 1,
+		"oAP": "\/css\/scss\/app\/css\/_speed-reader.css",
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
@@ -4238,19 +4344,6 @@
 		"ma": 0,
 		"oA": 1,
 		"oAP": "\/css\/scss\/app\/css\/_flickity.css",
-		"oF": 0,
-		"oS": 0,
-		"uL": 1
-		},
-	"\/css\/scss\/app\/utils\/_fullpage.scss": {
-		"aP": 0,
-		"bl": 0,
-		"dP": 10,
-		"dS": 0,
-		"ft": 4,
-		"ma": 0,
-		"oA": 1,
-		"oAP": "\/css\/scss\/app\/css\/_fullpage.css",
 		"oF": 0,
 		"oS": 0,
 		"uL": 1
@@ -5601,6 +5694,26 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/js\/main-bu--2.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/js\/min\/main-bu--2-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/js\/main-bu.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/js\/min\/main-bu-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/js\/main.js": {
 		"ft": 64,
 		"ma": 0,
@@ -5617,16 +5730,6 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "\/js\/min\/main.min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/js\/min\/loop-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/js\/min\/min\/loop-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -5812,6 +5915,13 @@
 		"oAP": "\/template-parts\/content-blocks\/block-reading-title.php",
 		"oF": 0
 		},
+	"\/template-parts\/content-blocks\/block-theme-switcher.php": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/template-parts\/content-blocks\/block-theme-switcher.php",
+		"oF": 0
+		},
 	"\/template-parts\/content-none.php": {
 		"cB": 0,
 		"ft": 8192,
@@ -5838,6 +5948,13 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/template-parts\/content-reading-annotation.php",
+		"oF": 0
+		},
+	"\/template-parts\/content-reading-slides.php": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/template-parts\/content-reading-slides.php",
 		"oF": 0
 		},
 	"\/template-parts\/content-reading-text.php": {

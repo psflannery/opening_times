@@ -11,6 +11,10 @@ $font-size-blockquote:  1.25em;
 $font-size-entry-title: 2.5rem;
 $font-size-headline:    4rem;
 
+$font-size-poster-sm: calc(6vw + 6vh); // calc(6vw + 7vh);
+$font-size-poster-md: calc(3.5vw + 4vh);
+$font-size-poster-lg: calc(1.5vw + 1.5vh); //calc(2vw + 2vh);
+
 //== Logo
 //
 //##
@@ -23,6 +27,8 @@ $logo-md: 250px;
 //##
 
 $icon-placeholder-size: 150px;
+
+$ui-icon-hover-color: $gray;
 
 //== Images
 //
@@ -155,3 +161,8 @@ $flickity-cell-width-lg:          33.333333%;
 
 $flickity-progress-bar-color:     $white;
 $flickity-progress-bar-height:    3px;
+
+// Header
+// 
+// ##
+$header-height: ($spacer * 3) * $line-height-base //94px;

@@ -1,0 +1,18 @@
+//
+// Slides
+// --------------------------------------------------
+
+.format-slides {
+	background-color: rgba($body-bg, 0.95);
+	.entry-title__container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		margin: 0;
+		height: calc(100vh - #{$header-height});
+		> div {
+			align-self: flex-start;
+		}
+	}
+}

@@ -257,6 +257,34 @@ function opening_times_the_featured_link_html( $url, $args = array(), $before = 
 
 
 /**
+ * Display the attributes for the post div.
+ * 
+ * @param  boolean $echo If true, echo the post attributes
+ * @return array        Array of post attributes
+ *
+ * @since Opening Times 1.0.0
+ */
+function opening_times_post_attributes( $echo = true ) {
+    $data_attributes = array();
+
+    $speed_reader = get_post_meta( get_the_ID(), '_ot_speed_read', true );
+
+    if ( $speed_reader ) {
+        $data_attributes[] = 'data-text="' . esc_attr ('split') . '" data-toggle="' . esc_attr ('theme') . '"';
+    }
+
+    //$data_attributes = array_map( 'esc_attr', $data_attributes );
+    $ouput =  join( ' ', $data_attributes );
+
+    if ( $echo ) {
+        echo $ouput;
+    } else {
+        return $ouput;
+    }
+};
+
+
+/**
  * Determine if a URL is an internal or external
  * 
  * @param  string $url            The URL to examine

@@ -1,0 +1,87 @@
+// Speed Reader
+// --------------------------------------------------
+
+.spritz {
+    @include size(100%, 100vh);
+    background-color: $body-bg;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transition: background 0.1s linear;
+    &.in {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        z-index: $zindex-fixed;
+    }
+}
+.spritz-word {
+    font-size: $font-size-poster-lg; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.theme-toggle {
+    position: fixed;
+    right: $grid-gutter-width-base/2;
+    bottom: $spacer * 2;
+    z-index: $zindex-fixed;
+}
+
+// Controls
+.wpm {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+}  
+.settings-controls {
+    max-width: 30rem;
+    //margin: 0 auto;
+    .speed {
+        margin-bottom: $spacer * 2;
+        input {
+            width: 100%;
+        }
+        output {
+
+        }
+    }
+    .pause {
+        svg {
+            @include size(3rem);
+            vertical-align: middle;
+            &:hover {
+                fill: $ui-icon-hover-color;
+            }  
+        }
+    }
+    .icon-play {
+        //display: inline-block;
+        display: none;
+        .paused & {
+            display: inline-block;
+        }
+    }
+    .icon-pause {
+        //display: none;
+        display: inline-block;
+        .paused & {
+            display: none;
+        }
+    }
+}
+.interaction {
+    padding-bottom: $spacer;
+}
+.progress-bar {
+    height: 0.2rem;
+    width: 0;
+    background: $brand-primary;
+}    

@@ -5,7 +5,9 @@
 .site-header {
 	background-color: $body-bg;
 	border-bottom: $ot-border-width solid $ot-border-color;
-	z-index: $zindex-offcanvas;
+	@include media-breakpoint-down(xs) {
+		z-index: $zindex-offcanvas;
+	}
 }
 .site-title {
 	margin: 0;

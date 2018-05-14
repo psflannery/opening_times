@@ -15,6 +15,8 @@
 		isSidebarOpen = false,
 		paused = false,
 		i = 0,
+		zoom = 1,
+		//var autosave = false;
 		isSpeedRead = false,
 		isAnimated = true,
 		isNormal = false,
@@ -256,6 +258,7 @@
 					$.scrollify.move(0);
 					$.scrollify.destroy();
 				}
+				//speedReader.refresh();
 			},
 			onStart: {
 				duration: 1000,
@@ -279,7 +282,6 @@
 
 				$.readyFn.execute();
 
-				// Ensure speed reader props are reset
 				if ( $(speedReader.config.reader).length ) {
 					speedReader.refresh();
 				}
@@ -872,6 +874,9 @@
 			container:       $body,
 			readingProgress: $('#spritz_progress'),
 			reader:          $('#spritz'),
+			//alert:           $('#alert'),
+			//save:            $('#spritz_save'),
+			//autosave:        $('#autosave_checkbox'),
 			space:           $('#spritz_word'),
 			$words:          $('[data-text="split"] .entry-content > p'),
 			spritz:          '',
@@ -894,7 +899,48 @@
 			speedReader.wordShow(0);
 			speedReader.wordUpdate();
 			speedReader.pause(true);
+
+			/*
+			if ( ! localStorage.jqspritz ) {
+				speedReader.wordsSet();
+				speedReader.wordShow(0);
+				speedReader.wordUpdate();
+				speedReader.pause(true);
+			} else {
+				speedReader.config.local = JSON.parse(localStorage.jqspritz);
+				speedReader.config.$words.val(speedReader.config.local.words);
+				i = speedReader.config.local.word;
+				if ( speedReader.config.local.autosave ) {
+					autosave = true;
+					speedReader.config.container.addClass('autosave');
+					speedReader.config.autosave.prop('checked', true);
+				}
+				speedReader.config.$wpm.val(speedReader.config.local.wpm);
+				speedReader.configinterval = 60000/speedReader.config.local.wpm;
+				speedReader.zoom(0);
+				speedReader.wordsSet();
+				speedReader.wordShow(i);
+				speedReader.wordUpdate();
+				speedReader.pause(true);
+				speedReader.alert('loaded');
+			} */
 		},
+		/*
+		save: function() {
+            speedReader.config.local = {
+				word: i,
+				words: speedReader.config.$words.val(),
+				wpm: speedReader.config.$wpm.val(),
+				autosave: autosave,
+				zoom: zoom
+			};
+            localStorage.jqspritz = JSON.stringify(speedReader.config.local);
+			if (!autosave) {
+				speedReader.alert('saved');
+			} else {
+				//button_flash('save', 500);
+			}			
+		}, */
 		
 		// Text parseing
 		wordsSet: function() {
@@ -948,6 +994,10 @@
 				paused = true;
 
 				speedReader.config.container.addClass('paused');
+				/*
+				if ( autosave && ! ns ) {
+					speedReader.save();
+				}*/
 			}
 		},
 		play: function() {
@@ -970,6 +1020,7 @@
 				clearInterval(speedReader.config.spritz);
 				speedReader.wordUpdate();
 			}
+			//speedReader.config.save.removeClass('saved loaded');
 		},
 		slider: function() {
 			speedReader.config.$wpm.attr('value', speedReader.config.$wpm.val());
@@ -977,8 +1028,43 @@
 			speedReader.speed();
 		},
 		output: function() {
-			speedReader.config.wpmOutput.value = speedReader.config.$wpm.val() + ' words per minute.';
+			speedReader.wpmOutput.value = speedReader.config.$wpm.val() + ' words per minute.';
 		},
+		/*
+		faster: function() {
+			speedReader.config.$wpm.val(parseInt(speedReader.config.$wpm.val())+50);
+			speedReader.output();
+			speedReader.speed();
+		},
+		slower: function() {
+			if ( speedReader.config.$wpm.val() >= 100 ) {
+				speedReader.config.$wpm.val(parseInt(speedReader.config.$wpm.val())-50);
+				speedReader.output();
+			}
+			speedReader.speed();
+		},*/
+
+		// Jog functions
+		/*
+		back: function() {
+			speedReader.pause();
+			if (i >= 1) {
+				speedReader.wordPrev();
+			}
+		},
+		forward: function() {
+			speedReader.pause();
+			if (i < speedReader.config.words.length) {
+				speedReader.wordNext();
+			}
+		},*/
+
+		// Words functions
+		/*
+		zoom: function(c) {
+			zoom = zoom+c;
+			speedReader.config.reader.css('font-size', zoom+'em');
+		},*/
 		refresh: function() {
 			clearInterval(speedReader.config.spritz);
 			speedReader.wordsSet();
@@ -986,29 +1072,114 @@
 			speedReader.pause();
 			speedReader.wordShow(0);
 		},
+		/*
+		select: function() {
+			speedReader.config.$words.select();
+		},
+		expand: function() {
+			speedReader.config.container.toggleClass('fullscreen');
+		},*/
+
+		/*
+		// Autosave functions
+		autosave: function() {
+			speedReader.config.container.toggleClass('autosave');
+
+			autosave = !autosave;
+
+			if (autosave) {
+				speedReader.config.autosave.prop('checked', true);
+			} else {
+				speedReader.config.autosave.prop('checked', false);
+			}
+		}, */
+
+		/*
+		// Alert functions
+		alert: function(type) {
+			var msg = '';
+			
+			switch (type) {
+				case 'loaded':
+					msg = 'Data loaded from local storage';
+					break;
+				case 'saved':
+					msg = 'Words, Position and Settings have been saved in local storage for the next time you visit';
+					break;
+			}
+
+			speedReader.config.alert.text(msg).fadeIn().delay(2000).fadeOut();
+		} */
 	};
    
 	var readerControls = {
 		config: {
-			controls: $('.controls'),
+			controls:   $('.controls'),
+			jogBack:    '',
+			jogForward: '',
 		},
 
 		init: function( config ) {
 			// merge config defaults with init config
 			$.extend( readerControls.config, config );
 
-			this.bindUIActions( readerControls.config.controls );
+			this.bindUIActions();
 		},
 
-		bindUIActions: function( $controls ) {
-			$controls.on('click', '#spritz_pause', function(event) {
+		bindUIActions: function() {
+			readerControls.config.controls.on('click', 'a, label', function(event) {
 				event.preventDefault();
-				speedReader.toggle(); 
+				readerControls.doClick(event, this);
 			});
 
-			$controls.on('input', 'input[type=range]', function() {
-				speedReader.slider();
+			readerControls.config.controls.on('input', 'input[type=range]', function(event) {
+				readerControls.doInputChange(event, this);
 			});
+		},
+        
+		doClick: function( event, target ) {
+			switch (target.id) {
+			//case 'spritz_slower':
+			//	speedReader.slower(); 
+			//	break;
+			//case 'spritz_faster':
+			//	speedReader.faster(); 
+			//	break;
+			//case 'spritz_save':
+			//	speedReader.save(); 
+			//	break;
+			case 'spritz_pause':
+				speedReader.toggle(); 
+				break;
+			//case 'spritz_smaller':
+			//	speedReader.zoom(-0.1); 
+			//	break;
+			//case 'spritz_bigger':
+			//	speedReader.zoom(0.1); 
+			//	break;
+			//case 'spritz_autosave':
+			//	speedReader.autosave(); 
+			//	break;
+			//case 'spritz_refresh':
+			//	speedReader.refresh(); 
+			//	break;
+			case 'spritz_select':
+				speedReader.select(); 
+				break;
+			case 'spritz_expand':
+				speedReader.expand(); 
+				break;
+			}
+
+			return false;
+		},
+
+		doInputChange: function( event, target ) {
+			switch (target.id) {
+			case 'spritz_wpm':
+				speedReader.slider();
+				break;
+			}
 		},
 	};
 
@@ -1146,6 +1317,8 @@
 			container:       $('body'),
 			readingProgress: $('#spritz_progress'),
 			reader:          $('#spritz'),
+			//alert:           $('#alert'),
+			//save:            $('#spritz_save'),
 			space:           $('#spritz_word'),
 			$words:          $('[data-text="split"] .entry-content > p'),
 			spritz:          '',
@@ -1154,10 +1327,6 @@
 			$wpm:            $('#spritz_wpm'),
 			interval:        60000/$('#spritz_wpm').val(),  
 			wpmOutput:       $('#spritz_wpm').next()[0],
-		});
-
-		readerControls.init({
-			controls: $('.controls'),
 		});
 
 		scrollSnap.init();

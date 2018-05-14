@@ -47,7 +47,6 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 // *** Utils ***
 @import "utils/_utilities";
 @import "utils/_flickity";
-@import "utils/_fullpage";
 @import "utils/_animations";
 @import "utils/_page-transitions";
 
@@ -60,8 +59,11 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 @import "components/_offcanvas";
 @import "components/_footer";
 @import "components/_headings";
+@import "components/_poster-text";
 @import "components/_images";
 @import "components/_icons";
+@import "components/_slides";
+@import "components/_speed-reader";
 @import "components/_loader";
 @import "components/_search-results";
 @import "components/_404";
@@ -105,6 +107,7 @@ The Opening Times theme is based on Underscores http://underscores.me/, (C) 2012
 	padding-bottom: $spacer * 5;	
 }
 .issue__issue {
+    overflow: hidden;
 	@include media-breakpoint-up(md) {
         border-left: $ot-border-width solid $ot-border-color;
 	}

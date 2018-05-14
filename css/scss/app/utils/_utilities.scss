@@ -2,7 +2,7 @@
 // Utilities
 // --------------------------------------------------
 
-.stop-scrolling {
+.stop-scroll {
     overflow: hidden;
 }
 .gradient-text {
@@ -17,6 +17,11 @@
 }
 .bg-transparent {
 	background-color: transparent;
+}
+.infinite {
+	.posts-navigation {
+		display: none;
+	}
 }
 
 // == Positioning

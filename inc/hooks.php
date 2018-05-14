@@ -23,6 +23,8 @@ function opening_times_body_classes( $classes ) {
 	if ( get_background_image() ) {
 		$classes[] = 'custom-background-active';
 	}
+
+	$classes[] = 'sceneElement site';
 	
 	return $classes;
 }
@@ -39,7 +41,6 @@ add_filter( 'body_class', 'opening_times_body_classes' );
  *
  */
 function opening_times_post_classes( $classes, $class, $post_id ) {
- 
     if ( is_search() ) {
     	$classes[] = 'search-result card border-0';
     }
@@ -55,6 +56,14 @@ function opening_times_post_classes( $classes, $class, $post_id ) {
 
     if ( is_page_template( 'page-templates/2-column.php' ) ) {
     	$classes[] = 'col columns-2-md';
+    }
+
+    if ( has_term( 'slides', 'format' ) ) {
+    	$classes[] = 'format-slides scroll-snap';
+    }
+
+    if (  has_tag( 'poster-text' ) ) {
+    	$classes[] = 'text-size--poster';
     }
 
     $classes[] = 'card border-0 bg-transparent';
@@ -542,5 +551,6 @@ function opening_times_do_speed_read() {
 		return;
 
 	get_template_part( 'template-parts/speed-reader' );
+	get_template_part( 'template-parts/content-blocks/block-theme-switcher' );
 }
 add_action( 'opening-times-after-reading-issue', 'opening_times_do_speed_read' );

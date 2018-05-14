@@ -19,12 +19,12 @@
     <?php echo opening_times_get_additional_header_scripts(); ?>
     
 </head>
-<body <?php body_class(); ?>>
+<body>
 
     <?php do_action( 'opening-times-before-page' ); ?>
 
     <div id="page" class="hfeed">
-        <div id="scene" class="sceneElement site">
+        <div id="scene" <?php body_class(); ?>>
 
             <?php do_action('before_header'); ?>
 

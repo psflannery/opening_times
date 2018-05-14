@@ -1,6 +1,6 @@
 <?php
 /**
- * The template used for displaying the Readising Issue Title.
+ * The template used for displaying the Reading Issue Title.
  *
  * @package Opening Times
  */

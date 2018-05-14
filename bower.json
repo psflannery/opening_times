@@ -39,6 +39,7 @@
     "vimeo-player-js": "^2.0.1",
     "flickity": "^2.0.10",
     "infinite-scroll": "jquery-infinite-scroll#^3.0.3",
-    "fullpage.js": "^2.9.7"
+    "fullpage.js": "^2.9.7",
+    "Scrollify": "^1.0.19"
   }
 }
