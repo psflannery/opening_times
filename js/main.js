@@ -11,7 +11,6 @@
 		},
 		type,
 		page = 1,
-		volFade_duration = 1000,
 		isSidebarOpen = false,
 		paused = false,
 		i = 0,
@@ -279,7 +278,7 @@
 
 				$.readyFn.execute();
 
-				// Ensure speed reader props are reset
+				// Ensure speed reader props are
 				if ( $(speedReader.config.reader).length ) {
 					speedReader.refresh();
 				}
@@ -497,7 +496,7 @@
         },
 
         hide: function( el ) {
-            if( otPopover.config.$pop.length ) {
+            if( otPopover.config.$popMedia.length ) {
                 var $el = $(el);
 
                 $el.find(otPopover.config.$popMedia).popover('hide');
@@ -661,9 +660,9 @@
 				makeGradients( '.gradient-text', 240, 100, 50 );
 				lazy_load_init();
 				
-				//accordion.config.$collapse.on('hidden.bs.collapse', function () {
-				//	mediaControls.doPause( this );
-				//});
+				accordion.config.$collapse.on('hidden.bs.collapse', function () {
+					mediaControls.doPause( this ); // TODO - check this
+				});
 			});
 		},
 	};
@@ -694,7 +693,7 @@
             
             $accordion.on('shown.bs.collapse', function () {                    
                 accordion.doLazyLoad( this );
-                //mediaControls.doPlay( this, 0.2 );
+                mediaControls.doPlay( this, 0.2 );
             });
             
             $accordion.on('hide.bs.collapse', function () {
@@ -703,7 +702,7 @@
             });
             
             $accordion.on('hidden.bs.collapse', function () {
-                //mediaControls.doPause( this );
+                mediaControls.doPause( this );
             });
 
 			// Close the info panels
@@ -719,7 +718,7 @@
                 var $el = $this.find('[data-lazy-src]');
 
                 $el.each(function() {
-                    //lazyLoad.lazy_load_media( this );
+                    lazy_load_media( this );
                 });
             }
         },
@@ -733,6 +732,134 @@
                 $this.parent(accordion.config.card).removeClass('show');
             }
         },
+    };
+
+    // Media Controls
+    var mediaControls = {
+		config: {
+			volFadeDuration: 1000,
+			$autoPlay: $('.autoplay'),
+		},
+
+		init: function( config ) {
+			// merge config defaults with init config
+			$.extend( mediaControls.config, config );
+
+			this.setAutoPlay( mediaControls.config.$autoPlay );
+		},
+
+		setAutoPlay: function( $autoPlay ) {
+			var $iframe = $autoPlay.find('iframe');
+
+			$iframe.attr('data-autoplay', '');
+
+			if( mobilecheck() && $iframe.length ) {
+				mediaControls.mobileParams( $iframe );
+			}
+		},
+
+		mobileParams: function( $iframe ) {
+			$iframe.each(function (i, video) {
+				var src = video.attr('src');
+				// determine embed type
+				parseVideo( src );
+
+				if ( type === 'vimeo' ) {
+					video.attr('src', src.replace('background=1', 'background=0'));
+				}
+			});
+		},
+
+		doPlay: function( panel, vol ) {
+            mediaControls.mediaToggle( true, panel, vol );
+            mediaControls.embedToggle( true, panel );
+        },
+        
+        doPause: function( panel ) {
+            mediaControls.mediaToggle( false, panel );
+            mediaControls.embedToggle( false, panel );
+        },
+
+        mediaToggle: function( bool, panel, vol ) {
+            var media = $(panel).find('video, audio');
+            
+            if( $(media).length ) {
+                media.each(function(i, el) {
+                    var $el = $(el),
+                        element = $el.get(0);
+                        
+                    if( bool ) {
+                        mediaControls.mediaPlay( $el, element, vol );
+                    } else {
+                        mediaControls.mediaPause( $el, element );
+                    }
+                });
+            }
+        },
+
+        mediaPlay: function( $el, element, vol ) {
+            if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
+                // Set the volume
+                $el.prop('volume', vol);
+                
+                if(element.volume === 0) {
+                    element.play().then(function() {
+                        $el.animate({volume: vol}, mediaControls.config.volFadeDuration * 2);
+                    });
+                } else {
+                    element.play();
+                }
+            }
+        },
+
+        mediaPause: function( $el, element ){
+            if( ! element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
+                $el.animate({volume: 0}, mediaControls.config.volFadeDuration, function () {
+                    element.pause();
+                });
+            }
+        },
+
+        embedToggle: function( bool, panel ) {
+            var iframe = $(panel).find('iframe'),
+                vid = iframe.is(['data-lazy-src']) ? iframe.data('lazy-src') : iframe.attr('src');
+                
+            if( $(iframe).length ) {
+                iframe.each(function() {
+                    // determine embed type
+                    parseVideo( vid );
+                    
+                    var video = iframe.get(0);
+                    
+                    if( bool ) {
+                        mediaControls.embedPlay( type, video );
+                    } else {
+                        mediaControls.embedPause( type, video );
+                    }
+
+                });
+            }
+        },
+
+        embedPlay: function( type, video ) {
+            if ( type === 'vimeo' && video.hasAttribute('data-autoplay') ) {
+                video.contentWindow.postMessage('{"method": "play"}', '*');
+            }
+
+            if ( type === 'youtube' && video.hasAttribute('data-autoplay') ) {
+                video.contentWindow.postMessage('{"event": "command", "func": "playVideo", "args": ""}', '*');
+            }
+        },
+
+		embedPause: function( type, video ) {
+			if ( type === 'vimeo' && ! video.hasAttribute('data-keepplaying') ) {
+				video.contentWindow.postMessage('{"method": "pause"}', '*');
+			}
+
+			if ( type === 'youtube' && ! video.hasAttribute('data-keepplaying') ) {
+				video.contentWindow.postMessage('{"event": "command", "func": "pauseVideo", "args": ""}', '*');
+			}
+		},
     };
 	
     var splitter = function( el ) {
@@ -1135,6 +1262,11 @@
             $panelClose: $('.site-info .close'),
             card:        '.card',
         });
+
+        mediaControls.init({
+			volFadeDuration: 1000,
+			$autoPlay: $('.autoplay'),
+		});
 
         // Custom
         splitText.init({
