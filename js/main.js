@@ -18,6 +18,7 @@
 		isAnimated = true,
 		isNormal = false,
 		smoothState,
+		hash = window.location.hash,
 		$site = $('html, body'),
 		$body = $('body'),
 		$page = $('#page');
@@ -251,6 +252,8 @@
 			onBefore: function( $currentTarget, $container ) {
 				infiniteScroll.config.$container.infiniteScroll('destroy');
 				otPopover.config.$popMedia.popover('dispose');
+				stopScroll( false, $body );
+				isSidebarOpen = false;
 				if ( $(scrollSnap.config.section).length ) {
 					$.scrollify.move(0);
 					$.scrollify.destroy();
@@ -671,7 +674,9 @@
     var accordion = {
         config: {
             $collapse: $('.accordion .collapse'),
-            $panelClose: $('.site-info .close'),
+            $infoClose: $('.site-info .close'),
+            $infoCollapse: $('.site-info .collapse'),
+            $accordionId: $(hash + '.collapse'),
             card: '.card',
         },
 
@@ -683,34 +688,48 @@
                 return;
             }
             
-            this.bindUIActions( accordion.config.$collapse, accordion.config.$panelClose );
+            this.bindUIActions( accordion.config.$collapse, accordion.config.$infoClose, accordion.config.$infoCollapse );
+            this.bindHashActions( accordion.config.$accordionId );
         },
         
-        bindUIActions: function( $accordion, $panelClose ) {
-            $accordion.on('show.bs.collapse', function () {
-                accordion.toggle( true, this );
-            });
-            
-            $accordion.on('shown.bs.collapse', function () {                    
-                accordion.doLazyLoad( this );
-                mediaControls.doPlay( this, 0.2 );
-            });
-            
-            $accordion.on('hide.bs.collapse', function () {
-                accordion.toggle( false, this );
-                otPopover.hide( this );
-            });
-            
-            $accordion.on('hidden.bs.collapse', function () {
-                mediaControls.doPause( this );
-            });
+        bindUIActions: function( $accordion, $panelClose, $infoCollapse ) {
+			$accordion.on('show.bs.collapse', function () {
+				accordion.toggle( true, this );
+			});
 
-			// Close the info panels
+			$accordion.on('shown.bs.collapse', function () {                    
+				//accordion.doLazyLoad( this );
+				mediaControls.doPlay( this, 0.2 );
+				mediaControls.mobileParams( this );
+			});
+
+			$accordion.on('hide.bs.collapse', function () {
+				accordion.toggle( false, this );
+				otPopover.hide( this );
+			});
+
+			$accordion.on('hidden.bs.collapse', function () {
+				mediaControls.doPause( this );
+			});
+
+			// Close info panels
 			$panelClose.on('click', function() {
 				$(this).closest('.collapse').collapse('hide');
 			});
+
+			// Toggle info panels
+			$infoCollapse.on('show.bs.collapse', function () {
+				$(this).siblings().collapse('hide');
+			});
         },
 
+        bindHashActions: function( $accordionId ) {
+			if ( hash && $accordionId ) {
+				$accordionId.prev('.collapsed').trigger('click');
+			}
+        },
+
+        /*
         doLazyLoad: function( el ) {
             var $this = $(el);
             
@@ -721,7 +740,7 @@
                     lazy_load_media( this );
                 });
             }
-        },
+        },*/
         
         toggle: function( bool, el ) {
             var $this = $(el);
@@ -753,21 +772,22 @@
 
 			$iframe.attr('data-autoplay', '');
 
-			if( mobilecheck() && $iframe.length ) {
-				mediaControls.mobileParams( $iframe );
-			}
+			mediaControls.mobileParams( $iframe );
 		},
 
 		mobileParams: function( $iframe ) {
-			$iframe.each(function (i, video) {
-				var src = video.attr('src');
-				// determine embed type
-				parseVideo( src );
+			if( mobilecheck() && $iframe.length ) {
+				$iframe.each(function (i, video) {
+					var src = video.attr('src');
+					
+					// determine embed type
+					parseVideo( src );
 
-				if ( type === 'vimeo' ) {
-					video.attr('src', src.replace('background=1', 'background=0'));
-				}
-			});
+					if ( type === 'vimeo' ) {
+						video.attr('src', src.replace('background=1', 'background=0'));
+					}
+				});
+			}
 		},
 
 		doPlay: function( panel, vol ) {
@@ -859,6 +879,55 @@
 			if ( type === 'youtube' && ! video.hasAttribute('data-keepplaying') ) {
 				video.contentWindow.postMessage('{"event": "command", "func": "pauseVideo", "args": ""}', '*');
 			}
+		},
+    };
+
+    // Offcanvas menu
+	var offCanvas = {
+		config: {
+			$offCanvas: '[data-toggle="offcanvas"]',
+			$scene:     $('#scene'),
+		},
+
+		init: function( config ) {
+			// merge config defaults with init config
+			$.extend( this.config, config );
+
+			if( !( this.config.$offCanvas ) ) {
+                return;
+            }
+            
+            this.bindUIActions( this.config.$offCanvas, this.config.$scene );
+		},
+
+		bindUIActions: function( $offcanvas, $scene ) {
+			$scene.on('click', $offcanvas, function(e) {
+				offCanvas.toggle( e, this, $scene );
+			});
+		},
+
+		toggle: function( e, el, $scene ) {
+			e.preventDefault();
+			
+			var $el = $(el),
+				$target = $($el.attr('data-target'));
+
+			isSidebarOpen = !isSidebarOpen;
+
+			$target.toggleClass('in');
+            $el.toggleClass('active');
+
+			if ( isSidebarOpen ) {
+				stopScroll( true, $body );
+				$scene.append('<div id="overlay" class="fixed-fs offcanvas__overlay" data-toggle="offcanvas" data-target="#site-navigation"></div>');
+			} else {
+				stopScroll( false, $body );
+				$('#overlay').remove();
+			}
+
+			$el.attr('aria-expanded', function (i, attr) {
+				return attr === 'true' ? 'false' : 'true';
+			});
 		},
     };
 	
@@ -1258,14 +1327,21 @@
         });
 
         accordion.init({
-            $collapse:   $('.accordion .collapse'),
-            $panelClose: $('.site-info .close'),
-            card:        '.card',
+			$collapse:     $('.accordion .collapse'),
+			$panelClose:   $('.site-info .close'),
+			$infoCollapse: $('.site-info .collapse'),
+			$accordionId:  $(hash + '.collapse'),
+			card:          '.card',
         });
 
         mediaControls.init({
 			volFadeDuration: 1000,
 			$autoPlay: $('.autoplay'),
+		});
+
+		offCanvas.init({
+			$offCanvas: '[data-toggle="offcanvas"]',
+			$scene:     $('#scene'),
 		});
 
         // Custom
