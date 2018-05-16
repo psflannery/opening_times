@@ -175,47 +175,66 @@
 
 	var searchBar = {
 		config: {
-			$searchWrap: $('.expanding-search'), //
+			$searchWrap: $('.expanding-search'),
 			$expand: $('[data-toggle="search-expand"]'),
-			$input: $('.expanding-search .search-field'), //
+			$input: $('.expanding-search .search-field'),
 			$submit: $('.expanding-search .search-submit'),
-			$menu: $('.navigation-social a'), //
+			$menu: $('.navigation-social a'),
 		},
 
 		init: function( config ) {
 			// merge config defaults with init config
 			$.extend( searchBar.config, config );
 
-			var $expand = this.config.$expand,
-				$submit = this.config.$submit;
-
-			this.bindUIActions( $expand, $submit );
+			this.bindUIActions( this.config.$expand, this.config.$submit, this.config.$input );
+			//this.doResize( this.config.$expand, this.config.$submit, this.config.$input );
 		},
 
-		bindUIActions: function( $expand, $submit ) {
-			$expand.on('click', function( event ) {
-				searchBar.doExpand( event );
-			});
-			$submit.on('click', function( event ) {
-				searchBar.doExpand( event );
-			});
+		bindUIActions: function( $expand, $submit, $input ) {
+			if ( ! screenLessThan( breakpoints.screen_md ) ) {
+				$expand.on('click', function( event ) {
+					searchBar.doExpand( event, $input );
+				});
+
+				$submit.on('click', function( event ) {
+					searchBar.doExpand( event, $input );
+				});
+
+				$submit.addClass('btn').removeClass('screen-reader-text');
+				$input.attr('placeholder', '');
+			} else {
+				$expand.off('click', function( event ) {
+					searchBar.doExpand( event );
+				});
+
+				$submit.off('click', function( event ) {
+					searchBar.doExpand( event );
+				});
+
+				$submit.addClass('screen-reader-text').removeClass('btn');
+				$input.attr('placeholder', 'Search');
+			}
 		},
 
-		doExpand: function( event ) {
+		doExpand: function( event, $input ) {
 			event.stopPropagation();
 
 			if ( !searchBar.config.$searchWrap.is('.in') ) {
-				searchBar.open(event);
+				searchBar.open(event, $input);
 			} else if ( searchBar.config.$searchWrap.is('.in') && /^\s*$/.test(searchBar.config.$input.val()) ) {
 				event.preventDefault();
 				searchBar.close();
 			}
 		},
 
-		open: function( event ) {
+		open: function( event, $input ) {
 			event.preventDefault();
+
+			//var placeholderText = screenLessThan( breakpoints.screen_md ) ? 'Search' : '';
+
 			searchBar.config.$searchWrap.addClass('in');
-			searchBar.config.$input.focus();
+			//$input.focus().attr('placeholder', placeholderText);
+			$input.focus();
 			searchBar.config.$menu.addClass('invisible');
 
 			$(document).on('click', function() {
@@ -240,6 +259,12 @@
 				searchBar.bodyFn(event);
 			});
 		},
+
+		doResize: function( $expand, $submit, $input ) {
+			$(window).resize(function () {
+				searchBar.bindUIActions( $expand, $submit, $input );
+			});
+		}
 	};
 	
 	var doSmoothState = {
