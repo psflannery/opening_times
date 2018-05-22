@@ -109,6 +109,14 @@
 		return ( parseInt( windowWidth ) <= parseInt( breakpoint ) );
 	};
 
+	// Helper function to test if number is between 2 values
+	var numberBetween = function( num, low, high, inclusive ) {
+		var min = Math.min.apply(Math, [low, high]),
+			max = Math.max.apply(Math, [low, high]);
+
+		return inclusive ? num >= min && num <= max : num > min && num < max;
+	};
+
 	// Toggle Scrolling
 	var stopScroll = function( bool, el ) {
 		var $el = $(el);
@@ -173,6 +181,7 @@
 		},
 	};
 
+	// Expanding search bar
 	var searchBar = {
 		config: {
 			$searchWrap: $('.expanding-search'),
@@ -186,83 +195,73 @@
 			// merge config defaults with init config
 			$.extend( searchBar.config, config );
 
-			this.bindUIActions( this.config.$expand, this.config.$submit, this.config.$input );
-			//this.doResize( this.config.$expand, this.config.$submit, this.config.$input );
+			this.bindUIActions( this.config.$searchWrap, this.config.$expand, this.config.$submit, this.config.$input, this.config.$menu );
+			this.toggleAtts( this.config.$submit, this.config.$input, this.config.$menu );
+			this.doResize( this.config.$submit, this.config.$input, this.config.$menu );
 		},
 
-		bindUIActions: function( $expand, $submit, $input ) {
-			if ( ! screenLessThan( breakpoints.screen_md ) ) {
-				$expand.on('click', function( event ) {
-					searchBar.doExpand( event, $input );
-				});
+		bindUIActions: function( $searchWrap, $expand, $submit, $input, $menu ) {
+			$expand.on('click', function( event ) {
+				searchBar.doExpand( event, $searchWrap, $submit, $input, $menu );
+			});
 
-				$submit.on('click', function( event ) {
-					searchBar.doExpand( event, $input );
-				});
-
-				$submit.addClass('btn').removeClass('screen-reader-text');
-				$input.attr('placeholder', '');
-			} else {
-				$expand.off('click', function( event ) {
-					searchBar.doExpand( event );
-				});
-
-				$submit.off('click', function( event ) {
-					searchBar.doExpand( event );
-				});
-
-				$submit.addClass('screen-reader-text').removeClass('btn');
-				$input.attr('placeholder', 'Search');
-			}
-		},
-
-		doExpand: function( event, $input ) {
-			event.stopPropagation();
-
-			if ( !searchBar.config.$searchWrap.is('.in') ) {
-				searchBar.open(event, $input);
-			} else if ( searchBar.config.$searchWrap.is('.in') && /^\s*$/.test(searchBar.config.$input.val()) ) {
-				event.preventDefault();
-				searchBar.close();
-			}
-		},
-
-		open: function( event, $input ) {
-			event.preventDefault();
-
-			//var placeholderText = screenLessThan( breakpoints.screen_md ) ? 'Search' : '';
-
-			searchBar.config.$searchWrap.addClass('in');
-			//$input.focus().attr('placeholder', placeholderText);
-			$input.focus();
-			searchBar.config.$menu.addClass('invisible');
-
-			$(document).on('click', function() {
-				searchBar.bodyFn(event);
+			$submit.on('click', function( event ) {
+				searchBar.doExpand( event, $searchWrap, $submit, $input, $menu );
 			});
 		},
 
-		close: function() {
-			searchBar.config.$searchWrap.removeClass('in');
-			searchBar.config.$input.blur();
-			searchBar.config.$menu.removeClass('invisible');
+		toggleAtts: function( $submit, $input, $menu ) {
+			if ( ! screenLessThan( breakpoints.screen_md ) ) {
+				$input.attr('placeholder', '');
+				$submit.addClass('btn').removeClass('screen-reader-text');
+			} else {
+				$input.attr('placeholder', 'Search');
+				$menu.removeClass('invisible');
+				$submit.addClass('screen-reader-text').removeClass('btn');
+			}
 		},
 
-		bodyFn: function(event) {
-			if( $(event.target).is(searchBar.config.$input) ) {
+		doExpand: function( event, $searchWrap, $submit, $input, $menu ) {
+			event.stopPropagation();
+			
+			if ( screenLessThan( breakpoints.screen_md ) ) {
 				return;
 			}
 
-			searchBar.close();
+			if ( ! $searchWrap.is('.in') ) {
+				event.preventDefault();
+				$searchWrap.addClass('in');
+				$input.focus();
+				$menu.addClass('invisible');
 
-			$(document).off('click', function() {
-				searchBar.bodyFn(event);
-			});
+				var bodyFn = function(event) {
+					if( $(event.target).is($input) ) {
+						return;
+					}
+
+					$searchWrap.removeClass('in');
+					$input.blur();
+					$menu.removeClass('invisible');
+
+					$(document).off('click', bodyFn);
+				};
+
+				$(document).on('click', bodyFn);
+			} else if ( $searchWrap.is('.in') && /^\s*$/.test( $input.val() ) ) {
+				event.preventDefault();
+
+				$searchWrap.removeClass('in');
+				$input.blur();
+				$menu.removeClass('invisible');
+			}
 		},
 
-		doResize: function( $expand, $submit, $input ) {
-			$(window).resize(function () {
-				searchBar.bindUIActions( $expand, $submit, $input );
+		doResize: function( $submit, $input, $menu ) {
+			$(window).resize(function() {
+				clearTimeout( window.resizedFinished );
+				window.resizedFinished = setTimeout(function() {
+					searchBar.toggleAtts( $submit, $input, $menu );
+				}, 100);
 			});
 		}
 	};
@@ -446,7 +445,6 @@
 	// Art directed popovers
 	var otPopover = {
         config: {
-            $pop: $('.popover'),
             $popMedia: $('.media-sample'),
             $scene: $('#scene'),
         },
@@ -462,33 +460,17 @@
         },
         
         bindUIActions: function() {
+        	var $popoverLg = $('.popover--large');
+
             otPopover.config.$scene.on('shown.bs.popover', function () {
-                otPopover.doVolumeToggle( $('.accordion .show'), 0.1 );
+                if( $popoverLg.length ) {
+                	mediaControls.volumeToggle( '.accordion .show', 0.1 );
+            	}
             });
             
             otPopover.config.$scene.on('hidden.bs.popover', function () {
-                otPopover.doVolumeToggle( $('.accordion .show'), 0.9 );
-
-                /*
-				$scene.on('hidden.bs.popover', function () {
-					raiseVolume( $('.accordion .show'), 0.9 );
-				});
-                */
+                mediaControls.volumeToggle( '.accordion .show', 0.5 );
             });
-        },
-        
-        doVolumeToggle: function( el, vol ) {
-            
-            /*
-            raiseVolume( $('.accordion .show'), 0.9 );
-            */
-            /*
-            var $popoverLg = $('.popover--large');
-
-            if( $popoverLg.length ) {
-                lowerVolume( $('.accordion .show'), 0.1 );
-            }
-            */
         },
         
         doMedia: function() {            
@@ -723,7 +705,7 @@
 			});
 
 			$accordion.on('shown.bs.collapse', function () {                    
-				//accordion.doLazyLoad( this );
+				accordion.doLazyLoad( this );
 				mediaControls.doPlay( this, 0.2 );
 				mediaControls.mobileParams( this );
 			});
@@ -754,7 +736,6 @@
 			}
         },
 
-        /*
         doLazyLoad: function( el ) {
             var $this = $(el);
             
@@ -765,7 +746,7 @@
                     lazy_load_media( this );
                 });
             }
-        },*/
+        },
         
         toggle: function( bool, el ) {
             var $this = $(el);
@@ -905,6 +886,61 @@
 				video.contentWindow.postMessage('{"event": "command", "func": "pauseVideo", "args": ""}', '*');
 			}
 		},
+
+		// This is how it should be, the play functions above a rea bit WET
+		mediaToggleVolume: function( container, vol ) {
+			var media = $(container).find('video, audio'),
+				$media = $(media);
+
+			if( ! $media.length ) {
+				return;
+			}
+
+			$media.each(function( i, el ){
+				var $this = $(el);
+
+				if( $this.volume === vol ) {
+					return;
+				}
+
+				$this.animate({ volume: vol }, 10);
+			});
+		},
+
+		iframeToggleVolume: function( container, vol ) {
+			var iframe = $(container).find('iframe'),
+				$iframe = $(iframe);
+
+			if( ! $iframe.length ) {
+				return;
+			}
+
+			$iframe.each(function( i, el ) {
+				var $this = $(el),
+					iframeSrc = $this.attr('src');
+
+				parseVideo( iframeSrc );
+
+				if ( type !== ('vimeo' || 'youtube') ) {
+					return;
+				}
+
+				var video = $this.get(0);
+
+				if ( type === 'vimeo' ) {
+					video.contentWindow.postMessage('{"method": "setVolume", "value":' + vol + '}', '*');
+				}
+			});
+		},
+
+		volumeToggle: function( container, vol ) {
+			if( ! $(container).length || numberBetween(0, 1, vol, true) ) {
+				return;
+			}
+
+			mediaControls.mediaToggleVolume( container, vol );
+			mediaControls.iframeToggleVolume( container, vol );
+		}
     };
 
     // Offcanvas menu
@@ -1346,7 +1382,6 @@
 		});
 
 		otPopover.init({
-            $pop:      $('.popover'),
             $popMedia: $('.media-sample'),
             $scene:    $('#scene'),
         });

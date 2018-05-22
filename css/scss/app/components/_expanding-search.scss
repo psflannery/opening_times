@@ -5,6 +5,7 @@
 .expanding-search {
 	display: flex;
 	&__btn {
+		background-color: transparent;
 		font-size: $font-size-nav;
 		cursor: pointer;
 		flex-direction: row;

@@ -7950,6 +7950,7 @@ img.lazyload {
   display: -ms-flexbox;
   display: flex; }
   .expanding-search__btn {
+    background-color: transparent;
     font-size: 1.15rem;
     cursor: pointer;
     -webkit-box-orient: horizontal;
