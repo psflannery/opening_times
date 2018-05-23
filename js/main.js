@@ -1323,7 +1323,7 @@
 			isAnimated = bool;
 		},
 
-		normal: function( bool ) {
+		default: function( bool ) {
 			if ( bool ) {
 				themeToggle.config.content.removeClass('col-md-12');
 				themeToggle.config.content.addClass('col-md-8');
@@ -1342,19 +1342,19 @@
 			switch (target.dataset.theme) {
 				case 'speed':
 					themeToggle.speedReader( true );
-					themeToggle.normal( false );
+					themeToggle.default( false );
 					themeToggle.slides( false );
 					themeToggle.btnSelected(target);
 					break;
-				case 'normal':
+				case 'default':
 					themeToggle.speedReader( false );
-					themeToggle.normal( true );
+					themeToggle.default( true );
 					themeToggle.slides( false );
 					themeToggle.btnSelected(target);
 					break;
 				case 'animated':
 					themeToggle.speedReader( false );
-					themeToggle.normal( false );
+					themeToggle.default( false );
 					themeToggle.slides( true );
 					themeToggle.btnSelected(target);
 					break;

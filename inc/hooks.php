@@ -551,6 +551,28 @@ function opening_times_do_speed_read() {
 		return;
 
 	get_template_part( 'template-parts/speed-reader' );
-	get_template_part( 'template-parts/content-blocks/block-theme-switcher' );
+	ot_get_theme_switcher();
 }
 add_action( 'opening-times-after-reading-issue', 'opening_times_do_speed_read' );
+
+
+/**
+ * Filter the theme switcher list
+ * 
+ * @param  array $menu_items Theme switcher menu items.
+ * @return array             Modified theme switcher menu items.
+ *
+ * @since opening_times 2.0.6
+ */
+function opening_times_filter_theme_switcher_list( $menu_items ) {
+	if ( has_term( 'slides', 'format' ) ) {
+		$menu_items = array(
+			'animated' => esc_html__( 'Slides', 'opening_times' ),
+			'speed'    => esc_html__( 'Speed Read', 'opening_times' ),
+			'default'  => esc_html__( 'Default', 'opening_times' ),
+		);
+	}
+
+	return $menu_items;
+}
+add_filter( 'theme_switcher_list', 'opening_times_filter_theme_switcher_list', 10 );

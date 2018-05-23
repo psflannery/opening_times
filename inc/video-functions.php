@@ -69,7 +69,7 @@ function opening_times_get_vimeo_defaults() {
     		'background' => 1,
 			'autoplay'   => 0,
 			'loop'       => 1,
-			'mute'       => 0
+			'muted'      => 0
     	);
 	}
 

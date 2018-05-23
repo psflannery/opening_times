@@ -93,14 +93,11 @@ function opening_times_tax_description( $taxonomy ) {
         return;
     }
 
-	// display the tax description if it exists, and don't display it on the reading pages.
-	//if ( !is_post_type_archive( 'reading' ) && !is_singular( 'reading' ) ) {	
-        foreach ( $tax_description as $tax ) {
-            if (  $tax->description ) {
-                echo '<aside class="artist-bio ot-meta ot-bio" role="complementary">' . wpautop( wptexturize( $tax->description ) ) . '</aside>';
-            }
-        };
-	//}
+    foreach ( $tax_description as $tax ) {
+        if (  $tax->description ) {
+            echo '<aside class="artist-bio ot-meta ot-bio" role="complementary">' . wpautop( wptexturize( $tax->description ) ) . '</aside>';
+        }
+    };
 }
 
 /**
@@ -124,7 +121,6 @@ function opening_times_editor_bio( $before = '', $after = '', $echo=true ) {
 	    $bio_classes = count($authors) > 1 && has_term( 'accordion-xl', 'format' ) ? 'col-md-4 vcard' : 'col-md-8 vcard';
 
 		foreach( $authors as $coauthor ) {
-			//$url = $coauthor->website ? $coauthor->website : $coauthor->user_url;
 			$url = $coauthor->website;
 			$desc = wpautop( $coauthor->description );
 
@@ -333,4 +329,100 @@ function opening_times_get_social_menu( $before = '', $after = '' ) {
 
 	<?php
 	return ob_get_clean();
+}
+
+/**
+ * The template used for displaying the Speed Read theme switcher.
+ *
+ * @param array $args {
+ *     Optional. Array of theme switcher arguments.
+ * 
+ *     @type string $menu_id       The ID that is applied to the button element which toggles the menu.
+ *     @type string $btn_text      The text in the toggle button.
+ *     @type string $position      The position of the dropdown menu relative to the toggle button.
+ *     @type string $alignment     The alignment of the dropdown menu relative to the toggle button.
+ *     @type string $dropdown_wrap How the dropdown should be wrapped. Uses printf() format with numbered placeholders.
+ *     @type string $menu_wrap     How the dropdown menu should be wrapped. Uses printf() format with numbered placeholders.
+ * }
+ * 
+ * @return string|void       String when $echo is false.
+ * 
+ * @since opening_times 2.0.6
+ */
+
+function ot_get_theme_switcher( $args = '' ) {
+	$default_args = array(
+		'btn_id'        => 'theme-toggle',
+		'btn_text'      => 'Switch View',
+		'position'      => 'dropup',
+		'alignment'     => 'dropdown-menu-right',
+		'dropdown_wrap' => '<div class="%1$s theme-toggle" role="navigation">%2$s</div>',
+		'menu_wrap'     => '<div class="dropdown-menu %1$s" aria-labelledby="%2$s">%3$s</div>',
+	);
+	$args = wp_parse_args( $args, $default_args );
+
+	/**
+	 * Filters the arguments used to display the theme switcher menu.
+	 *
+	 * @since 2.0.6
+	 *
+	 * @param array $args Array of ot_get_theme_switcher() arguments.
+	 */
+	$args = apply_filters( 'theme_switcher_args', $args );
+
+	// Set up the button
+	$button = '<button id="' . esc_attr( $args['btn_id'] ) . '" class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . esc_html__( $args['btn_text'], 'opening_times' ) . '</button>';
+
+	/**
+	 * Filters the HTML output of the dropdown button.
+	 *
+	 * @since 2.0.6
+	 *
+	 * @param string $button The dropdown button HTML button.
+	 */
+	$button = apply_filters( 'theme_switcher_button_toggle', $button, $args );
+
+	// Set up the menu  
+	$menu_items = array(
+		'speed'   => esc_html__( 'Speed Read', 'opening_times' ),
+		'default' => esc_html__( 'Default', 'opening_times' ),
+	);
+
+	/**
+	 * Filters the HTML output of the theme swither list.
+	 *
+	 * @since 2.0.6
+	 *
+	 * @param array $menu_items The theme swither list HTML output.
+	 */
+	$menu_items = apply_filters( 'theme_switcher_list', $menu_items );
+
+	$menu_item = '';
+	$i = 0;
+	// Loop through the menu items and build the HTML output
+	foreach ( $menu_items as $menu_item_type => $menu_item_name ) {
+		$maybe_disabled = $i === 0 ? ' disabled="true"' : '';
+		$maybe_active = $i === 0 ? ' active' : '';
+		
+		$menu_item .= '<button class="btn dropdown-item ' . $maybe_active . '" type="button" data-theme="' . $menu_item_type . '" aria-label="' . $menu_item_type . '"' . $maybe_disabled . '>' . $menu_item_name . '</button>';
+		
+		$i++;
+	};    
+
+	$menu = sprintf(
+		$args['menu_wrap'],
+		esc_attr( $args['alignment'] ),
+		esc_attr( $args['btn_id'] ),
+		$menu_item
+	);
+
+	$menu = $button . $menu;
+
+	$dropdown = sprintf(
+		$args['dropdown_wrap'],
+		esc_attr( $args['position'] ),
+		$menu
+	);
+
+	echo $dropdown;
 }

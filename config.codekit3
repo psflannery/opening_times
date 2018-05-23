@@ -5895,13 +5895,6 @@
 		"oAP": "\/template-parts\/content-blocks\/block-reading-title.php",
 		"oF": 0
 		},
-	"\/template-parts\/content-blocks\/block-theme-switcher.php": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/template-parts\/content-blocks\/block-theme-switcher.php",
-		"oF": 0
-		},
 	"\/template-parts\/content-none.php": {
 		"cB": 0,
 		"ft": 8192,
