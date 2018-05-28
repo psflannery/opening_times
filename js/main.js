@@ -168,16 +168,16 @@
 		},
 
 		// Validate Forms
-		validate: function( el, mail, confirm ) {
-			var form = el[0];
+		validate: function( form, mail, confirm ) {
+			var $form = form[0];
 
-			form.addEventListener( 'submit', function( e ) {
-				if ( form.checkValidity() === false ) {
+			$form.addEventListener( 'submit', function( e ) {
+				if ( $form.checkValidity() === false ) {
 					e.preventDefault();
 					e.stopPropagation();
 				}
 
-				$(el).addClass('was-validated');
+				$(form).addClass('was-validated');
 
 				formValidate.match( mail, confirm );
 			}, false);
@@ -210,7 +210,10 @@
 			// merge config defaults with init config
             $.extend( this.config, config );
 
-			this.bindUIActions();
+            if( $('#mailing-list-subscribe')[0].checkValidity() === true ) {
+				alert('foo');
+				this.bindUIActions();
+			}
 		},
 
 		bindUIActions: function() {
@@ -328,7 +331,7 @@
 		config: {
 			prefetch: true,
 			prefetchOn: 'mouseover touchstart',
-			//cacheLength: 2,
+			cacheLength: 2,
 			blacklist: '.post-edit-link',
 			debug: true,
 			onBefore: function() {
@@ -726,13 +729,13 @@
 		},
 
 		bindEvents: function( $el ) {
-			$el.on('append.infiniteScroll', function() {
+			$el.on( 'append.infiniteScroll', function() {
 				makeGradients( '.gradient-text', 240, 100, 50 );
 				lazy_load_init();
 				
 				//accordion.config.$collapse.on('hidden.bs.collapse', function () {
-				$('.accordion .collapse').on('hidden.bs.collapse', function () {
-					mediaControls.doPause( this ); // TODO - check this
+				$('.accordion .collapse').on( 'hidden.bs.collapse', function () {
+					mediaControls.doPause( this );
 				});
 			});
 
@@ -770,7 +773,7 @@
 			});
 
 			$accordion.on('shown.bs.collapse', function () {                    
-				accordion.doLazyLoad( this );
+				//accordion.doLazyLoad( this );
 				mediaControls.doPlay( this, bgVol );
 				mediaControls.mobileParams( this );
 			});
@@ -1502,6 +1505,13 @@
 		lazy_load_init();
 		makeGradients( '.gradient-text', 240, 100, 50 );
 		formValidate.init();
+
+		/*
+		phpListAjaxForm.init({
+			successMessage: 'Thank you for your registration. Please check your email to confirm.',
+			failMessage: 'Sorry, we were unable to process your subscription.',
+			data: $('#subscribeform').serialize(),
+		});*/
 
 		themeToggle.init({
 			btnSelect: $('[data-theme]'),
