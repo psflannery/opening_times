@@ -36,6 +36,23 @@ get_header(); ?>
         </div>
     </main>
 
-    <?php //get_template_part( 'template-parts/underscore-templates' ); ?>
+    <?php 
+    if ( opening_times_has_featured_posts() ) : 
+        // Get our Featured Content posts
+        $featured = opening_times_get_featured_posts();
 
-<?php get_footer(); ?>
+        // If we have no posts, our work is done here
+        if ( empty( $featured ) ) {
+            return;
+        }
+
+        foreach ( $featured as $post ) : setup_postdata( $post );
+
+            get_template_part( 'template-parts/content-featured' );
+
+        endforeach;
+        wp_reset_postdata();
+
+    endif;
+
+get_footer(); ?>

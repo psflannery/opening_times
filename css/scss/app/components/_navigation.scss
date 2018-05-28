@@ -29,6 +29,10 @@
 		@include media-breakpoint-down(sm) {
 			border-bottom: $ot-border-width solid $ot-border-color;
 		}
+	}
+}
+.navigation-menu {
+	.nav-item {
 		a {
 			color: $body-color;
 		}

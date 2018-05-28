@@ -4299,16 +4299,6 @@
 		"oS": 0,
 		"uL": 1
 		},
-	"\/css\/scss\/app\/css\/loader.css": {
-		"aP": 1,
-		"bl": 0,
-		"ft": 16,
-		"ma": 0,
-		"oA": 0,
-		"oAP": "\/css\/scss\/app\/css\/loader-min.css",
-		"oF": 0,
-		"oS": 3
-		},
 	"\/css\/scss\/app\/editor-styles.scss": {
 		"aP": 1,
 		"bl": 0,
@@ -5684,16 +5674,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/js\/loop.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/js\/min\/loop-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"\/js\/main.js": {
 		"ft": 64,
 		"ma": 0,
@@ -5893,6 +5873,13 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/template-parts\/content-blocks\/block-reading-title.php",
+		"oF": 0
+		},
+	"\/template-parts\/content-featured.php": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/template-parts\/content-featured.php",
 		"oF": 0
 		},
 	"\/template-parts\/content-none.php": {

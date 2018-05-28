@@ -83,9 +83,9 @@ add_filter( 'post_class', 'opening_times_post_classes', 10, 3 );
  *
  */
 function opening_times_menu_classes( $classes, $item, $args ) {
-	if( $args->theme_location == 'primary' ) {
+	//if( $args->theme_location == 'primary' ) {
 		$classes[] = 'nav-item';
-	}
+	//}
 
 	return $classes;
 }
@@ -222,7 +222,7 @@ add_filter( 'upload_mimes', 'opening_times_custom_mime_types' );
  * @since Opening Times 1.0.0
  */
 function opening_times_excerpt_more( $more ) {
-	return '...  <a class="excerpt-read-more" href="'. get_permalink( get_the_ID() ) . '" title="'. __('Read more...', 'opening_times') . get_the_title( get_the_ID() ).'">'. __('Read more...', 'opening_times') .'</a>';
+	return '...  <a class="excerpt-read-more" href="'. get_permalink( get_the_ID() ) . '" title="'. __('Read more...', 'opening_times') . get_the_title( get_the_ID() ).'">'. __('Read more', 'opening_times') .'</a>';
 }
 add_filter('excerpt_more', 'opening_times_excerpt_more');
 

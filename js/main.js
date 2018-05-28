@@ -1,4 +1,4 @@
-/* globals IntersectionObserver, jQuery */
+/* globals IntersectionObserver, jQuery, ot */
 
 ( function ( $ ) {
 	// Global Definitions
@@ -17,6 +17,7 @@
 		isSpeedRead = false,
 		isAnimated = true,
 		isNormal = false,
+		bgVol = 0.2,
 		smoothState,
 		hash = window.location.hash,
 		$site = $('html, body'),
@@ -30,7 +31,7 @@
 			$.readyFn.list.push(fn);
 		},
 		execute: function() {
-			for (var i = 0; i < $.readyFn.list.length; i++) {
+			for ( var i = 0; i < $.readyFn.list.length; i++ ) {
 				try {
 					$.readyFn.list[i].apply(document, [$]);
 				} catch (e) {
@@ -117,6 +118,22 @@
 		return inclusive ? num >= min && num <= max : num > min && num < max;
 	};
 
+	// Call stats after ajax page load
+	var doStatsCallback = function() {
+		var ga = window[window.GoogleAnalyticsObject || 'ga'],
+			stats;
+
+		if ( typeof ga === 'function' ) {
+			////ga( 'send', 'pageview', window.location.pathname || url );
+			ga( 'set', 'page', location.pathname );
+			ga( 'send', 'pageview' );
+		}
+
+		if ( stats ) {
+			new Image().src = document.location.protocol + '//pixel.wp.com/g.gif?' + stats + '&post=0&baba=' + Math.random();
+		}
+	};
+
 	// Toggle Scrolling
 	var stopScroll = function( bool, el ) {
 		var $el = $(el);
@@ -178,6 +195,47 @@
 				$feedback.data('text-original', $feedback.text());
 				$feedback.text( $feedback.data('text-swap') );
 			}
+		},
+	};
+
+	// Submit to mailing list
+	var phpListAjaxForm = {
+		config: {
+			successMessage: 'Thank you for your registration. Please check your email to confirm.',
+			failMessage: 'Sorry, we were unable to process your subscription.',
+			data: $('#subscribeform').serialize(),
+		},
+
+		init: function( config ) {
+			// merge config defaults with init config
+            $.extend( this.config, config );
+
+			this.bindUIActions();
+		},
+
+		bindUIActions: function() {
+			$('#btn').on('submit', function(){
+				phpListAjaxForm.doSubmit();
+			});
+		},
+
+		doSubmit: function() {
+			$.ajax( {
+				type: 'POST',
+				data: phpListAjaxForm.config.data,
+				url: 'http://www.xxx.com/phplist-mp/lists/index.php?p=asubscribe&id=3',
+				dataType: 'html',
+				//success: function ( data, status, request ) {
+				success: function ( data ) {
+					$('#result').empty().append( data !== '' ? data : phpListAjaxForm.config.successMessage );
+					$('#attribute1').val('');
+					$('#email').val('');
+				},
+				//error: function ( request, status, error ) {
+				error: function () {
+					alert(phpListAjaxForm.config.failMessage); 
+				}
+			});
 		},
 	};
 
@@ -273,7 +331,7 @@
 			//cacheLength: 2,
 			blacklist: '.post-edit-link',
 			debug: true,
-			onBefore: function( $currentTarget, $container ) {
+			onBefore: function() {
 				infiniteScroll.config.$container.infiniteScroll('destroy');
 				otPopover.config.$popMedia.popover('dispose');
 				stopScroll( false, $body );
@@ -298,12 +356,16 @@
 				}
 			},
 			onAfter: function() {
+				//console.log(smoothState.href);
 				$body.removeClass('stop-scrolling');
 				//$('#overlay').remove();
 				// reset the page counter
 				page = 1;
 
 				$.readyFn.execute();
+
+				// recapture page stats
+				doStatsCallback();
 
 				// Ensure speed reader props are
 				if ( $(speedReader.config.reader).length ) {
@@ -460,16 +522,14 @@
         },
         
         bindUIActions: function() {
-        	var $popoverLg = $('.popover--large');
-
-            otPopover.config.$scene.on('shown.bs.popover', function () {
-                if( $popoverLg.length ) {
-                	mediaControls.volumeToggle( '.accordion .show', 0.1 );
+            otPopover.config.$scene.on('show.bs.popover', function() {
+                if( otPopover.config.$popMedia.length ) {
+                	mediaControls.volumeToggle( '.accordion .show', bgVol/10 );
             	}
             });
             
-            otPopover.config.$scene.on('hidden.bs.popover', function () {
-                mediaControls.volumeToggle( '.accordion .show', 0.5 );
+            otPopover.config.$scene.on('hide.bs.popover', function() {
+                mediaControls.volumeToggle( '.accordion .show', bgVol );
             });
         },
         
@@ -643,7 +703,7 @@
 				append: '.post',
 				prefill: true,
 				hideNav: '.nav-links',
-				history: false
+				//history: false
 			},
 		},
 
@@ -661,18 +721,22 @@
 			this.bindEvents( $infScroll );
 		},
 
-		create: function( el ) {
-			el.infiniteScroll(infiniteScroll.config.options);  
+		create: function( $el ) {
+			$el.infiniteScroll(infiniteScroll.config.options);  
 		},
 
-		bindEvents: function( el ) {
-			el.on('append.infiniteScroll', function() {
+		bindEvents: function( $el ) {
+			$el.on('append.infiniteScroll', function() {
 				makeGradients( '.gradient-text', 240, 100, 50 );
 				lazy_load_init();
 				
 				accordion.config.$collapse.on('hidden.bs.collapse', function () {
 					mediaControls.doPause( this ); // TODO - check this
 				});
+			});
+
+			$el.on( 'history.infiniteScroll', function() {
+				doStatsCallback();
 			});
 		},
 	};
@@ -706,7 +770,7 @@
 
 			$accordion.on('shown.bs.collapse', function () {                    
 				accordion.doLazyLoad( this );
-				mediaControls.doPlay( this, 0.2 );
+				mediaControls.doPlay( this, bgVol );
 				mediaControls.mobileParams( this );
 			});
 
@@ -760,7 +824,7 @@
     };
 
     // Media Controls
-    var mediaControls = {
+	var mediaControls = {
 		config: {
 			volFadeDuration: 1000,
 			$autoPlay: $('.autoplay'),
@@ -785,7 +849,7 @@
 			if( mobilecheck() && $iframe.length ) {
 				$iframe.each(function (i, video) {
 					var src = video.attr('src');
-					
+
 					// determine embed type
 					parseVideo( src );
 
@@ -796,86 +860,79 @@
 			}
 		},
 
-		doPlay: function( panel, vol ) {
-            mediaControls.mediaToggle( true, panel, vol );
-            mediaControls.embedToggle( true, panel );
-        },
-        
-        doPause: function( panel ) {
-            mediaControls.mediaToggle( false, panel );
-            mediaControls.embedToggle( false, panel );
-        },
+		mediaToggle: function( bool, panel, vol ) {
+			var media = $(panel).find('video, audio'),
+				$media = $(media);
 
-        mediaToggle: function( bool, panel, vol ) {
-            var media = $(panel).find('video, audio');
-            
-            if( $(media).length ) {
-                media.each(function(i, el) {
-                    var $el = $(el),
-                        element = $el.get(0);
-                        
-                    if( bool ) {
-                        mediaControls.mediaPlay( $el, element, vol );
-                    } else {
-                        mediaControls.mediaPause( $el, element );
-                    }
-                });
-            }
-        },
+			if( $media.length ) {
+				$media.each(function(i, el) {
+					var $el = $(el),
+						element = $el[0];
 
-        mediaPlay: function( $el, element, vol ) {
-            if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
-                // Set the volume
-                $el.prop('volume', vol);
-                
-                if(element.volume === 0) {
-                    element.play().then(function() {
-                        $el.animate({volume: vol}, mediaControls.config.volFadeDuration * 2);
-                    });
-                } else {
-                    element.play();
-                }
-            }
-        },
+					if( bool ) {
+						mediaControls.mediaPlay( $el, element, vol );
+					} else {
+						mediaControls.mediaPause( $el, element );
+					}
+				});
+			}
+		},
 
-        mediaPause: function( $el, element ){
-            if( ! element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
-                $el.animate({volume: 0}, mediaControls.config.volFadeDuration, function () {
-                    element.pause();
-                });
-            }
-        },
+		mediaPlay: function( $el, element, vol ) {
+			if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
+				// Set the volume
+				$el.prop('volume', vol);
 
-        embedToggle: function( bool, panel ) {
-            var iframe = $(panel).find('iframe'),
-                vid = iframe.is(['data-lazy-src']) ? iframe.data('lazy-src') : iframe.attr('src');
-                
-            if( $(iframe).length ) {
-                iframe.each(function() {
-                    // determine embed type
-                    parseVideo( vid );
-                    
-                    var video = iframe.get(0);
-                    
-                    if( bool ) {
-                        mediaControls.embedPlay( type, video );
-                    } else {
-                        mediaControls.embedPause( type, video );
-                    }
+				if(element.volume === 0) {
+					element.play().then(function() {
+						$el.animate({volume: vol}, mediaControls.config.volFadeDuration);
+					});
+				} else {
+					element.play();
+				}
+			}
+		},
 
-                });
-            }
-        },
+		mediaPause: function( $el, element ){
+			if( ! element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
+				$el.animate({volume: 0}, mediaControls.config.volFadeDuration, function () {
+					element.pause();
+				});
+			}	
+		},
 
-        embedPlay: function( type, video ) {
-            if ( type === 'vimeo' && video.hasAttribute('data-autoplay') ) {
-                video.contentWindow.postMessage('{"method": "play"}', '*');
-            }
+		embedToggle: function( bool, panel ) {
+			var iframe = $(panel).find('iframe'),
+				$iframe = $(iframe),
+				src = $iframe.is(['data-lazy-src']) ? $iframe.data('lazy-src') : $iframe.attr('src');
 
-            if ( type === 'youtube' && video.hasAttribute('data-autoplay') ) {
-                video.contentWindow.postMessage('{"event": "command", "func": "playVideo", "args": ""}', '*');
-            }
-        },
+			if( $iframe.length ) {
+				$iframe.each(function(i, el) {
+					var $el = $(el);
+
+					// determine embed type
+					parseVideo( src );
+
+					var video = $el[0];
+
+					if( bool ) {
+						mediaControls.embedPlay( type, video );
+					} else {
+						mediaControls.embedPause( type, video );
+					}
+				});
+			}
+		},
+
+		embedPlay: function( type, video ) {
+			if ( type === 'vimeo' && video.hasAttribute('data-autoplay') ) {
+				video.contentWindow.postMessage('{"method": "play"}', '*');
+			}
+
+			if ( type === 'youtube' && video.hasAttribute('data-autoplay') ) {
+				video.contentWindow.postMessage('{"event": "command", "func": "playVideo", "args": ""}', '*');
+			}
+		},
 
 		embedPause: function( type, video ) {
 			if ( type === 'vimeo' && ! video.hasAttribute('data-keepplaying') ) {
@@ -887,50 +944,60 @@
 			}
 		},
 
+		doPlay: function( panel, vol ) {
+			mediaControls.mediaToggle( true, panel, vol );
+			mediaControls.embedToggle( true, panel );
+		},
+
+		doPause: function( panel ) {
+			mediaControls.mediaToggle( false, panel );
+			mediaControls.embedToggle( false, panel );
+		},
+
 		// This is how it should be, the play functions above a rea bit WET
 		mediaToggleVolume: function( container, vol ) {
-			var media = $(container).find('video, audio'),
-				$media = $(media);
+	var media = $(container).find('video, audio'),
+	$media = $(media);
 
-			if( ! $media.length ) {
-				return;
-			}
+	if( ! $media.length ) {
+	return;
+	}
 
-			$media.each(function( i, el ){
-				var $this = $(el);
+	$media.each(function( i, el ){
+	var $this = $(el);
 
-				if( $this.volume === vol ) {
-					return;
-				}
+	if( $this.volume === vol ) {
+	return;
+	}
 
-				$this.animate({ volume: vol }, 10);
-			});
+	$this.animate({ volume: vol }, mediaControls.config.volFadeDuration);
+	});
 		},
 
 		iframeToggleVolume: function( container, vol ) {
-			var iframe = $(container).find('iframe'),
-				$iframe = $(iframe);
+	var iframe = $(container).find('iframe'),
+	$iframe = $(iframe);
 
-			if( ! $iframe.length ) {
-				return;
-			}
+	if( ! $iframe.length ) {
+	return;
+	}
 
-			$iframe.each(function( i, el ) {
-				var $this = $(el),
-					iframeSrc = $this.attr('src');
+	$iframe.each(function( i, el ) {
+	var $this = $(el),
+	iframeSrc = $this.attr('src');
 
-				parseVideo( iframeSrc );
+	parseVideo( iframeSrc );
 
-				if ( type !== ('vimeo' || 'youtube') ) {
-					return;
-				}
+	if ( type !== ('vimeo' || 'youtube') ) {
+	return;
+	}
 
-				var video = $this.get(0);
+	var video = $this.get(0);
 
-				if ( type === 'vimeo' ) {
-					video.contentWindow.postMessage('{"method": "setVolume", "value":' + vol + '}', '*');
-				}
-			});
+	if ( type === 'vimeo' ) {
+	video.contentWindow.postMessage('{"method": "setVolume", "value":' + vol + '}', '*');
+	}
+	});
 		},
 
 		volumeToggle: function( container, vol ) {
@@ -941,7 +1008,7 @@
 			mediaControls.mediaToggleVolume( container, vol );
 			mediaControls.iframeToggleVolume( container, vol );
 		}
-    };
+	};
 
     // Offcanvas menu
 	var offCanvas = {
@@ -1454,6 +1521,10 @@
 	$(document).ready(function() {
 		doSmoothState.init();
 		$.readyFn.execute();
+
+		if ( typeof ot !== 'undefined' ) {
+			stats = ot.settings.stats;
+		}
 	});
 
 })( jQuery );

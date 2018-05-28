@@ -52,7 +52,7 @@ function opening_times_has_featured_posts( $minimum = 1 ) {
  
     if ( $minimum > count( $featured_posts ) )
         return false;
- 
+    
     return true;
 }
 
@@ -71,6 +71,49 @@ function opening_times_allow_post_type_wpcom( $allowed_post_types ) {
     return $allowed_post_types;
 }
 add_filter( 'rest_api_allowed_post_types', 'opening_times_allow_post_type_wpcom');
+
+
+/**
+ * Get WP Stats info for tracking ajax pages loads
+ * 
+ * @return string javascript for Jetpack stats.
+ *
+ * @since  Opening Times 2.0.6
+ */
+function slug_jetpack_stats_callback() {
+	// Abort if Stats module isn't active
+	if( class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'stats' ) && ! Jetpack::is_module_active( 'infinite-scroll' ) ) {
+		$settings = array();
+
+		// Abort if user is logged in but logged-in users shouldn't be tracked.
+		if ( is_user_logged_in() && function_exists( 'stats_get_options' ) ) {           
+			$stats_options = stats_get_options();
+
+			$track_loggedin_users = isset( $stats_options['reg_users'] ) ? (bool) $stats_options['reg_users'] : false;
+
+			if ( ! $track_loggedin_users ) {
+				return $settings;
+			}
+
+			// We made it this far, so gather the data needed to track IS views
+			$settings['stats'] = 'blog=' . Jetpack_Options::get_option( 'id' ) . '&host=' . parse_url( get_option( 'home' ), PHP_URL_HOST ) . '&v=ext&j=' . JETPACK__API_VERSION . ':' . JETPACK__VERSION;
+
+			// Pagetype parameter
+			//$settings['stats'] .= '&x_pagetype=infinite-jetpack';
+		}
+
+	?>
+
+	<script type="text/javascript">
+		//<![CDATA[
+		var ot = <?php echo json_encode( array( 'settings' => $settings ) ); ?>;
+		//]]>
+	</script>
+
+	<?php
+	}
+}
+add_action( 'wp_footer', 'slug_jetpack_stats_callback', 2 );
 
 
 /**

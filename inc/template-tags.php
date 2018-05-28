@@ -302,7 +302,7 @@ function opening_times_get_social_menu( $before = '', $after = '' ) {
 	// Kickoff our output buffer.
 	ob_start(); ?>
 
-	<ul class="navigation-social nav">
+	<ul class="navigation-social navigation-menu nav">
 
 		<?php	
 		$output = '';
