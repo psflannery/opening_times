@@ -730,7 +730,8 @@
 				makeGradients( '.gradient-text', 240, 100, 50 );
 				lazy_load_init();
 				
-				accordion.config.$collapse.on('hidden.bs.collapse', function () {
+				//accordion.config.$collapse.on('hidden.bs.collapse', function () {
+				$('.accordion .collapse').on('hidden.bs.collapse', function () {
 					mediaControls.doPause( this ); // TODO - check this
 				});
 			});
