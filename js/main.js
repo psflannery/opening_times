@@ -199,46 +199,48 @@
 	};
 
 	// Submit to mailing list
+	// http://otdac.org/lists/?p=subscribe&id=2
 	var phpListAjaxForm = {
-		config: {
-			successMessage: 'Thank you for your registration. Please check your email to confirm.',
-			failMessage: 'Sorry, we were unable to process your subscription.',
-			data: $('#subscribeform').serialize(),
+		init: function() {
+			var	$form = $('#mailing-list-subscribe');
+
+			this.bindUIActions( $form );
 		},
 
-		init: function( config ) {
-			// merge config defaults with init config
-            $.extend( this.config, config );
+		bindUIActions: function( $form ) {
+			$form.on('submit', function( event ) {
+				event.preventDefault();
+				event.stopPropagation();
+				phpListAjaxForm.doSubmit( $form );
+			});
+		},
 
-            if( $('#mailing-list-subscribe')[0].checkValidity() === true ) {
-				alert('foo');
-				this.bindUIActions();
+		doSubmit: function( $form ) {
+			var $subscribeAlert = $('.alert__mail-subscribe');
+
+			if( $subscribeAlert.length ) {
+				$subscribeAlert.alert('close');
 			}
-		},
 
-		bindUIActions: function() {
-			$('#btn').on('submit', function(){
-				phpListAjaxForm.doSubmit();
-			});
-		},
+			if ( $form[0].checkValidity() !== false ) {
+				var url = 'http://otdac.org/lists/?p=asubscribe&id=2',
+                	messageSuccess = 'Thank you for your registration. Please check your email to confirm.',
+                	messageFail = 'Sorry, we were unable to process your subscription.',
+                	$alertBox = $('<div class="alert alert-dismissable mx-auto alert__mail-subscribe" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span class="pr-4"></span></div>');
 
-		doSubmit: function() {
-			$.ajax( {
-				type: 'POST',
-				data: phpListAjaxForm.config.data,
-				url: 'http://www.xxx.com/phplist-mp/lists/index.php?p=asubscribe&id=3',
-				dataType: 'html',
-				//success: function ( data, status, request ) {
-				success: function ( data ) {
-					$('#result').empty().append( data !== '' ? data : phpListAjaxForm.config.successMessage );
-					$('#attribute1').val('');
-					$('#email').val('');
-				},
-				//error: function ( request, status, error ) {
-				error: function () {
-					alert(phpListAjaxForm.config.failMessage); 
-				}
-			});
+				$.ajax({
+					type: 'POST',
+					url: url,
+					data: $(this).serialize(),
+					success: function ( data ) {
+						$alertBox.appendTo($form).addClass('alert-success').find('span').text(messageSuccess);
+						$form[0].reset();
+					},
+					error: function() {
+						$alertBox.appendTo($form).addClass('alert-danger').find('span').text(messageFail);
+					}
+            	});
+			}
 		},
 	};
 
@@ -332,7 +334,7 @@
 			prefetch: true,
 			prefetchOn: 'mouseover touchstart',
 			cacheLength: 2,
-			blacklist: '.post-edit-link',
+			blacklist: '.post-edit-link, .no-ss',
 			debug: true,
 			onBefore: function() {
 				infiniteScroll.config.$container.infiniteScroll('destroy');
@@ -960,49 +962,49 @@
 
 		// This is how it should be, the play functions above a rea bit WET
 		mediaToggleVolume: function( container, vol ) {
-	var media = $(container).find('video, audio'),
-	$media = $(media);
+			var media = $(container).find('video, audio'),
+				$media = $(media);
 
-	if( ! $media.length ) {
-	return;
-	}
+			if( ! $media.length ) {
+				return;
+			}
 
-	$media.each(function( i, el ){
-	var $this = $(el);
+			$media.each(function( i, el ){
+				var $this = $(el);
 
-	if( $this.volume === vol ) {
-	return;
-	}
+				if( $this.volume === vol ) {
+					return;
+				}
 
-	$this.animate({ volume: vol }, mediaControls.config.volFadeDuration);
-	});
+				$this.animate({ volume: vol }, mediaControls.config.volFadeDuration);
+			});
 		},
 
 		iframeToggleVolume: function( container, vol ) {
-	var iframe = $(container).find('iframe'),
-	$iframe = $(iframe);
+			var iframe = $(container).find('iframe'),
+				$iframe = $(iframe);
 
-	if( ! $iframe.length ) {
-	return;
-	}
+				if( ! $iframe.length ) {
+					return;
+				}
 
-	$iframe.each(function( i, el ) {
-	var $this = $(el),
-	iframeSrc = $this.attr('src');
+				$iframe.each(function( i, el ) {
+					var $this = $(el),
+						iframeSrc = $this.attr('src');
 
-	parseVideo( iframeSrc );
+					parseVideo( iframeSrc );
 
-	if ( type !== ('vimeo' || 'youtube') ) {
-	return;
-	}
+					if ( type !== ('vimeo' || 'youtube') ) {
+						return;
+					}
 
-	var video = $this.get(0);
+					var video = $this.get(0);
 
-	if ( type === 'vimeo' ) {
-	video.contentWindow.postMessage('{"method": "setVolume", "value":' + vol + '}', '*');
-	}
-	});
-		},
+					if ( type === 'vimeo' ) {
+						video.contentWindow.postMessage('{"method": "setVolume", "value":' + vol + '}', '*');
+					}
+				});
+			},
 
 		volumeToggle: function( container, vol ) {
 			if( ! $(container).length || numberBetween(0, 1, vol, true) ) {
@@ -1505,13 +1507,7 @@
 		lazy_load_init();
 		makeGradients( '.gradient-text', 240, 100, 50 );
 		formValidate.init();
-
-		/*
-		phpListAjaxForm.init({
-			successMessage: 'Thank you for your registration. Please check your email to confirm.',
-			failMessage: 'Sorry, we were unable to process your subscription.',
-			data: $('#subscribeform').serialize(),
-		});*/
+		phpListAjaxForm.init();
 
 		themeToggle.init({
 			btnSelect: $('[data-theme]'),
