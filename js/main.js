@@ -233,11 +233,11 @@
 					url: url,
 					data: $(this).serialize(),
 					success: function ( data ) {
-						$alertBox.appendTo($form).addClass('alert-success').find('span').text(messageSuccess);
+						$alertBox.appendTo($form).removeClass('alert-danger').addClass('alert-success').find('span').text(messageSuccess);
 						$form[0].reset();
 					},
 					error: function() {
-						$alertBox.appendTo($form).addClass('alert-danger').find('span').text(messageFail);
+						$alertBox.appendTo($form).removeClass('alert-success').addClass('alert-danger').find('span').text(messageFail);
 					}
             	});
 			}
