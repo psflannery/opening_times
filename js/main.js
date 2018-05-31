@@ -204,6 +204,7 @@
 		init: function() {
 			var	$form = $('#mailing-list-subscribe');
 
+			formValidate.init();
 			this.bindUIActions( $form );
 		},
 
@@ -226,7 +227,8 @@
 				var url = 'http://otdac.org/lists/?p=asubscribe&id=2',
                 	messageSuccess = 'Thank you for your registration. Please check your email to confirm.',
                 	messageFail = 'Sorry, we were unable to process your subscription.',
-                	$alertBox = $('<div class="alert alert-dismissable mx-auto alert__mail-subscribe" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><span class="pr-4"></span></div>');
+                	btn =  '<button type="button" class="close close-sm" data-dismiss="alert" aria-hidden="true"><svg class="icon icon-close" aria-hidden="true" role="img"><title>close</title><use xlink:href="#icon-close"></use></svg></button>',
+                	$alertBox = $('<div class="alert alert-dismissable mx-auto alert__mail-subscribe" role="alert">' + btn + '<span class="pr-4"></span></div>');
 
 				$.ajax({
 					type: 'POST',
@@ -761,7 +763,7 @@
             // merge config defaults with init config
             $.extend( this.config, config );
             
-            if( !( accordion.config.$collapse.length || accordion.config.$panelClose.length ) ) {
+            if( !( accordion.config.$collapse.length || accordion.config.$infoClose.length ) ) {
                 return;
             }
             
@@ -1460,11 +1462,11 @@
         });
 
         accordion.init({
-			$collapse:     $('.accordion .collapse'),
-			$panelClose:   $('.site-info .close'),
+			$collapse: $('.accordion .collapse'),
+			$infoClose: $('.site-info .close'),
 			$infoCollapse: $('.site-info .collapse'),
-			$accordionId:  $(hash + '.collapse'),
-			card:          '.card',
+			$accordionId: $(hash + '.collapse'),
+			card: '.card',
         });
 
         mediaControls.init({
@@ -1506,7 +1508,6 @@
 		// Utils
 		lazy_load_init();
 		makeGradients( '.gradient-text', 240, 100, 50 );
-		formValidate.init();
 		phpListAjaxForm.init();
 
 		themeToggle.init({

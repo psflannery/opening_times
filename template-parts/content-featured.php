@@ -13,17 +13,17 @@ do_action( 'opening-times-before-featured-content' );
 ?>
 
 <div class="featured-content">
-	<header class="entry-header">
+	<div class="featured-content__entry">
 
 		<?php
 		if ( 'reading' === get_post_type() ) {
-			opening_times_partner_name( '<span class="entry-title__author">', '</span>' );
-			opening_times_reading_issue_title( '<span class="entry-title--md">', '</span>' );
+			opening_times_partner_name( '<h2>', '</h2>' );
+			opening_times_reading_issue_title( '<span>', '</span>' );
 			opening_times_reading_issue_standfirst( '<div class="issue-title__standfirst">', '</div>' );
 		}
 		?>
 
-	</header>
+	</div>
 </div>
 
 <?php do_action( 'opening-times-after-featured-content' ); ?>

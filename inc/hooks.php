@@ -576,3 +576,19 @@ function opening_times_filter_theme_switcher_list( $menu_items ) {
 	return $menu_items;
 }
 add_filter( 'theme_switcher_list', 'opening_times_filter_theme_switcher_list', 10 );
+
+
+/**
+ * Filter the mailing list widget args
+ * 
+ * @param  array $instance Default args for mailing list widget
+ * @return array           Modified args for mailing list widget
+ *
+ * @since opening_times 2.0.8
+ */
+function opening_times_filter_mail_widget_args( $instance ) {
+    $instance['form'] = '<form id="mailing-list-subscribe" class="row no-ss" method="post" action="%1$s" name="subscribeform" novalidate><fieldset class="col-lg-12">%2$s</fieldset></form>';
+
+    return $instance;
+}
+add_filter( 'ot_mailing_list_widget_args', 'opening_times_filter_mail_widget_args' );

@@ -1,6 +1,31 @@
 // Featured Content
 // --------------------------------------------------
 
+.featured-content {
+	border: $ot-border-width solid $ot-border-color;
+	background-color: $body-bg;
+	color: $body-color;
+	padding: $spacer;
+	position: fixed;
+	bottom:	-$ot-border-width;
+	right: -$ot-border-width;
+	z-index: $zindex-base + 1;
+	@include media-breakpoint-up(md) {
+		width: 50%;
+	}
+	@include media-breakpoint-up(lg) {
+		width: 33.333%;
+	}
+	h2 {
+		font-size: $font-size-base * 2;
+	}
+	span {
+		font-size: $font-size-base * 1.25;
+	}
+}
+
+
+// Posts
 .featured-link {
 	display: block;
 	&:last-of-type {

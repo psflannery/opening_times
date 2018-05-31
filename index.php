@@ -47,9 +47,9 @@ get_header(); ?>
         }
 
         foreach ( $featured as $post ) : setup_postdata( $post );
-
-            get_template_part( 'template-parts/content-featured' );
-
+            echo '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">';
+                get_template_part( 'template-parts/content-featured' );
+            echo '</a>';
         endforeach;
         wp_reset_postdata();
 

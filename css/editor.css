@@ -596,8 +596,8 @@ Theme URI: http://otdac.org/
 Author: Paul Flannery
 Author URI: http://paulflannery.co.uk/
 Description: A theme for Opening Times a not-for-profit, digital art commissioning body and platform for artworks whose primary means of encounter is online. Launching June 2014
-Version: 2.0.7
-Date: 29/05/18
+Version: 2.0.8
+Date: 31/05/18
 License: GNU General Public License
 License URI: license.txt
 Text Domain: opening_times
@@ -7420,6 +7420,10 @@ hr {
     -webkit-box-shadow: none;
             box-shadow: none; }
 
+button.close-sm {
+  width: 1.6rem;
+  height: 1.6rem; }
+
 .stop-scroll {
   overflow: hidden; }
 
@@ -8537,6 +8541,26 @@ img.lazyload {
     color: initial;
     background-image: none;
     padding-right: 0; }
+
+.featured-content {
+  border: 1px solid #000;
+  background-color: #fff;
+  color: #000;
+  padding: 1rem;
+  position: fixed;
+  bottom: -1px;
+  right: -1px;
+  z-index: 2; }
+  @media (min-width: 768px) {
+    .featured-content {
+      width: 50%; } }
+  @media (min-width: 992px) {
+    .featured-content {
+      width: 33.333%; } }
+  .featured-content h2 {
+    font-size: 2rem; }
+  .featured-content span {
+    font-size: 1.25rem; }
 
 .featured-link {
   display: block; }

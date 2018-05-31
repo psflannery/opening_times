@@ -34,3 +34,8 @@
 		//margin-left: -$grid-gutter-width-base/2;
 	}
 }
+
+//close-button
+button.close-sm {
+	@include size($btn-close-sm);
+}
