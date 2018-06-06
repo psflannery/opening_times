@@ -2,7 +2,7 @@
 // --------------------------------------------------
 
 .featured-content {
-	border: $ot-border-width solid $ot-border-color;
+	border: $ot-border-width solid $ot-border-color-light;
 	background-color: $body-bg;
 	color: $body-color;
 	padding: $spacer * 1.5;
@@ -10,6 +10,10 @@
 	bottom:	-$ot-border-width;
 	right: -$ot-border-width;
 	z-index: $zindex-base + 1;
+	will-change: transform;
+	&:hover {
+		border-color: $link-color;
+	}
 	@include media-breakpoint-up(md) {
 		width: 50%;
 	}
@@ -18,6 +22,7 @@
 	}
 	h2 {
 		font-size: $font-size-base * 2;
+		font-weight: $font-weight-bold;
 	}
 	p {
 		margin-bottom: 0;
@@ -25,8 +30,11 @@
 	span {
 		font-size: $font-size-base * 1.25;
 	}
+	.is-exiting & {
+		transform: translateY(100%);
+		transition: transform 0.3s ease;
+	}
 }
-
 
 // Posts
 .featured-link {

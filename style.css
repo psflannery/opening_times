@@ -7951,14 +7951,17 @@ img.lazyload {
     padding-right: 0; }
 
 .featured-content {
-  border: 1px solid #000;
+  border: 1px solid rgba(0, 0, 0, 0.125);
   background-color: #fff;
   color: #000;
   padding: 1.5rem;
   position: fixed;
   bottom: -1px;
   right: -1px;
-  z-index: 2; }
+  z-index: 2;
+  will-change: transform; }
+  .featured-content:hover {
+    border-color: #0000ff; }
   @media (min-width: 768px) {
     .featured-content {
       width: 50%; } }
@@ -7966,11 +7969,19 @@ img.lazyload {
     .featured-content {
       width: 33.333%; } }
   .featured-content h2 {
-    font-size: 2rem; }
+    font-size: 2rem;
+    font-weight: bold; }
   .featured-content p {
     margin-bottom: 0; }
   .featured-content span {
     font-size: 1.25rem; }
+  .is-exiting .featured-content {
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease; }
 
 .featured-link {
   display: block; }

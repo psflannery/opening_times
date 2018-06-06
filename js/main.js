@@ -17,9 +17,11 @@
 		isSpeedRead = false,
 		isAnimated = true,
 		isNormal = false,
+		didInfinite = false,
 		bgVol = 0.2,
 		smoothState,
 		hash = window.location.hash,
+		link = document.createElement('a'),
 		$site = $('html, body'),
 		$body = $('body'),
 		$page = $('#page');
@@ -119,13 +121,19 @@
 	};
 
 	// Call stats after ajax page load
-	var doStatsCallback = function() {
+	var doStatsCallback = function( event, response, path ) {
 		var ga = window[window.GoogleAnalyticsObject || 'ga'],
 			stats;
 
 		if ( typeof ga === 'function' ) {
-			////ga( 'send', 'pageview', window.location.pathname || url );
-			ga( 'set', 'page', location.pathname );
+			link.href = path;
+
+			if(	didInfinite !== true ) {
+				ga( 'set', 'page', location.pathname );
+			} else {
+				ga( 'set', 'page', link.pathname );
+			}
+
 			ga( 'send', 'pageview' );
 		}
 
@@ -339,7 +347,8 @@
 			blacklist: '.post-edit-link, .no-ss',
 			debug: true,
 			onBefore: function() {
-				infiniteScroll.config.$container.infiniteScroll('destroy');
+				//infiniteScroll.config.$container.infiniteScroll('destroy');
+				didInfinite = false,
 				otPopover.config.$popMedia.popover('dispose');
 				stopScroll( false, $body );
 				isSidebarOpen = false;
@@ -710,7 +719,7 @@
 				append: '.post',
 				prefill: true,
 				hideNav: '.nav-links',
-				//history: false
+				history: false
 			},
 		},
 
@@ -733,9 +742,12 @@
 		},
 
 		bindEvents: function( $el ) {
-			$el.on( 'append.infiniteScroll', function() {
+			$el.on( 'append.infiniteScroll', function( event, response, path ) {
+				didInfinite = true,
 				makeGradients( '.gradient-text', 240, 100, 50 );
 				lazy_load_init();
+
+				doStatsCallback( event, response, path );
 				
 				//accordion.config.$collapse.on('hidden.bs.collapse', function () {
 				$('.accordion .collapse').on( 'hidden.bs.collapse', function () {
@@ -743,9 +755,9 @@
 				});
 			});
 
-			$el.on( 'history.infiniteScroll', function() {
-				doStatsCallback();
-			});
+			//$el.on( 'history.infiniteScroll', function() {
+			//	doStatsCallback();
+			//});
 		},
 	};
 
