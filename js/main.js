@@ -348,7 +348,7 @@
 			debug: true,
 			onBefore: function() {
 				//infiniteScroll.config.$container.infiniteScroll('destroy');
-				didInfinite = false,
+				didInfinite = false;
 				otPopover.config.$popMedia.popover('dispose');
 				stopScroll( false, $body );
 				isSidebarOpen = false;
@@ -743,7 +743,7 @@
 
 		bindEvents: function( $el ) {
 			$el.on( 'append.infiniteScroll', function( event, response, path ) {
-				didInfinite = true,
+				didInfinite = true;
 				makeGradients( '.gradient-text', 240, 100, 50 );
 				lazy_load_init();
 
@@ -788,7 +788,7 @@
 				accordion.toggle( true, this );
 			});
 
-			$accordion.on('shown.bs.collapse', function () {                    
+			$accordion.on('show.bs.collapse', function () {                    
 				//accordion.doLazyLoad( this );
 				mediaControls.doPlay( this, bgVol );
 				mediaControls.mobileParams( this );
@@ -923,17 +923,16 @@
 
 		embedToggle: function( bool, panel ) {
 			var iframe = $(panel).find('iframe'),
-				$iframe = $(iframe),
-				src = $iframe.is(['data-lazy-src']) ? $iframe.data('lazy-src') : $iframe.attr('src');
+				$iframe = $(iframe);
 
 			if( $iframe.length ) {
-				$iframe.each(function(i, el) {
-					var $el = $(el);
+				$iframe.each(function( i, el ) {
+					var $el = $(el),
+						video = $el[0],
+						src = $el.attr('src');
 
 					// determine embed type
 					parseVideo( src );
-
-					var video = $el[0];
 
 					if( bool ) {
 						mediaControls.embedPlay( type, video );
