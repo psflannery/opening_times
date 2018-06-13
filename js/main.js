@@ -786,13 +786,17 @@
         bindUIActions: function( $accordion, $panelClose, $infoCollapse ) {
 			$accordion.on('show.bs.collapse', function () {
 				accordion.toggle( true, this );
-			});
-
-			$accordion.on('show.bs.collapse', function () {                    
-				//accordion.doLazyLoad( this );
+				//
 				mediaControls.doPlay( this, bgVol );
 				mediaControls.mobileParams( this );
 			});
+
+			/*
+			$accordion.on('shown.bs.collapse', function () {                    
+				//accordion.doLazyLoad( this );
+				mediaControls.doPlay( this, bgVol );
+				mediaControls.mobileParams( this );
+			});*/
 
 			$accordion.on('hide.bs.collapse', function () {
 				accordion.toggle( false, this );
