@@ -99,7 +99,7 @@ function slug_jetpack_stats_callback() {
 			$settings['stats'] = 'blog=' . Jetpack_Options::get_option( 'id' ) . '&host=' . parse_url( get_option( 'home' ), PHP_URL_HOST ) . '&v=ext&j=' . JETPACK__API_VERSION . ':' . JETPACK__VERSION;
 
 			// Pagetype parameter
-			//$settings['stats'] .= '&x_pagetype=infinite-jetpack';
+			$settings['stats'] .= '&x_pagetype=infinite-jetpack';
 		}
 
 	?>
