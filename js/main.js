@@ -793,8 +793,8 @@
 
 			$accordion.on('shown.bs.collapse', function () {                    
 				accordion.doLazyLoad( this );
-				//mediaControls.doPlay( this, bgVol );
-				//mediaControls.mobileParams( this );
+				mediaControls.doPlay( this, bgVol );
+				mediaControls.mobileParams( this );
 			});
 
 			$accordion.on('hide.bs.collapse', function () {
